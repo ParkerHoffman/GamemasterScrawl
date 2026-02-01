@@ -6,12 +6,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 
 
+//Building the server host
 var builder = WebApplication.CreateBuilder(args);
 
 
+//Configuring the ports to use
 builder.WebHost.ConfigureKestrel(options =>
 {
-
     options.ListenAnyIP(80);
     options.ListenAnyIP(443, listenOptions =>
     {
@@ -19,20 +20,25 @@ builder.WebHost.ConfigureKestrel(options =>
     });
 });
 
+//Building the actual app
 var app = builder.Build();
 
-
+//Used in determining the useable IP (for the auto-open of it)
 var lifetime = app.Lifetime;
 
+//On the app running, do the lambda
 lifetime.ApplicationStarted.Register(() =>
 {
     try
     {
 
+//Declare the IP (It starts null, can become not null)
 string? ip = null;
 
+//Check all network interface for usefulness
         foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())
     {
+        //If the interface is not up, leave
         if (ni.OperationalStatus != OperationalStatus.Up)
             continue;
 
@@ -65,7 +71,14 @@ string? ip = null;
     }
 });
 
+app.MapGet("/", async context =>
+{
+    context.Response.ContentType = "text/html";
+    await context.Response.SendFileAsync(
+        Path.Combine(app.Environment.WebRootPath, "login.html")
+    );
+});
 
-app.MapGet("/", () => "Server is running. Is your Refridgerator?");
+//app.MapGet("/", () => "Server is running. Is your Refridgerator?");
 
 app.Run("http://0.0.0.0:5000");
