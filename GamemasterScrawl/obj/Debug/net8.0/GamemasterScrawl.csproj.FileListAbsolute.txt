@@ -1,3 +1,4 @@
+C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\bin\Debug\net8.0\GamemasterScrawl.staticwebassets.runtime.json
 C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\bin\Debug\net8.0\GamemasterScrawl.staticwebassets.endpoints.json
 C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\bin\Debug\net8.0\GamemasterScrawl.exe
 C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\bin\Debug\net8.0\GamemasterScrawl.deps.json
@@ -25,4 +26,3 @@ C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8
 C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\GamemasterScrawl.pdb
 C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\GamemasterScrawl.genruntimeconfig.cache
 C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\ref\GamemasterScrawl.dll
-C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\bin\Debug\net8.0\GamemasterScrawl.staticwebassets.runtime.json
