@@ -1,3 +1,4 @@
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
@@ -24,9 +25,29 @@ namespace GamemasterScrawl
         {
             lock (_lock) {_connectionCount ++;}
         }
+
+        public override async Task OnDisconnectedAsync(Exception? ex)
+        {
+            bool shouldClear = false;
+
+            lock (_lock)
+            {
+                _connectionCount --;
+                if(_connectionCount == 0)
+                {
+                    shouldClear = true;
+                }
+            }
+
+
+            if (shouldClear)
+            {
+                //Any shutdown logic goes here
+            }
+        }
         
 
-
+    //This is where the other functions go
 
 
 
