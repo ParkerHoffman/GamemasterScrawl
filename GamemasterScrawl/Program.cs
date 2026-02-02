@@ -13,13 +13,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSignalR();
 
+//Manages who the host is, and services related to that
+builder.Services.AddSingleton<HostIdentity>();
 
 //Registering the various data files
 builder.Services.AddSingleton(sp =>
 {
+    //Setting up the root directory path
     var env = sp.GetRequiredService<IWebHostEnvironment>();
     var dataPath = Path.Combine(env.ContentRootPath, "App_Data");
     Directory.CreateDirectory(dataPath);
+
+
+    //User info
     return new FileHandler<LoginState>(dataPath, "login.json");
 });
 
@@ -38,6 +44,7 @@ builder.WebHost.ConfigureKestrel(options =>
 //Building the actual app
 var app = builder.Build();
 
+//Used in routing for the app, if not otherwise specified the app knows where the correct files are when http requesting
 app.UseStaticFiles();
 
 //Used in determining the useable IP (for the auto-open of it)
@@ -87,6 +94,12 @@ string? ip = null;
     {
         // Swallow exceptions to avoid crashing the app if browser launch fails
     }
+});
+
+lifetime.ApplicationStopping.Register(() =>
+{
+    Console.WriteLine("Application stopping — cleaning up...");
+    // Save files, flush state, etc.
 });
 
 //Sets the default path to 'login.html' to enforce logging in first. 
