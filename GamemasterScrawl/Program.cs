@@ -4,10 +4,24 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
+using GamemasterScrawl;
+
 
 
 //Building the server host
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSignalR();
+
+
+//Registering the various data files
+builder.Services.AddSingleton(sp =>
+{
+    var env = sp.GetRequiredService<IWebHostEnvironment>();
+    var dataPath = Path.Combine(env.ContentRootPath, "App_Data");
+    Directory.CreateDirectory(dataPath);
+    return new FileHandler<LoginState>(dataPath, "login.json");
+});
 
 
 //Configuring the ports to use
@@ -20,11 +34,15 @@ builder.WebHost.ConfigureKestrel(options =>
     });
 });
 
+
 //Building the actual app
 var app = builder.Build();
 
+app.UseStaticFiles();
+
 //Used in determining the useable IP (for the auto-open of it)
 var lifetime = app.Lifetime;
+
 
 //On the app running, do the lambda
 lifetime.ApplicationStarted.Register(() =>
@@ -71,6 +89,7 @@ string? ip = null;
     }
 });
 
+//Sets the default path to 'login.html' to enforce logging in first. 
 app.MapGet("/", async context =>
 {
     context.Response.ContentType = "text/html";
@@ -78,7 +97,6 @@ app.MapGet("/", async context =>
         Path.Combine(app.Environment.WebRootPath, "login.html")
     );
 });
-
-//app.MapGet("/", () => "Server is running. Is your Refridgerator?");
+app.MapHub<SocketHub>("/socketHub");
 
 app.Run("http://0.0.0.0:5000");

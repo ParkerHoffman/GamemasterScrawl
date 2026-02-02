@@ -24,6 +24,7 @@ namespace GamemasterScrawl
         public override async Task OnConnectedAsync()
         {
             lock (_lock) {_connectionCount ++;}
+            Console.WriteLine("Connected user");
         }
 
         public override async Task OnDisconnectedAsync(Exception? ex)
