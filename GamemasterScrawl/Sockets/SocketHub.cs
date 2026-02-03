@@ -90,10 +90,10 @@ private readonly IHostApplicationLifetime _appLifetime;
         }
 
 
+//This function will hash a user's password using SHA256. Tis hashed password will be utilized for the rest of the program. 
         private string HashString(string? unhashedString)
         {
-
-
+            //Setting up the SHA instance
                 using (var sha = new System.Security.Cryptography.SHA256Managed())
             {
                 byte[] textData = System.Text.Encoding.UTF8.GetBytes(unhashedString);

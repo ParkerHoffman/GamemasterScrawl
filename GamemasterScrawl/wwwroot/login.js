@@ -24,8 +24,12 @@ async function ValidateCreds(){
 
 //On call, it axes this window. Should be called on host disconnect
  connection.on("CloseWindow", function () {
-    window.close();
+        handleDisconnect();
  });
+
+ async function handleDisconnect(){
+    await connection.stop();
+ }
 
 
 
