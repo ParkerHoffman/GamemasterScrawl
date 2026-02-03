@@ -2,7 +2,7 @@ const connection = new signalR.HubConnectionBuilder().withUrl("/socketHub").buil
 
 
 
-function ValidateCreds(){
+async function ValidateCreds(){
     var user = document.getElementById("usernameInput").value;
     var pass = document.getElementById("passwordInput").value;
 
@@ -16,8 +16,16 @@ function ValidateCreds(){
         alert(`Please insert a valid password for the user '${user}`);
         return;
     }
+
+    const ips = await connection.invoke("UserLogin", user, pass);
     console.log(user, pass);
 }
+
+
+//On call, it axes this window. Should be called on host disconnect
+ connection.on("CloseWindow", function () {
+    window.close();
+ });
 
 
 

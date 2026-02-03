@@ -1,6 +1,7 @@
 using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using System.Security.Cryptography;
 
 
 
@@ -50,15 +51,58 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
 
 
+            //If it's valid to shutdown
             if (shouldClear)
             {
+                //CLose windows
+                await CloseWindow();
+
                 //Gracefully close the program
                 _appLifetime.StopApplication();
             }
         }
+
+
+        public async Task CloseWindow()
+        {
+            await Clients.All.SendAsync("CloseWindow");
+        }
         
 
-    //This is where the other functions go
+    //This is the function for a user to login
+    public async Task UserLogin(string user, string password)
+        {
+            try
+            {
+                string passHash = HashString(password);
+                           Console.WriteLine(user);
+            Console.WriteLine(passHash); 
+            
+            } catch(Exception ex)
+            {
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(ex.ToString());
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Black;
+            }
+
+        }
+
+
+        private string HashString(string? unhashedString)
+        {
+
+
+                using (var sha = new System.Security.Cryptography.SHA256Managed())
+            {
+                byte[] textData = System.Text.Encoding.UTF8.GetBytes(unhashedString);
+                byte[] hash = sha.ComputeHash(textData);
+                return BitConverter.ToString(hash).Replace("-", String.Empty);
+            }
+       
+        }
+
 
 
 
