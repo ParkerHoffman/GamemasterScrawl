@@ -25,10 +25,10 @@ async function ValidateCreds(){
 
 async function checkHostStatus(){
     isHost = await connection.invoke("CheckIfHost");
-
+    console.log(isHost)
     if(isHost = true){
         //Now redirect to the home page
-        console.log("I'm the host")
+        
     }
 }
 

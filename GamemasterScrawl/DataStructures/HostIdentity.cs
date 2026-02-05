@@ -8,16 +8,14 @@
 //Returns true if the given ID is the host ID
         public bool CheckHost(string newID)
         {
-            Console.WriteLine("Host: " + HostConnectionID + ", Checker: " + newID);
+            Console.WriteLine("Current Host: " + HostConnectionID + ", NewID: " + newID );
             return newID == HostConnectionID;
         }
 
         public void RegisterHost(string newID)
         {
-            Console.WriteLine("Host: " + HostConnectionID + ", Checker: " + newID);
             if(HostConnectionID == null)
             {
-                Console.WriteLine("New Host: " + newID);
                 HostConnectionID = newID;
             } 
 
