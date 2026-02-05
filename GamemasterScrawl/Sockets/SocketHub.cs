@@ -19,7 +19,12 @@ private readonly IHostApplicationLifetime _appLifetime;
 
         private readonly HostIdentity _hostIdentity;
 
-
+        /// <summary>
+        /// The constructor for a SocketHub
+        /// </summary>
+        /// <param name="tempStore">Login Details File (FileHandler<LoginState>)</param>
+        /// <param name="host">Reference to the HostIdentity class</param>
+        /// <param name="_lifetime">Application reference, for termination</param>
         public SocketHub(FileHandler<LoginState> tempStore, HostIdentity host, IHostApplicationLifetime _lifetime)
         {
             _store = tempStore;
@@ -27,7 +32,10 @@ private readonly IHostApplicationLifetime _appLifetime;
             _appLifetime = _lifetime;
         }
 
-
+        /// <summary>
+        /// This is the function that handles when a connection is established and registering the user, incrementing the user count, etc...
+        /// </summary>
+        /// <returns>Nothing</returns>
         public override async Task OnConnectedAsync()
         {
             //Increase user count (If/when it reaches 0, terminate app)
@@ -37,8 +45,18 @@ private readonly IHostApplicationLifetime _appLifetime;
             _hostIdentity.RegisterHost(Context.ConnectionId);
         }
 
+/// <summary>
+/// This function runs when a user disconnects. It handles possibly shutting down the app and various other functions
+/// </summary>
+/// <param name="ex">Closing Exception</param>
+/// <returns>Nothing</returns>
         public override async Task OnDisconnectedAsync(Exception? ex)
         {
+            if(ex != null)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
             bool shouldClear = false;
 
             lock (_lock)
@@ -63,18 +81,31 @@ private readonly IHostApplicationLifetime _appLifetime;
         }
 
 
+        /// <summary>
+        /// This function intializes the shutdown process for the clients
+        /// </summary>
+        /// <returns>Nothing</returns>
         public async Task CloseWindows()
         {
             await Clients.All.SendAsync("CloseWindow");
         }
         
 
+        /// <summary>
+        /// This returns a bool representing if the user is the host
+        /// </summary>
+        /// <returns>Bool, true if user is host, false otherwise</returns>
         public async Task<bool> CheckIfHost()
         {
             return _hostIdentity.CheckHost(Context.ConnectionId);
         }
 
-    //This is the function for a user to login
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="password"></param>
+    /// <returns></returns>
     public async Task UserLogin(string user, string password)
         {
             try
@@ -96,7 +127,11 @@ private readonly IHostApplicationLifetime _appLifetime;
         }
 
 
-//This function will hash a user's password using SHA256. Tis hashed password will be utilized for the rest of the program. 
+        /// <summary>
+        /// This function will return a hashed version of the input string
+        /// </summary>
+        /// <param name="unhashedString">This is the sting before it's hashed</param>
+        /// <returns>The hashed version of the above string</returns>
         private string HashString(string? unhashedString)
         {
             //Setting up the SHA instance
