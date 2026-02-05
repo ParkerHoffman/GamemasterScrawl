@@ -5,6 +5,8 @@ using System.Net.Sockets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using GamemasterScrawl;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SignalR;
 
 
 
@@ -99,6 +101,12 @@ string? ip = null;
 lifetime.ApplicationStopping.Register(() =>
 {
     Console.WriteLine("Application stopping — cleaning up...");
+
+    //Setting up to tell all Socket clients to DC
+    var hubContext = app.Services.GetRequiredService<Microsoft.AspNetCore.SignalR.IHubContext<SocketHub>>();
+
+    //Telling all socket clients to DC
+    hubContext.Clients.All.SendAsync("CloseWindow").GetAwaiter().GetResult();
     // Save files, flush state, etc.
 });
 

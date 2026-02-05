@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GamemasterScrawl")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a749010d8b06aa1b516acb01d03b7f46dfa09fdb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+962149bb86f669c0b3a32479033da39759e41fbf")]
 [assembly: System.Reflection.AssemblyProductAttribute("GamemasterScrawl")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GamemasterScrawl")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

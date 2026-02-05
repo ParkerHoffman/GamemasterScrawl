@@ -55,7 +55,7 @@ private readonly IHostApplicationLifetime _appLifetime;
             if (shouldClear)
             {
                 //CLose windows
-                await CloseWindow();
+                await CloseWindows();
 
                 //Gracefully close the program
                 _appLifetime.StopApplication();
@@ -63,11 +63,16 @@ private readonly IHostApplicationLifetime _appLifetime;
         }
 
 
-        public async Task CloseWindow()
+        public async Task CloseWindows()
         {
             await Clients.All.SendAsync("CloseWindow");
         }
         
+
+        public async Task<bool> CheckIfHost()
+        {
+            return _hostIdentity.CheckHost(Context.ConnectionId);
+        }
 
     //This is the function for a user to login
     public async Task UserLogin(string user, string password)
@@ -80,6 +85,7 @@ private readonly IHostApplicationLifetime _appLifetime;
             
             } catch(Exception ex)
             {
+                //In the event of an error, make it obvious
                 Console.BackgroundColor = ConsoleColor.DarkRed;
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine(ex.ToString());

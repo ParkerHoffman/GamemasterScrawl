@@ -1,5 +1,7 @@
 const connection = new signalR.HubConnectionBuilder().withUrl("/socketHub").build();
 
+var isHost = false;
+
 
 
 async function ValidateCreds(){
@@ -17,9 +19,19 @@ async function ValidateCreds(){
         return;
     }
 
-    const ips = await connection.invoke("UserLogin", user, pass);
+    await connection.invoke("UserLogin", user, pass);
     console.log(user, pass);
 }
+
+async function checkHostStatus(){
+    isHost = await connection.invoke("CheckIfHost");
+
+    if(isHost = true){
+        //Now redirect to the home page
+        console.log("I'm the host")
+    }
+}
+
 
 
 //On call, it axes this window. Should be called on host disconnect
@@ -32,5 +44,27 @@ async function ValidateCreds(){
  }
 
 
+ async function startConnection(){
+    try{
+        console.log("Starting conn");
+        await connection.start();
 
-connection.start().catch(err => console.error(err.toString()));
+        console.log("Conn done. Now, host")
+
+        await checkHostStatus();
+
+        console.log("setup done")
+    } catch(err){
+        //Try again in a few seconds
+setTimeout(startConnection, 5000);
+    }
+
+
+ }
+
+
+//Start the socket connection (And other startup functions)
+startConnection();
+
+
+
