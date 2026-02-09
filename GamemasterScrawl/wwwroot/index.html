@@ -1,18 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8" />
-    <title>Gamemaster Scrawl</title>
-    <link rel="stylesheet" href="/index.css">
+  <meta charset="UTF-8" />
+  <title>Gamemaster Scrawl</title>
+      <link rel="stylesheet" href="/index.css">
      <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@9.0.6/dist/browser/signalr.min.js"></script>
 </head>
 <body>
-    <div>The app is running. This is the page. Is your refridgerator running?</div>
-    <input type="text" id="usernameInput" placeholder="Username" />
-    <input type="text" id="passwordInput" placeholder="Password" />
-    <button onclick="ValidateCreds()" >Sign In</button>
-    <script src="/index.js"></script>
-   
-</body>
+  <div id="app"></div>
 
+  <script type="module" src="/app.js"></script>
+</body>
 </html>

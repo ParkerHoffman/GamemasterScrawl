@@ -13,7 +13,9 @@
         /// <returns></returns>
         public bool CheckHost(string newID)
         {
-            return newID == HostConnectionID;
+            Console.WriteLine(newID + "   " + HostConnectionID);
+            Console.WriteLine(newID.Equals(HostConnectionID));
+            return newID.Equals(HostConnectionID);
         }
 
         /// <summary>
