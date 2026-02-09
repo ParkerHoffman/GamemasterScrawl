@@ -115,7 +115,7 @@ app.MapGet("/", async context =>
 {
     context.Response.ContentType = "text/html";
     await context.Response.SendFileAsync(
-        Path.Combine(app.Environment.WebRootPath, "login.html")
+        Path.Combine(app.Environment.WebRootPath, "index.html")
     );
 });
 app.MapHub<SocketHub>("/socketHub");
