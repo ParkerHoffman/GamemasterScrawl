@@ -1,5 +1,5 @@
 import {loadComponent} from "../router.js";
-import { connection } from "../app.js";
+import { hashPassword } from "../app.js";
 
 var ddList = [];
 
@@ -47,25 +47,7 @@ async function ValidateCreds(container, appState){
 }
 
 
-//This is now erroring out
-//This hashes the password before sending across the internet
-function hashPassword(pass){
-    let hash = 0;
 
-    //For each character
-    for(let i = 0; i < pass.length; i++){
-
-        //Get current char
-        const char = pass.charCodeAt(i);
-
-        //Modify the 'hash' in
-        hash = char + (hash << 6) + (hash << 16) - hash;
-    }
-
-
-    //Return the pass as a hex
-    return (hash >>> 0).toString(16).padStart(8, '0');
-}
 
 
 

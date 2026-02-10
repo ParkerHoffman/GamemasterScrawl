@@ -15,6 +15,25 @@ export const appState = {
 
 referenceState(appState);
 
+//This hashes the password before sending across the internet
+export function hashPassword(pass){
+    let hash = 0;
+
+    //For each character
+    for(let i = 0; i < pass.length; i++){
+
+        //Get current char
+        const char = pass.charCodeAt(i);
+
+        //Modify the 'hash' in
+        hash = char + (hash << 6) + (hash << 16) - hash;
+    }
+
+
+    //Return the pass as a hex
+    return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
 
 
 //This function asks the server if this user is the host.

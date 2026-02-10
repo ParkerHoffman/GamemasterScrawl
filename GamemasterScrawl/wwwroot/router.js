@@ -20,7 +20,7 @@ export async function loadComponent(name) {
   app.innerHTML = html;
 
   //Get and load the correct JS
-  const module = await import(`/components/${name}.js`);
+  const module = await import(`/components/${name}.js?v=${Date.now()}`);
   
   if(module){
   //Initialize the JS

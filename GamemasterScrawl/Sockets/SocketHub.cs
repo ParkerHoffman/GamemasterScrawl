@@ -148,6 +148,61 @@ private readonly IHostApplicationLifetime _appLifetime;
 
         }
 
+        public async Task<bool> CreateUser(string user, string password)
+        {
+        try
+            {
+                //Verify that there is no double usernames
+                foreach(User person in _loginStore.Data.users)
+                {
+                    if (user.Equals(person.username))
+                    {
+                        return false;
+                    }
+                }
+
+                //Hash the password attempt
+                string passHash = HashString(password);
+
+                //Create a new user object to add into the array
+                User freshUser = new User();
+
+                //Set the data points on the new user
+                freshUser.username = user;
+                freshUser.pass = passHash;
+                freshUser.ID = _loginStore.Data.lastID;
+
+                //Increment the ID counter
+                _loginStore.Data.IncrementID();
+
+                //Temporary list to add the user into the array
+                List<User> tempList = new List<User>();
+
+                //adding array
+                tempList.AddRange(_loginStore.Data.users);
+                //adding user
+                tempList.Add(freshUser);
+
+                //Set the storage array
+                _loginStore.Data.users = tempList.ToArray();
+
+                _loginStore.SaveChanges();
+
+                return true;
+            
+            } catch(Exception ex)
+            {
+                //In the event of an error, make it obvious
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(ex.ToString());
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Black;
+
+                return false;
+            }
+        }
+
 
         /// <summary>
         /// This function will return a hashed version of the input string
