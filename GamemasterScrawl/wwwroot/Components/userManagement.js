@@ -61,10 +61,10 @@ userList = await appState.connection.invoke("GetFullUserList");
     const displayTableCont = container.querySelector("#UsermanagementTableContainer");
 
 
-    var innerString = "<table><thead><tr><td>ID</td><td>Username</td><td>Edit Password</td></tr></thead><tr>";
+    var innerString = "<table><thead><tr><td>ID</td><td>Username</td><td>Edit Password</td><td>Delete User</td></tr></thead><tr>";
 
     userList.forEach((e) => {
-        innerString += `<tr><td>${e.id}</td><td>${e.username}</td><td><input id=\"passwordChange${e.id}\"/><button id=\"passwordChangeSubmit${e.id}\">Change Password</button></td></tr>`;
+        innerString += `<tr><td>${e.id}</td><td>${e.username}</td><td><input id=\"passwordChange${e.id}\"/><button id=\"passwordChangeSubmit${e.id}\">Change Password</button></td><td><button id=\"deleteUser${e.id}\">Delete</button></td></tr>`;
     })
 
 
@@ -76,18 +76,30 @@ userList = await appState.connection.invoke("GetFullUserList");
 
     //Setting up the listener set for all the buttons
         userList.forEach((e) => {
+            //Getting the password change buttons
             const passEditBtn = container.querySelector("#passwordChangeSubmit" + e.id);
-  
+            //Setting up the listener
             passEditBtn.addEventListener("click", async () => {changeUserPassword(container, appState, e.id)});
+            
+            //Getting the user delete button
+            const usrDelBtn = container.querySelector("#deleteUser" + e.id);
+  
+            //Setting up the delete function
+            usrDelBtn.addEventListener("click", async () => {DeleteUser(container, appState, e.id)});
 
     })
 }
 
+
+//This is the function that handles changing a user's password
 async function changeUserPassword(container, appState, id){
+    //This is the container that holds the unhashed password
     var unhashedPassCont = container.querySelector(`#passwordChange${id}`);
 
+    //This hashes the password
     var hashed = hashPassword(unhashedPassCont.value);
 
+    //Now we ask the server to change the password of the user
     var success = await appState.connection.invoke("ChangeUserPassword", id, hashed);
 
     if(success == true){
@@ -95,5 +107,17 @@ async function changeUserPassword(container, appState, id){
         alert('Password Successfully updated')
     } else {
         alert('Error. Password Not updated correctly')
+    }
+}
+
+async function DeleteUser(container, appState, id){
+
+    var success = await appState.connection.invoke("DeleteUser", id);
+
+    if(success == true){
+        UpdateTable(container, appState);
+        alert('User Deleted')
+    } else {
+        alert('Error. Currently unable to delete user')
     }
 }

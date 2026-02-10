@@ -44,6 +44,8 @@ async function ValidateCreds(container, appState){
 
     //Tell the server the login creds for it to do it's magic
     var success = await appState.connection.invoke("UserLogin", user, newPass);
+
+    console.log(success);
 }
 
 

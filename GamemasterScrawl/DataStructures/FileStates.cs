@@ -9,14 +9,21 @@ namespace GamemasterScrawl
 
         public void IncrementID()
         {
-            if(lastID < users.Length)
-            {
-                lastID = users.Length + 1;
-            } else
-            {
-                lastID++;   
-            }
+            //Declre the min ID
+            int newID = 0;
 
+            //Iterate through every ID
+            foreach (User u in users)
+            {
+                //If the ID is bigger than the placeholder
+                if(u.ID >= newID)
+                {
+                    //make the placeholder larger than it
+                    newID = u.ID + 1;
+                }
+            }
+            //Set the increment ID as the next useful number
+            lastID = newID;
         }
     }
 

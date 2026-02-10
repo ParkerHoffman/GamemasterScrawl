@@ -89,7 +89,12 @@ private readonly IHostApplicationLifetime _appLifetime;
         /// <returns>Nothing</returns>
         public async Task CloseWindows()
         {
+            //Save the current filestate
+            _loginStore.SaveChanges();
+
+            //Tell all the users to close run their disconnect functions
             await Clients.All.SendAsync("CloseWindow");
+
         }
         
 
@@ -126,16 +131,51 @@ private readonly IHostApplicationLifetime _appLifetime;
         }
 
     /// <summary>
-    /// 
+    /// This function handles the login process of the app
     /// </summary>
-    /// <param name="user"></param>
-    /// <param name="password"></param>
-    /// <returns></returns>
-    public async Task UserLogin(string user, string password)
+    /// <param name="user">username selected</param>
+    /// <param name="password">Hashed password from client</param>
+    /// <returns>Bool of success</returns>
+    public async Task<bool> UserLogin(string username, string password)
         {
             try
             {
                 string passHash = HashString(password);
+
+                GamemasterScrawl.User? user = null;
+
+                int holdingI = 0;
+
+                for(holdingI = 0; holdingI < _loginStore.Data.users.Length; holdingI++)
+                {
+                    GamemasterScrawl.User u = _loginStore.Data.users[holdingI];
+                    //Check every account
+                    if (u.username.Equals(username) && u.pass.Equals(passHash))
+                    {
+                        user = u;
+                        break;
+                    }
+                }
+
+            
+
+                //Case: No user identified
+                if(user == null)
+                {
+                    return false;
+                }
+
+                //log that this user is verified
+                user.currentConnection = Context.ConnectionId;
+
+                User[] tempArray = _loginStore.Data.users;
+                tempArray[holdingI] = user;
+
+                _loginStore.Data.users = tempArray;
+
+                _loginStore.SaveChanges();
+
+                return true;
             
             } catch(Exception ex)
             {
@@ -145,6 +185,8 @@ private readonly IHostApplicationLifetime _appLifetime;
                 Console.WriteLine(ex.ToString());
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.BackgroundColor = ConsoleColor.Black;
+
+                return false;
             }
 
         }
@@ -159,6 +201,13 @@ private readonly IHostApplicationLifetime _appLifetime;
         {
         try
             {
+                bool? perms = await CheckIfHost();
+            //Check the perms of the user. Deny if not allowed
+            if(perms != true)
+            {
+                return false;
+            }
+
                 //Verify that there is no double usernames
                 foreach(User person in _loginStore.Data.users)
                 {
@@ -177,7 +226,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 //Set the data points on the new user
                 freshUser.username = user;
                 freshUser.pass = passHash;
-                
+
                 //Increment the ID counter
                 _loginStore.Data.IncrementID();
                 freshUser.ID = _loginStore.Data.lastID;
@@ -223,6 +272,14 @@ private readonly IHostApplicationLifetime _appLifetime;
         {
             try
             {
+
+            bool? perms = await CheckIfHost();
+            //Check the perms of the user. Deny if not allowed
+            if(perms != true)
+            {
+                return false;
+            }
+
                 //Hash the password attempt
                 string passHash = HashString(newPass);
 
@@ -261,6 +318,57 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
+        /// <summary>
+        /// This will delete a user on demand
+        /// </summary>
+        /// <param name="uID">User ID being deleted</param>
+        /// <returns>Bool of success</returns>
+        public async Task<bool> DeleteUser(int uID)
+        {
+
+            try
+            {
+            bool? perms = await CheckIfHost();
+            //Check the perms of the user. Deny if not allowed
+            if(perms != true)
+            {
+                return false;
+            }
+
+            //Setting up the temp list
+            List<User> tempList = new List<User>();
+
+            foreach(User person in _loginStore.Data.users)
+            {
+                if(person.ID != uID)
+                {
+                    tempList.Add(person);
+                }
+            }
+
+                //Save the state in the current state registry
+                _loginStore.Data.users = tempList.ToArray();
+
+                //Save teh changes in the file
+                _loginStore.SaveChanges();
+
+                //Notify the user of success
+                return true;
+
+
+            }catch(Exception ex)
+            {
+                //In the event of an error, make it obvious
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(ex.ToString());
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Black;
+
+                return false;
+            }
+        }
+
 
         /// <summary>
         /// This function will return a hashed version of the input string
@@ -278,9 +386,6 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
        
         }
-
-
-
 
     }
 
