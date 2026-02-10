@@ -1,20 +1,28 @@
-import {loadComponent} from "./router.js";
+import {loadComponent, referenceState} from "./router.js";
 
 export const connection = new signalR.HubConnectionBuilder().withUrl("/socketHub").build();
 
 var isHost = false;
 
-function CheckAmIHost(){
+export function CheckAmIHost(){
     return isHost;
 }
+
+export const appState = {
+    isHost: false,
+    connection: connection
+}
+
+referenceState(appState);
 
 
 
 //This function asks the server if this user is the host.
-async function checkHostStatus(){
+export async function checkHostStatus(){
 
     //Call the server, wait for a response
     isHost = await connection.invoke("CheckIfHost");
+    appState.isHost = isHost;
     if(isHost === true){
         //Log in. This is the super user
         loadComponent("Home");

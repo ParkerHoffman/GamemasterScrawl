@@ -1,12 +1,23 @@
 import {loadComponent} from "../router.js";
 import { connection } from "../app.js";
 
+var ddList = [];
+
 export function init(container, appState){
 
 
 const loginBtn = container.querySelector("#LogInButton");
   
 loginBtn.addEventListener("click", async () => {ValidateCreds(container, appState)});
+
+getUserList(appState);
+}
+
+
+async function getUserList(state){
+    ddList = await state.connection.invoke("GetUserNameList")
+
+    console.log(ddList)
 }
 
 
@@ -32,7 +43,7 @@ async function ValidateCreds(container, appState){
     const newPass = hashPassword(pass);
 
     //Tell the server the login creds for it to do it's magic
-    var success = await connection.invoke("UserLogin", user, newPass);
+    var success = await appState.connection.invoke("UserLogin", user, newPass);
 }
 
 

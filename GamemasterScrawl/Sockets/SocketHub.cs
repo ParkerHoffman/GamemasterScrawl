@@ -2,6 +2,7 @@ using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Cryptography;
+using System.Reflection.Metadata;
 
 
 
@@ -13,7 +14,7 @@ namespace GamemasterScrawl
 
 //Used to cleanly shutdown the app when relevant
 private readonly IHostApplicationLifetime _appLifetime;
-        private readonly FileHandler<LoginState> _store;
+        private readonly FileHandler<LoginState> _loginStore;
         private static int _connectionCount = 0;
         private static readonly object _lock = new();
 
@@ -27,7 +28,7 @@ private readonly IHostApplicationLifetime _appLifetime;
         /// <param name="_lifetime">Application reference, for termination</param>
         public SocketHub(FileHandler<LoginState> tempStore, HostIdentity host, IHostApplicationLifetime _lifetime)
         {
-            _store = tempStore;
+            _loginStore = tempStore;
             _hostIdentity = host;
             _appLifetime = _lifetime;
         }
@@ -100,6 +101,29 @@ private readonly IHostApplicationLifetime _appLifetime;
             return _hostIdentity.CheckHost(Context.ConnectionId);
         }
 
+
+        /// <summary>
+        /// This gets a list of currently useful users
+        /// </summary>
+        /// <returns>A string[] of current usernames that are valid</returns>
+        public async Task<string[]> GetUserNameList()
+        {
+            List<string> uList = new List<string>();
+            
+            foreach(GamemasterScrawl.User singleUser in _loginStore.Data.users)
+            {
+                uList.Add(singleUser.username);
+            }
+
+            return uList.ToArray();
+
+        }
+
+        public async Task GetUserList()
+        {
+            //This is where I send up the current state
+        }
+
     /// <summary>
     /// 
     /// </summary>
@@ -111,8 +135,6 @@ private readonly IHostApplicationLifetime _appLifetime;
             try
             {
                 string passHash = HashString(password);
-                           Console.WriteLine(user);
-            Console.WriteLine(passHash); 
             
             } catch(Exception ex)
             {

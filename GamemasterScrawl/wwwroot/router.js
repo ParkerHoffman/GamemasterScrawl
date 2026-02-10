@@ -1,3 +1,10 @@
+let appState;
+
+
+export async function referenceState(refState){
+    appState = refState;
+}
+
 //THis function is used to fetch and switch to different pages without ever causing a redirect
 export async function loadComponent(name) {
     //Get the entire app that can be changed up
@@ -16,7 +23,7 @@ export async function loadComponent(name) {
   
   if(module){
   //Initialize the JS
-  module.init(app);
+  module.init(app, appState);
   }
 
 

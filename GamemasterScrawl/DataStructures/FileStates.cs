@@ -12,6 +12,7 @@ namespace GamemasterScrawl
         public string username {get; set;} = "";
         public string pass {get; set;} = "";
         public int ID {get ;set;} = -1;
+        public string currentConnection {get; set;} = "";
 
 
     }
