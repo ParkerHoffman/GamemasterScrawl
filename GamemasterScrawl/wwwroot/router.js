@@ -1,6 +1,6 @@
 let appState;
 
-
+//All this does is update the pointer reference on call. This is necessary to be run once on page load to set up the pointers and never again
 export async function referenceState(refState){
     appState = refState;
 }
@@ -11,9 +11,10 @@ export async function loadComponent(name) {
   const app = document.getElementById("app");
 
   //Fetch the new components
-  const html = await fetch(`/components/${name}.html`)
-    .then(r => r.text());
+    const res = await fetch(`/components/${name}.html`);
 
+    //Force the html to have to be loaded before continuing
+    const html = await res.text();
 
     //Set the inner HTML to the given
   app.innerHTML = html;

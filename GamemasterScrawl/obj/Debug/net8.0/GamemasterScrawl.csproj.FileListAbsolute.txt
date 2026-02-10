@@ -1,10 +1,4 @@
-C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\rpswa.dswa.cache.json
-C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\GamemasterScrawl.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\GamemasterScrawl.AssemblyInfoInputs.cache
-C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\GamemasterScrawl.AssemblyInfo.cs
-C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\GamemasterScrawl.csproj.CoreCompileInputs.cache
-C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\GamemasterScrawl.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\GamemasterScrawl.sourcelink.json
+C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\bin\Debug\net8.0\App_Data\login.json
 C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\bin\Debug\net8.0\GamemasterScrawl.staticwebassets.runtime.json
 C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\bin\Debug\net8.0\GamemasterScrawl.staticwebassets.endpoints.json
 C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\bin\Debug\net8.0\GamemasterScrawl.exe
@@ -12,6 +6,13 @@ C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\bin\Debug\net8
 C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\bin\Debug\net8.0\GamemasterScrawl.runtimeconfig.json
 C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\bin\Debug\net8.0\GamemasterScrawl.dll
 C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\bin\Debug\net8.0\GamemasterScrawl.pdb
+C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\GamemasterScrawl.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\GamemasterScrawl.AssemblyInfoInputs.cache
+C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\GamemasterScrawl.AssemblyInfo.cs
+C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\GamemasterScrawl.csproj.CoreCompileInputs.cache
+C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\GamemasterScrawl.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\GamemasterScrawl.sourcelink.json
 C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\rjimswa.dswa.cache.json
 C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
 C:\Users\parkh\Documents\GitHub\GamemasterScrawl\GamemasterScrawl\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json

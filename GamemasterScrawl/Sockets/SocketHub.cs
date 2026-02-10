@@ -119,9 +119,9 @@ private readonly IHostApplicationLifetime _appLifetime;
 
         }
 
-        public async Task GetUserList()
+        public async Task<User[]> GetFullUserList()
         {
-            //This is where I send up the current state
+            return _loginStore.Data.users;
         }
 
     /// <summary>
