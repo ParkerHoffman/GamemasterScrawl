@@ -100,6 +100,7 @@ string? ip = null;
 
 lifetime.ApplicationStopping.Register(() =>
 {
+    Console.WriteLine("");
     Console.WriteLine("Application stopping — cleaning up...");
 
     //Setting up to tell all Socket clients to DC

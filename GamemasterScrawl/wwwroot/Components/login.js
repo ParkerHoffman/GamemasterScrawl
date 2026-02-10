@@ -28,25 +28,32 @@ async function ValidateCreds(container, appState){
         return;
     }
 
+    //Hashing the pass
+    const newPass = hashPassword(pass);
+
     //Tell the server the login creds for it to do it's magic
-    var success = await connection.invoke("UserLogin", user, await hashPassword(pass));
+    var success = await connection.invoke("UserLogin", user, newPass);
 }
 
 
 //This is now erroring out
 //This hashes the password before sending across the internet
-async function hashPassword(pass){
-    //Set up encoder
-    const encoder = new TextEncoder();
+function hashPassword(pass){
+    let hash = 0;
 
-    //Endcode pass
-    const data = encoder.encode(pass);
+    //For each character
+    for(let i = 0; i < pass.length; i++){
 
-    const buffer = await crypto.subtle.digest("SHA-256", data);
+        //Get current char
+        const char = pass.charCodeAt(i);
 
-    const hashArray = Array.from(new Uint8Array(buffer));
+        //Modify the 'hash' in
+        hash = char + (hash << 6) + (hash << 16) - hash;
+    }
 
-    return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+
+    //Return the pass as a hex
+    return (hash >>> 0).toString(16).padStart(8, '0');
 }
 
 
