@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Cryptography;
 using System.Reflection.Metadata;
+using System.ComponentModel;
 
 
 
@@ -148,6 +149,12 @@ private readonly IHostApplicationLifetime _appLifetime;
 
         }
 
+        /// <summary>
+        /// On call, it creates a new user with the given Username and Password (hash)
+        /// </summary>
+        /// <param name="user">Username of the given account</param>
+        /// <param name="password">Password of the given account</param>
+        /// <returns>bool of success</returns>
         public async Task<bool> CreateUser(string user, string password)
         {
         try
@@ -170,6 +177,9 @@ private readonly IHostApplicationLifetime _appLifetime;
                 //Set the data points on the new user
                 freshUser.username = user;
                 freshUser.pass = passHash;
+                
+                //Increment the ID counter
+                _loginStore.Data.IncrementID();
                 freshUser.ID = _loginStore.Data.lastID;
 
                 //Increment the ID counter
@@ -191,6 +201,54 @@ private readonly IHostApplicationLifetime _appLifetime;
                 return true;
             
             } catch(Exception ex)
+            {
+                //In the event of an error, make it obvious
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(ex.ToString());
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Black;
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// This function changes the password of a user
+        /// </summary>
+        /// <param name="uID">UserID being changed</param>
+        /// <param name="newPass">New password hash</param>
+        /// <returns>bool of success</returns>
+        public async Task<bool> ChangeUserPassword(int uID, string newPass)
+        {
+            try
+            {
+                //Hash the password attempt
+                string passHash = HashString(newPass);
+
+                List<User> uList = new List<User>();
+
+                foreach(User person in _loginStore.Data.users)
+                {
+                    if(person.ID == uID)
+                    {
+                        person.pass = passHash;
+                    } 
+                        uList.Add(person);
+                    
+                }
+
+                //Save the state in the current state registry
+                _loginStore.Data.users = uList.ToArray();
+
+                //Save teh changes in the file
+                _loginStore.SaveChanges();
+
+                //Notify the user of success
+                return true;
+
+
+            }catch(Exception ex)
             {
                 //In the event of an error, make it obvious
                 Console.BackgroundColor = ConsoleColor.DarkRed;

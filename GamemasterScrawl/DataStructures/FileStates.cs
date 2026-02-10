@@ -11,7 +11,7 @@ namespace GamemasterScrawl
         {
             if(lastID < users.Length)
             {
-                lastID = users.Length;
+                lastID = users.Length + 1;
             } else
             {
                 lastID++;   

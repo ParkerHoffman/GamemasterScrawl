@@ -1,9 +1,23 @@
 {
   "users": [
-    { "username": "A",
-       "pass": "x",
-        "ID": 1,
-        "currentConnection": ""
-      }
-  ]
+    {
+      "username": "Nate",
+      "pass": "927FCA5756324D78E29EA281944D7666C417CA4F18A8B6029B5F9C9EF9CD5237",
+      "ID": 1,
+      "currentConnection": ""
+    },
+    {
+      "username": "Shane",
+      "pass": "45E578D9A3CBFA83A467CE185BACDD07E4A7117A3327FABAAA470F3CB7B202C9",
+      "ID": 2,
+      "currentConnection": ""
+    },
+    {
+      "username": "Tyler",
+      "pass": "96D10FC3738560B07215BA4B7A0455645D9583E96BBAB65C22044DDC889990B1",
+      "ID": 3,
+      "currentConnection": ""
+    }
+  ],
+  "lastID": 3
 }

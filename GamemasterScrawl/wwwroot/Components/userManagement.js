@@ -61,15 +61,39 @@ userList = await appState.connection.invoke("GetFullUserList");
     const displayTableCont = container.querySelector("#UsermanagementTableContainer");
 
 
-    var innerString = "<table><thead><tr><td>Username</td></tr></thead><tr>";
+    var innerString = "<table><thead><tr><td>ID</td><td>Username</td><td>Edit Password</td></tr></thead><tr>";
 
     userList.forEach((e) => {
-        innerString += "<td>" + e.username +  "<td>";
+        innerString += `<tr><td>${e.id}</td><td>${e.username}</td><td><input id=\"passwordChange${e.id}\"/><button id=\"passwordChangeSubmit${e.id}\">Change Password</button></td></tr>`;
     })
 
 
-    innerString += "</tr></table>";
+
+    innerString += "</table>";
 
 
     displayTableCont.innerHTML = innerString;
+
+    //Setting up the listener set for all the buttons
+        userList.forEach((e) => {
+            const passEditBtn = container.querySelector("#passwordChangeSubmit" + e.id);
+  
+            passEditBtn.addEventListener("click", async () => {changeUserPassword(container, appState, e.id)});
+
+    })
+}
+
+async function changeUserPassword(container, appState, id){
+    var unhashedPassCont = container.querySelector(`#passwordChange${id}`);
+
+    var hashed = hashPassword(unhashedPassCont.value);
+
+    var success = await appState.connection.invoke("ChangeUserPassword", id, hashed);
+
+    if(success == true){
+        unhashedPassCont.value = "";
+        alert('Password Successfully updated')
+    } else {
+        alert('Error. Password Not updated correctly')
+    }
 }

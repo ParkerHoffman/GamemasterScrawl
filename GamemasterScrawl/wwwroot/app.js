@@ -1,22 +1,32 @@
 import {loadComponent, referenceState} from "./router.js";
 
-export const connection = new signalR.HubConnectionBuilder().withUrl("/socketHub").build();
+//The SignalR connection (AKA socket conenction)
+//It's used to maintain a connection with the server
+const connection = new signalR.HubConnectionBuilder().withUrl("/socketHub").build();
 
+//This boolean controls the app's host status
 var isHost = false;
 
+//This function checks if the user is the host
 export function CheckAmIHost(){
     return isHost;
 }
 
+//A global state variable with references to the variables stored in this global layer
 export const appState = {
     isHost: false,
     connection: connection
 }
 
+//Set the reference to the global state
 referenceState(appState);
 
 //This hashes the password before sending across the internet
 export function hashPassword(pass){
+
+    //Adding some salt to the password before hashing
+    pass = pass + "I'm salty";
+
     let hash = 0;
 
     //For each character
@@ -39,11 +49,12 @@ export function hashPassword(pass){
 //This function asks the server if this user is the host.
 export async function checkHostStatus(){
 
-    //Call the server, wait for a response
+    //Call the server, wait for a response. Set the relevant states that track that
     isHost = await connection.invoke("CheckIfHost");
     appState.isHost = isHost;
+
     if(isHost === true){
-        //Log in. This is the super user
+        //This is the super user. No need to log in
         loadComponent("Home");
         
     } else {
@@ -75,8 +86,6 @@ export async function checkHostStatus(){
         //Try again in a few seconds
 setTimeout(startConnection, 5000);
     }
-
-
  }
 
 
