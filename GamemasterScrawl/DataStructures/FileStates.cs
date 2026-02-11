@@ -30,9 +30,15 @@ namespace GamemasterScrawl
         public class User
     {
         public string username {get; set;} = "";
-        public string pass {get; set;} = "";
+        public string pass {private get; set;} = "";
         public int ID {get ;set;} = -1;
         public string currentConnection {get; set;} = "";
+
+        //This prevents passwords from ever leaving this area
+        public bool checkLoginAbility(string user, string passHash)
+        {
+            return  u.currentConnection.Length > 0 && username.Equals(user) && u.pass.Equals(passHash);
+        }
 
 
     }

@@ -5,12 +5,25 @@ var ddList = [];
 
 export function init(container, appState){
 
-
-const loginBtn = container.querySelector("#LogInButton");
+    //This is teh button that a user presses to attempt to log in
+    const loginBtn = container.querySelector("#LogInButton");
   
-loginBtn.addEventListener("click", async () => {ValidateCreds(container, appState)});
+    //This is what happens on login attempt
+    loginBtn.addEventListener("click", async () => {ValidateCreds(container, appState)});
 
-getUserList(appState);
+    //This is preloading the user list
+    getUserList(appState);
+
+
+    //This handles a user logging in, and removes them from the dd List
+    appState.connection.on("UserSuccessfullyLoggedIn", function (username)  {
+        RemoveLoginOption(username)
+    })
+
+    //This handles a user logging in, and removes them from the dd List
+    appState.connection.on("UserSuccessfullyDisconnects", function (username)  {
+        AddLoginOption(username)
+    })
 }
 
 
@@ -18,6 +31,16 @@ async function getUserList(state){
     ddList = await state.connection.invoke("GetUserNameList")
 
     console.log(ddList)
+}
+
+//Removes the given user from the DD list
+function RemoveLoginOption(user){
+    ddList = ddList.filter((e) => e !== user);
+}
+
+//Adds a user on user disconnect to the DD Options
+function AddLoginOption(user){
+    ddList = [...ddList, user]
 }
 
 

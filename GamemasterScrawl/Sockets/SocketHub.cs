@@ -67,6 +67,23 @@ private readonly IHostApplicationLifetime _appLifetime;
                 if(_connectionCount == 0 || _hostIdentity.CheckHost(Context.ConnectionId))
                 {
                     shouldClear = true;
+                } else
+                {
+                    List<User> tempList = new List<User>();
+
+                    foreach(User u in _loginStore.Data.users)
+                    {
+                        if (u.currentConnection.Equals(Context.ConnectionId))
+                        {
+                            u.currentConnection = "";
+                        }
+
+                        tempList.Add(u);
+                    }
+
+                    _loginStore.Data.users = tempList.ToArray();
+
+                    _loginStore.SaveChanges();
                 }
             }
 
@@ -114,19 +131,39 @@ private readonly IHostApplicationLifetime _appLifetime;
         /// <returns>A string[] of current usernames that are valid</returns>
         public async Task<string[]> GetUserNameList()
         {
-            List<string> uList = new List<string>();
-            
-            foreach(GamemasterScrawl.User singleUser in _loginStore.Data.users)
+            //Temporary list to eb sorted through
+            List<string> tempList = new List<string>();
+
+            //Iterate through every user in the list
+            foreach(User u in _loginStore.Data.users)
             {
-                uList.Add(singleUser.username);
+                //If there is not a connected user
+                if(u.currentConnection != null && u.currentConnection.Length > 0)
+                {
+                    //Add the username
+                    tempList.Add(u.username);
+                }
             }
 
-            return uList.ToArray();
+            //Return the array of usernames
+            return tempList.ToArray();
 
         }
 
+
+        /// <summary>
+        /// This gives a master view of the Userlist data for editng purposes
+        /// </summary>
+        /// <returns>The JSON of the User Data</returns>
         public async Task<User[]> GetFullUserList()
         {
+            bool? perms = await CheckIfHost();
+            //Check the perms of the user. Deny if not allowed
+            if(perms != true)
+            {
+                return false;
+            }
+
             return _loginStore.Data.users;
         }
 
@@ -144,24 +181,31 @@ private readonly IHostApplicationLifetime _appLifetime;
 
                 GamemasterScrawl.User? user = null;
 
-                int holdingI = 0;
+                //Declare the holding variable for event user can be signed in
+                int holdingI;
 
                 for(holdingI = 0; holdingI < _loginStore.Data.users.Length; holdingI++)
                 {
                     GamemasterScrawl.User u = _loginStore.Data.users[holdingI];
+
+
+//RED FLAG: WILL NEED IF LOGIC CHANGE
                     //Check every account
-                    if (u.username.Equals(username) && u.pass.Equals(passHash))
+                    //If a user is not connected to this account AND the credentials are correct
+                    if (u.checkLoginAbility(username, passHash))
                     {
+                        //Set the user
                         user = u;
+
+                        //Stop iterating
                         break;
                     }
                 }
 
-            
-
                 //Case: No user identified
                 if(user == null)
                 {
+                    //Tell the user those creds don't work (or another user is using them)
                     return false;
                 }
 
@@ -174,6 +218,9 @@ private readonly IHostApplicationLifetime _appLifetime;
                 _loginStore.Data.users = tempArray;
 
                 _loginStore.SaveChanges();
+
+                //Now, we tell all clients this user is signed in
+                await Clients.All.SendAsync("UserSuccessfullyLoggedIn", username);
 
                 return true;
             
