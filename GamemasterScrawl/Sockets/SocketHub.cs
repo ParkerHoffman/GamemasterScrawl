@@ -235,6 +235,9 @@ private readonly IHostApplicationLifetime _appLifetime;
                 //Now, we tell all clients this user is signed in
                 await Clients.All.SendAsync("UserSuccessfullyLoggedIn", username);
 
+                
+                await toastAllUsers(username + " just signed in. Hello " + username + '!', "info");
+
                 return true;
             
             } catch(Exception ex)

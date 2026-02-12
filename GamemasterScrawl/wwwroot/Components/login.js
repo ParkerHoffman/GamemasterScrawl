@@ -77,7 +77,7 @@ async function ValidateCreds(container, appState){
 
     //If there is no password, alert the user to this fact. This error will be utilized from this point onwards
     if(!pass){
-        toastUser(`Please insert a valid password for the user '${user}`, 'error')
+        toastUser(`Please insert a valid password for the user '${user}'`, 'error')
         return;
     }
 
@@ -88,6 +88,8 @@ async function ValidateCreds(container, appState){
     var success = await appState.connection.invoke("UserLogin", user, newPass);
 
     if(success === true){
+        //Tell the user the good news
+        toastUser(`Successfully logged in as ${user}`, 'success')
         //Send the user home, into the app
         loadComponent("home");
     } else {
