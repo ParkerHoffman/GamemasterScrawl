@@ -5,6 +5,14 @@
         //The reference of the host's connection ID
         public string? HostConnectionID {get; private set;}
 
+        /// <summary>
+        /// Gets the Host's Connection ID
+        /// </summary>
+        /// <returns>String of Host ConnectionID</returns>
+        public string? GetHost()
+        {
+            return HostConnectionID;
+        }
 
         /// <summary>
         /// This function checks if the user is registered as the host
@@ -13,8 +21,6 @@
         /// <returns></returns>
         public bool CheckHost(string newID)
         {
-            Console.WriteLine(newID + "   " + HostConnectionID);
-            Console.WriteLine(newID.Equals(HostConnectionID));
             return newID.Equals(HostConnectionID);
         }
 

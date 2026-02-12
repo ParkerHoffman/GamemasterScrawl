@@ -17,7 +17,12 @@
       "pass": "49DC41FCE9E76094645FE536FE00BEDD85DC9050084356B28D04AC8007FD8DA6",
       "ID": 2,
       "currentConnection": ""
+    },
+    {
+      "username": "Matt",
+      "pass": "49DC41FCE9E76094645FE536FE00BEDD85DC9050084356B28D04AC8007FD8DA6",
+      "ID": 3,
+      "currentConnection": ""
     }
-  ],
-  "lastID": 0
+  ]
 }

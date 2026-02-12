@@ -47,7 +47,20 @@ builder.WebHost.ConfigureKestrel(options =>
 var app = builder.Build();
 
 //Used in routing for the app, if not otherwise specified the app knows where the correct files are when http requesting
-app.UseStaticFiles();
+//app.UseStaticFiles();
+
+//See above
+//In addition, this disables cacheing
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        // Prevent caching during development
+        ctx.Context.Response.Headers.Append("Cache-Control", "no-cache, no-store, must-revalidate");
+        ctx.Context.Response.Headers.Append("Pragma", "no-cache");
+        ctx.Context.Response.Headers.Append("Expires", "0");
+    }
+});
 
 //Used in determining the useable IP (for the auto-open of it)
 var lifetime = app.Lifetime;

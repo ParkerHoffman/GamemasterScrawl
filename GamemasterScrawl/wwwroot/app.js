@@ -82,6 +82,49 @@ export async function checkHostStatus(){
     await connection.stop();
  }
 
+  //On call of this function, the user gets a custom toast
+ export function toastUser(message, type, duration = 3000){
+
+    if(type.length === 0 ){
+        type = 'success';
+    }
+
+    //The toast container
+    const container = document.getElementById('toast-container');
+
+    const toast = document.createElement('div');
+    const toastID = `ToastID${Date().now}`
+
+    //Setting it up as a ${type} toast
+    toast.className = `toast ${type}`;
+
+    //Set up other properties of the toast
+    toast.id = toastID;
+    toast.innerText = message;
+
+    //Birth the child
+    container.appendChild(toast);
+
+    //CSS anim
+    setTimeout(() => toast.classList.add('show'), 10)
+
+    //Kill the child
+    const removeToast = () => {
+        toast.classList.remove("show");
+        //Wait for the toast to slide out before I take a knife to it
+        toast.addEventListener('transitionend', () => toast.remove());
+    }
+
+    //Child murdering time (with a short delay for dramatic effect)
+    setTimeout(removeToast, duration);
+
+ }
+
+  //On the event a user calls a toast
+ connection.on("callToast", function (message, type){
+    toastUser(message, type);
+ });
+
  //This is run on page load. It initializes the socket connection
  async function startConnection(){
     try{
@@ -94,6 +137,9 @@ export async function checkHostStatus(){
 setTimeout(startConnection, 5000);
     }
  }
+
+
+
 
 
 //Start the socket connection (And other startup functions)

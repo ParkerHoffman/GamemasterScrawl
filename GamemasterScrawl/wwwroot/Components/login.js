@@ -71,13 +71,13 @@ async function ValidateCreds(container, appState){
 
     //If there is no username, alert the user to this fact
     if(!user){
-        alert('Please enter a username');
+        toastUser('Please choose a username', 'error')
         return;
     }
 
     //If there is no password, alert the user to this fact. This error will be utilized from this point onwards
     if(!pass){
-        alert(`Please insert a valid password for the user '${user}`);
+        toastUser(`Please insert a valid password for the user '${user}`, 'error')
         return;
     }
 
@@ -91,7 +91,7 @@ async function ValidateCreds(container, appState){
         //Send the user home, into the app
         loadComponent("home");
     } else {
-        alert('Please try a different credential set')
+        toastUser(`Please insert a valid password for the user '${user}`, 'error')
     }
 }
 

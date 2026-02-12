@@ -38,13 +38,13 @@ async function createNewUser(container, appState){
     
         //If there is no username, alert the user to this fact
         if(!user){
-            alert('Please enter a new username');
+            toastUser(`Please enter a new username`, 'error')
             return;
         }
     
         //If there is no password, alert the user to this fact. This error will be utilized from this point onwards
         if(!pass){
-            alert(`Please insert a valid password for the user '${user}`);
+            toastUser(`Please insert a valid password for the user '${user}`, 'error')
             return;
         }
     
@@ -60,7 +60,7 @@ async function createNewUser(container, appState){
             passI.value = "";
             userI.value = "";
         } else {
-            alert('There was an error creating this user. It could be due to another user already possessing this username')
+            toastUser(`Unable to create this user at this time. It could be due to a server error, or the username is not unique`, 'error')
         }
 }
 
@@ -131,10 +131,7 @@ async function changeUserPassword(container, appState, id){
 
     if(success == true){
         unhashedPassCont.value = "";
-        alert('Password Successfully updated')
-    } else {
-        alert('Error. Password Not updated correctly')
-    }
+    } 
 }
 
 async function DeleteUser(container, appState, id){
@@ -143,9 +140,9 @@ async function DeleteUser(container, appState, id){
 
     if(success == true){
         FetchTableInfo(container, appState);
-        alert('User Deleted')
+        toastUser(`User successfully deleted`, 'success')
     } else {
-        alert('Error. Currently unable to delete user')
+        toastUser(`Unable to delete user`, 'error')
     }
 }
 
@@ -155,8 +152,8 @@ async function kickUser(container, appState, id){
 
         if(success == true){
         FetchTableInfo(container, appState);
-        alert('User kicked')
+        toastUser(`Successfully logged the user out`, 'success')
     } else {
-        alert('Error. Currently unable to kick user')
+        toastUser(`Error kicking user`, 'error')
     }
 }
