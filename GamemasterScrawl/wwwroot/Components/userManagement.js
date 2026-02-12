@@ -1,5 +1,5 @@
 import {loadComponent} from "../router.js";
-import { hashPassword } from "../app.js";
+import { hashPassword, toastUser } from "../app.js";
 
 var userList = [];
 
@@ -38,13 +38,13 @@ async function createNewUser(container, appState){
     
         //If there is no username, alert the user to this fact
         if(!user){
-            toastUser(`Please enter a new username`, 'error')
+            toastUser("More Info Needed", `Please enter a new username`, 'warn')
             return;
         }
     
         //If there is no password, alert the user to this fact. This error will be utilized from this point onwards
         if(!pass){
-            toastUser(`Please insert a valid password for the user '${user}`, 'error')
+            toastUser("More Info Needed", `Please insert a valid password for the user '${user}`, 'warn')
             return;
         }
     
@@ -60,7 +60,7 @@ async function createNewUser(container, appState){
             passI.value = "";
             userI.value = "";
         } else {
-            toastUser(`Unable to create this user at this time. It could be due to a server error, or the username is not unique`, 'error')
+            toastUser("Error", `Unable to create this user at this time. It could be due to a server error, or the username is not unique`, 'error')
         }
 }
 
@@ -78,12 +78,12 @@ function UpdateTable(container, appState){
     var innerString = "<table><thead><tr><td>ID</td><td>Username</td><td>Edit Password</td><td>User Status</td><td>Kick User</td><td>Delete User</td></tr></thead><tr>";
 
     userList.forEach((e) => {
-        innerString += `<tr><td>${e.id}</td><td>${e.username}</td><td><input id=\"passwordChange${e.id}\"/><button id=\"passwordChangeSubmit${e.id}\">Change Password</button></td><td>`
+        innerString += `<tr><td>${e.id}</td><td>${e.username}</td><td><input autocomplete=\"new-password\" type=\"password\" id=\"passwordChange${e.id}\"/><button id=\"passwordChangeSubmit${e.id}\">Change Password</button></td><td>`
         
         if(e.currentConnection && e.currentConnection.length > 0){
             innerString += `Active</td><td><button id=\"kickUser${e.id}\">Kick</button></td><td><button id=\"deleteUser${e.id}\">Delete</button></td></tr>`
         } else {
-            innerString += `</td><td></td><td><button id=\"deleteUser${e.id}\">Delete</button></td></tr>`
+            innerString += `</td><td><button id=\"kickUser${e.id}\" class=\"InactiveButton\">Kick</button></td><td><button id=\"deleteUser${e.id}\">Delete</button></td></tr>`
         }
         
     })
@@ -140,9 +140,9 @@ async function DeleteUser(container, appState, id){
 
     if(success == true){
         FetchTableInfo(container, appState);
-        toastUser(`User successfully deleted`, 'success')
+        toastUser("Deleted", `User successfully deleted`, 'success')
     } else {
-        toastUser(`Unable to delete user`, 'error')
+        toastUser("Error", `Unable to delete user`, 'error')
     }
 }
 
@@ -152,8 +152,8 @@ async function kickUser(container, appState, id){
 
         if(success == true){
         FetchTableInfo(container, appState);
-        toastUser(`Successfully logged the user out`, 'success')
+        toastUser("User Kicked", `Successfully logged the user out`, 'success')
     } else {
-        toastUser(`Error kicking user`, 'error')
+        toastUser("Error", `Error kicking user`, 'error')
     }
 }

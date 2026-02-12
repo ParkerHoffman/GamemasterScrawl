@@ -1,5 +1,5 @@
 import {loadComponent} from "../router.js";
-import { hashPassword } from "../app.js";
+import { hashPassword, toastUser } from "../app.js";
 
 var ddList = [];
 
@@ -71,13 +71,13 @@ async function ValidateCreds(container, appState){
 
     //If there is no username, alert the user to this fact
     if(!user){
-        toastUser('Please choose a username', 'error')
+        toastUser("More Info Needed", 'Please choose a username', 'warn')
         return;
     }
 
     //If there is no password, alert the user to this fact. This error will be utilized from this point onwards
     if(!pass){
-        toastUser(`Please insert a valid password for the user '${user}'`, 'error')
+        toastUser("More Info Needed", `Please insert a valid password for the user '${user}'`, 'warn')
         return;
     }
 
@@ -89,11 +89,11 @@ async function ValidateCreds(container, appState){
 
     if(success === true){
         //Tell the user the good news
-        toastUser(`Successfully logged in as ${user}`, 'success')
+        toastUser("Success", `Successfully logged in as ${user}`, 'success')
         //Send the user home, into the app
-        loadComponent("home");
+        loadComponent("Home");
     } else {
-        toastUser(`Please insert a valid password for the user '${user}`, 'error')
+        toastUser("Bad Credetials", `Please insert a valid password for the user '${user}`, 'error')
     }
 }
 

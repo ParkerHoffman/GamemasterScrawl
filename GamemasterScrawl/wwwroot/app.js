@@ -73,6 +73,7 @@ export async function checkHostStatus(){
  //On the event the host orders a logout, go to the login screen
  connection.on("LogOut", function (){
     if(!isHost){
+        toastUser('Kicked', `The host has decided to kick you. You've been logged out`, 'warn')
         loadComponent("login")
     }
  });
@@ -83,10 +84,10 @@ export async function checkHostStatus(){
  }
 
   //On call of this function, the user gets a custom toast
- export function toastUser(message, type, duration = 3000){
+ export function toastUser(header, message, type, duration = 3000){
 
     if(type.length === 0 ){
-        type = 'success';
+        type = 'info';
     }
 
     //The toast container
@@ -98,9 +99,21 @@ export async function checkHostStatus(){
     //Setting it up as a ${type} toast
     toast.className = `toast ${type}`;
 
+    const toastHeader = document.createElement('div');
+
+    toastHeader.innerText = header;
+
+    toastHeader.className = 'toastHeader';
+
+
+    const toastMessage = document.createElement('div');
+
+    toastMessage.innerText = message;
+
     //Set up other properties of the toast
     toast.id = toastID;
-    toast.innerText = message;
+    toast.appendChild(toastHeader);
+    toast.appendChild(toastMessage);
 
     //Birth the child
     container.appendChild(toast);
@@ -121,8 +134,8 @@ export async function checkHostStatus(){
  }
 
   //On the event a user calls a toast
- connection.on("callToast", function (message, type){
-    toastUser(message, type);
+ connection.on("callToast", function (header, message, type){
+    toastUser(header, message, type);
  });
 
  //This is run on page load. It initializes the socket connection

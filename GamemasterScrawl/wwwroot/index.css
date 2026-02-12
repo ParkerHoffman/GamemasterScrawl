@@ -27,7 +27,12 @@
     opacity: 1;
 }
 
+.toast .toastHeader {
+font-size: 1.4em;
+}
+
 /* These are the colorings and definitions for each toast severity */
 .toast.success { border-left: 5px solid #4CAF50; }
 .toast.error   { border-left: 5px solid #F44336; }
 .toast.info   { border-left: 5px solid #3688f4; }
+.toast.warn   { border-left: 5px solid #f4e736; }

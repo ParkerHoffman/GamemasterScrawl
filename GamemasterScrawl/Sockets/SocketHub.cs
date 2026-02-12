@@ -107,6 +107,7 @@ private readonly IHostApplicationLifetime _appLifetime;
         public async Task CloseWindows()
         {
 
+            await toastAllUsers("App Shutting Down", "The app is now shutting down. Any changes on the server are being saved", "warn");
 
             //clear all the connections (for use next time)
             List<User> tempList = new List<User>();
@@ -236,7 +237,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 await Clients.All.SendAsync("UserSuccessfullyLoggedIn", username);
 
                 
-                await toastAllUsers(username + " just signed in. Hello " + username + '!', "info");
+                await toastAllUsers("Hello!", username + " just signed in. Hello " + username + '!', "info");
 
                 return true;
             
@@ -308,7 +309,7 @@ private readonly IHostApplicationLifetime _appLifetime;
 
                 await Clients.All.SendAsync("UserSuccessfullyDisconnects", user);
 
-                toastHost("The user '" + user + "' was successfully created", "success");
+                toastHost("Created", "The user '" + user + "' was successfully created", "success");
 
                 return true;
             
@@ -321,7 +322,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.BackgroundColor = ConsoleColor.Black;
 
-                toastHost("There was an error creating this user. Please try again later", "error");
+                toastHost("Error", "There was an error creating this user. Please try again later", "error");
 
                 return false;
             }
@@ -368,7 +369,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 //Save teh changes in the file
                 _loginStore.SaveChanges();
 
-                toastHost("The password for " + holderName + " has successfully been updated", "success");
+                toastHost("Success", "The password for " + holderName + " has successfully been updated", "success");
 
                 //Notify the user of success
                 return true;
@@ -383,7 +384,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.BackgroundColor = ConsoleColor.Black;
 
-                toastHost("An error occured while changing this user's password. Please try again later", "error");
+                toastHost("Error", "An error occured while changing this user's password. Please try again later", "error");
 
                 return false;
             }
@@ -437,7 +438,7 @@ private readonly IHostApplicationLifetime _appLifetime;
 
                 await disconnectSingleUserByConn(holderConnection);
 
-                toastHost(holderName + " has been successfully logged out", "success");
+                toastHost("Success", holderName + " has been successfully logged out", "success");
                 //Notify the user of success
                 return true;
 
@@ -451,7 +452,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.BackgroundColor = ConsoleColor.Black;
 
-                toastHost("There was an error kicking this user", "error");
+                toastHost("Error", "There was an error kicking this user", "error");
 
                 return false;
             }
@@ -535,37 +536,40 @@ private readonly IHostApplicationLifetime _appLifetime;
         /// <summary>
         /// Toasts all users with the given toast
         /// </summary>
+        /// <param name="header">Header of the toast</param>
         /// <param name="message">Message of the toast</param>
         /// <param name="type">Severity of the toast ('success', 'error', etc)</param>
         /// <returns>N/A</returns>
-        private async Task toastAllUsers(string message, string type)
+        private async Task toastAllUsers(string header, string message, string type)
         {
-            await Clients.All.SendAsync("callToast", message, type);
+            await Clients.All.SendAsync("callToast", header,  message, type);
         }
 
         /// <summary>
         /// Toasts a single user with the given toast
         /// </summary>
+        /// <param name="header">Header of the toast</param>
         /// <param name="message">Message of the toast</param>
         /// <param name="type">Severity of the toast ('success', 'error', etc)</param>
         /// <param name="connString">The specific user to be toasted</param>
         /// <returns>N/A</returns>
-        private async Task toastUser(string message, string type, string connString)
+        private async Task toastUser(string header, string message, string type, string connString)
         {
             Console.WriteLine("Toasting user " + connString + ", at severity " + type + " with:");
             Console.WriteLine(message);
-            await Clients.Client(connString).SendAsync("callToast", message, type);
+            await Clients.Client(connString).SendAsync("callToast", header, message, type);
         }
 
         /// <summary>
         /// Toasts the host with the given toast
         /// </summary>
+        /// <param name="header">Header of the toast</param>
         /// <param name="message">Message of the toast</param>
         /// <param name="type">Severity of the toast ('success', 'error', etc)</param>
         /// <returns>N/A</returns>
-        private async Task toastHost(string message, string type)
+        private async Task toastHost(string header, string message, string type)
         {
-            toastUser(message, type, _hostIdentity.GetHost());
+            toastUser(header, message, type, _hostIdentity.GetHost());
         }
 
         /// <summary>
