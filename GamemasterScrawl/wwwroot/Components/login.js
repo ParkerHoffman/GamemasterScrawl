@@ -1,7 +1,14 @@
 import {loadComponent} from "../router.js";
 import { hashPassword, toastUser } from "../app.js";
 
+//The reference to the library managing 3D stuff
+import * as THREE from 'three';
+
 var ddList = [];
+
+//Setting up stuff for the ROTATING CUBE OF OMINOUS INTENT
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 
 export function init(container, appState){
@@ -25,6 +32,9 @@ export function init(container, appState){
     appState.connection.on("UserSuccessfullyDisconnects", function (username)  {
         AddLoginOption(username, container)
     })
+
+    AddOminousCube(container);
+
 }
 
 
@@ -96,9 +106,45 @@ async function ValidateCreds(container, appState){
         toastUser("Bad Credetials", `Please insert a valid password for the user '${user}`, 'error')
     }
 }
+function RandomIntGen() {
+    return Math.floor(Math.random() * 21) - 10;
+}
 
 
 
+function AddOminousCube(container){
+        const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+    var ominousCubeCont = container.querySelector("#OminousCube");
+
+    ominousCubeCont.appendChild(renderer.domElement);
+
+    const geometry = new THREE.BoxGeometry(1,1,1);
+    const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+
+    camera.position.z = 5;
+    const randomYChng = RandomIntGen()
+    const randomXChng = RandomIntGen()
+
+
+function animate() {
+    cube.rotation.x += 0.01 * randomXChng;
+    cube.rotation.y += 0.01 * randomYChng;
+
+    renderer.render(scene, camera);
+}
+
+
+
+renderer.setAnimationLoop( animate );
+
+
+
+}
 
 
 

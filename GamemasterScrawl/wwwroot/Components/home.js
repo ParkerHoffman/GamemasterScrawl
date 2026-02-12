@@ -1,5 +1,8 @@
 import {loadComponent} from "../router.js";
 
+//The reference to the library managing 3D stuff
+import * as THREE from 'three';
+
 export function init(container, appState){
 
 
