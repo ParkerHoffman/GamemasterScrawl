@@ -3,6 +3,7 @@ import { hashPassword } from "../app.js";
 
 var ddList = [];
 
+
 export function init(container, appState){
 
     //This is teh button that a user presses to attempt to log in
@@ -12,35 +13,53 @@ export function init(container, appState){
     loginBtn.addEventListener("click", async () => {ValidateCreds(container, appState)});
 
     //This is preloading the user list
-    getUserList(appState);
+    getUserList(appState, container);
 
 
     //This handles a user logging in, and removes them from the dd List
     appState.connection.on("UserSuccessfullyLoggedIn", function (username)  {
-        RemoveLoginOption(username)
+        RemoveLoginOption(username, container)
     })
 
     //This handles a user logging in, and removes them from the dd List
     appState.connection.on("UserSuccessfullyDisconnects", function (username)  {
-        AddLoginOption(username)
+        AddLoginOption(username, container)
     })
 }
 
 
-async function getUserList(state){
-    ddList = await state.connection.invoke("GetUserNameList")
+async function getUserList(state, container){
+    ddList = await state.connection.invoke("GetUserNameList");
 
-    console.log(ddList)
+    ddResetter(container)
+}
+
+//Resets the DD to reflect current state of ddList
+function ddResetter(container){
+    const ddCont = container.querySelector("#usernameInputHolder");
+    var innerHtmlHoler = `<select name="Username" id="usernameInput">`
+
+ddList.forEach((x) => {
+    innerHtmlHoler += `<option value="${x}">${x}</option>`;
+})
+
+  innerHtmlHoler += `</select>`;
+
+  ddCont.innerHTML = innerHtmlHoler;
 }
 
 //Removes the given user from the DD list
-function RemoveLoginOption(user){
+function RemoveLoginOption(user, container){
     ddList = ddList.filter((e) => e !== user);
+
+    ddResetter(container);
 }
 
 //Adds a user on user disconnect to the DD Options
-function AddLoginOption(user){
+function AddLoginOption(user, container){
     ddList = [...ddList, user]
+
+    ddResetter(container);
 }
 
 
@@ -68,7 +87,12 @@ async function ValidateCreds(container, appState){
     //Tell the server the login creds for it to do it's magic
     var success = await appState.connection.invoke("UserLogin", user, newPass);
 
-    console.log(success);
+    if(success === true){
+        //Send the user home, into the app
+        loadComponent("home");
+    } else {
+        alert('Please try a different credential set')
+    }
 }
 
 

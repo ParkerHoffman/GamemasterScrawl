@@ -70,6 +70,13 @@ export async function checkHostStatus(){
         handleDisconnect();
  });
 
+ //On the event the host orders a logout, go to the login screen
+ connection.on("LogOut", function (){
+    if(!isHost){
+        loadComponent("login")
+    }
+ });
+
  //THis function handles all the cleanup for the code. It is run only on app shutdown
  async function handleDisconnect(){
     await connection.stop();

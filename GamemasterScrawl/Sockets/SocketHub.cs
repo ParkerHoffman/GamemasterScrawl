@@ -106,8 +106,22 @@ private readonly IHostApplicationLifetime _appLifetime;
         /// <returns>Nothing</returns>
         public async Task CloseWindows()
         {
+
+
+            //clear all the connections (for use next time)
+            List<User> tempList = new List<User>();
+
+            foreach(User u in _loginStore.Data.users)
+            {
+                u.currentConnection = "";
+                tempList.Add(u);
+            }
+
+            _loginStore.Data.users = tempList.ToArray();
+
             //Save the current filestate
             _loginStore.SaveChanges();
+
 
             //Tell all the users to close run their disconnect functions
             await Clients.All.SendAsync("CloseWindow");
@@ -138,7 +152,7 @@ private readonly IHostApplicationLifetime _appLifetime;
             foreach(User u in _loginStore.Data.users)
             {
                 //If there is not a connected user
-                if(u.currentConnection != null && u.currentConnection.Length > 0)
+                if(u.currentConnection != null && u.currentConnection.Length == 0)
                 {
                     //Add the username
                     tempList.Add(u.username);
@@ -161,7 +175,7 @@ private readonly IHostApplicationLifetime _appLifetime;
             //Check the perms of the user. Deny if not allowed
             if(perms != true)
             {
-                return false;
+                return [];
             }
 
             return _loginStore.Data.users;
@@ -189,10 +203,9 @@ private readonly IHostApplicationLifetime _appLifetime;
                     GamemasterScrawl.User u = _loginStore.Data.users[holdingI];
 
 
-//RED FLAG: WILL NEED IF LOGIC CHANGE
                     //Check every account
                     //If a user is not connected to this account AND the credentials are correct
-                    if (u.checkLoginAbility(username, passHash))
+                    if (u.username.Equals(username) && u.checkLoginAbility(passHash))
                     {
                         //Set the user
                         user = u;
@@ -275,11 +288,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 freshUser.pass = passHash;
 
                 //Increment the ID counter
-                _loginStore.Data.IncrementID();
-                freshUser.ID = _loginStore.Data.lastID;
-
-                //Increment the ID counter
-                _loginStore.Data.IncrementID();
+                freshUser.ID = _loginStore.Data.IncrementID();
 
                 //Temporary list to add the user into the array
                 List<User> tempList = new List<User>();
@@ -293,6 +302,8 @@ private readonly IHostApplicationLifetime _appLifetime;
                 _loginStore.Data.users = tempList.ToArray();
 
                 _loginStore.SaveChanges();
+
+                await Clients.All.SendAsync("UserSuccessfullyDisconnects", user);
 
                 return true;
             
@@ -385,11 +396,21 @@ private readonly IHostApplicationLifetime _appLifetime;
             //Setting up the temp list
             List<User> tempList = new List<User>();
 
+            string holderName = "";
+            string holderConnection = "";
+
             foreach(User person in _loginStore.Data.users)
             {
                 if(person.ID != uID)
                 {
                     tempList.Add(person);
+                } else
+                {
+                    //Log the user
+                    holderName = person.username;
+
+                    //Get the current connection to force disconnect them
+                    holderConnection = person.currentConnection;
                 }
             }
 
@@ -398,6 +419,11 @@ private readonly IHostApplicationLifetime _appLifetime;
 
                 //Save teh changes in the file
                 _loginStore.SaveChanges();
+
+                //Tell users to remove this user
+                await Clients.All.SendAsync("UserSuccessfullyLoggedIn", holderName);
+
+                await disconnectSingleUserByConn(holderConnection);
 
                 //Notify the user of success
                 return true;
@@ -416,6 +442,82 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
+
+        public async Task<bool> forceDisconnectAUser(int ID)
+        {
+             try
+            {
+            bool? perms = await CheckIfHost();
+            //Check the perms of the user. Deny if not allowed
+            if(perms != true)
+            {
+                return false;
+            }
+
+            //Setting up the temp list
+            List<User> tempList = new List<User>();
+
+            string holderName = "";
+            string holderConnection = "";
+
+            foreach(User person in _loginStore.Data.users)
+            {
+                if(person.ID == ID)
+                {
+                    //Log the user
+                    holderName = person.username;
+
+                    //Get the current connection to force disconnect them
+                    holderConnection = person.currentConnection;
+
+                    person.currentConnection = "";
+
+
+                }
+
+                tempList.Add(person);
+            }
+
+                //Save the state in the current state registry
+                _loginStore.Data.users = tempList.ToArray();
+
+                //Save teh changes in the file
+                _loginStore.SaveChanges();
+
+                await disconnectSingleUserByConn(holderConnection);
+
+                //Notify the user of success
+                return true;
+
+
+            }catch(Exception ex)
+            {
+                //In the event of an error, make it obvious
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(ex.ToString());
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Black;
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// This function is used to disconnect a single user on call. It does this by forcing them back to the login screen, and their connection string should be cleared before using this
+        /// </summary>
+        /// <param name="connString">String of the user being disconnected</param>
+        /// <returns>N/A</returns>
+        private async Task disconnectSingleUserByConn(string connString)
+        {
+            //If the conn string is non-existant, complete
+            if(connString.Length < 1)
+            {
+                return;
+            }
+
+            await Clients.Client(connString).SendAsync("LogOut");
+        }
 
         /// <summary>
         /// This function will return a hashed version of the input string

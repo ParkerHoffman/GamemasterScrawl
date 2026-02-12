@@ -2,22 +2,22 @@
   "users": [
     {
       "username": "Nate",
-      "pass": "CF65CDB51825893B9AB0CDD04802D14DBA2EB80420EFE72143C34CA8264937FC",
+      "pass": "49DC41FCE9E76094645FE536FE00BEDD85DC9050084356B28D04AC8007FD8DA6",
       "ID": 0,
-      "currentConnection": "2rypeIKNCTpAK5fSVeDSYg"
+      "currentConnection": ""
     },
     {
       "username": "Shane",
-      "pass": "45E578D9A3CBFA83A467CE185BACDD07E4A7117A3327FABAAA470F3CB7B202C9",
+      "pass": "49DC41FCE9E76094645FE536FE00BEDD85DC9050084356B28D04AC8007FD8DA6",
       "ID": 1,
       "currentConnection": ""
     },
     {
       "username": "Jaimie",
-      "pass": "4098412B013208C32BB7B6ED2EB0728B5B630EAA204822E031C6C23FC7EB58A4",
+      "pass": "49DC41FCE9E76094645FE536FE00BEDD85DC9050084356B28D04AC8007FD8DA6",
       "ID": 2,
       "currentConnection": ""
     }
   ],
-  "lastID": 3
+  "lastID": 0
 }

@@ -14,7 +14,17 @@ const newUsrBtn = container.querySelector("#CreateNewUser");
   
 newUsrBtn.addEventListener("click", async () => {createNewUser(container, appState)});
 
-UpdateTable(container, appState);
+FetchTableInfo(container, appState);
+
+    //This handles a user logging in, and updates the list to reflect that
+    appState.connection.on("UserSuccessfullyLoggedIn", function (username)  {
+        FetchTableInfo(container, appState)
+    })
+
+    //This handles a user logging in, and removes them from the dd List
+    appState.connection.on("UserSuccessfullyDisconnects", function (username)  {
+        FetchTableInfo(container, appState)
+    })
 }
 
 
@@ -45,7 +55,7 @@ async function createNewUser(container, appState){
         var success = await appState.connection.invoke("CreateUser", user, newPass);
 
         if(success == true){
-            UpdateTable(container, appState);
+            FetchTableInfo(container, appState);
 
             passI.value = "";
             userI.value = "";
@@ -55,16 +65,27 @@ async function createNewUser(container, appState){
 }
 
 
-async function UpdateTable(container, appState){
+async function FetchTableInfo(container, appState){
 userList = await appState.connection.invoke("GetFullUserList");
 
+    UpdateTable(container, appState);
+}
+
+function UpdateTable(container, appState){
     const displayTableCont = container.querySelector("#UsermanagementTableContainer");
 
 
-    var innerString = "<table><thead><tr><td>ID</td><td>Username</td><td>Edit Password</td><td>Delete User</td></tr></thead><tr>";
+    var innerString = "<table><thead><tr><td>ID</td><td>Username</td><td>Edit Password</td><td>User Status</td><td>Kick User</td><td>Delete User</td></tr></thead><tr>";
 
     userList.forEach((e) => {
-        innerString += `<tr><td>${e.id}</td><td>${e.username}</td><td><input id=\"passwordChange${e.id}\"/><button id=\"passwordChangeSubmit${e.id}\">Change Password</button></td><td><button id=\"deleteUser${e.id}\">Delete</button></td></tr>`;
+        innerString += `<tr><td>${e.id}</td><td>${e.username}</td><td><input id=\"passwordChange${e.id}\"/><button id=\"passwordChangeSubmit${e.id}\">Change Password</button></td><td>`
+        
+        if(e.currentConnection && e.currentConnection.length > 0){
+            innerString += `Active</td><td><button id=\"kickUser${e.id}\">Kick</button></td><td><button id=\"deleteUser${e.id}\">Delete</button></td></tr>`
+        } else {
+            innerString += `</td><td></td><td><button id=\"deleteUser${e.id}\">Delete</button></td></tr>`
+        }
+        
     })
 
 
@@ -86,6 +107,12 @@ userList = await appState.connection.invoke("GetFullUserList");
   
             //Setting up the delete function
             usrDelBtn.addEventListener("click", async () => {DeleteUser(container, appState, e.id)});
+
+                        //Getting the user delete button
+            const usrKickBtn = container.querySelector("#kickUser" + e.id);
+  
+            //Setting up the delete function
+            usrKickBtn.addEventListener("click", async () => {kickUser(container, appState, e.id)});
 
     })
 }
@@ -115,9 +142,21 @@ async function DeleteUser(container, appState, id){
     var success = await appState.connection.invoke("DeleteUser", id);
 
     if(success == true){
-        UpdateTable(container, appState);
+        FetchTableInfo(container, appState);
         alert('User Deleted')
     } else {
         alert('Error. Currently unable to delete user')
+    }
+}
+
+
+async function kickUser(container, appState, id){
+    var success = await appState.connection.invoke("forceDisconnectAUser", id);
+
+        if(success == true){
+        FetchTableInfo(container, appState);
+        alert('User kicked')
+    } else {
+        alert('Error. Currently unable to kick user')
     }
 }

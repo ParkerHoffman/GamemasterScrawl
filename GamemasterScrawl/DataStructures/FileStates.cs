@@ -5,9 +5,9 @@ namespace GamemasterScrawl
     public class LoginState
     {
         public User[] users {get; set;} = [];
-        public int lastID {get; private set;} = 0;
+        public int lastID {private get; set;} = 0;
 
-        public void IncrementID()
+        public int IncrementID()
         {
             //Declre the min ID
             int newID = 0;
@@ -24,20 +24,23 @@ namespace GamemasterScrawl
             }
             //Set the increment ID as the next useful number
             lastID = newID;
+
+            return newID;
         }
     }
 
         public class User
     {
         public string username {get; set;} = "";
-        public string pass {private get; set;} = "";
+        public string pass {get; set;} = "";
         public int ID {get ;set;} = -1;
         public string currentConnection {get; set;} = "";
 
-        //This prevents passwords from ever leaving this area
-        public bool checkLoginAbility(string user, string passHash)
+        //This is the login check function
+        //passwords have to be allowed to go up the chain, otherwise they're overwritten (possible optimization later)
+        public bool checkLoginAbility(string passHash)
         {
-            return  u.currentConnection.Length > 0 && username.Equals(user) && u.pass.Equals(passHash);
+            return  currentConnection.Length == 0 && pass.Equals(passHash);
         }
 
 
