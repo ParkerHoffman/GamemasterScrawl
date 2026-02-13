@@ -1,7 +1,15 @@
 import {loadComponent} from "../router.js";
 import { hashPassword, toastUser } from "../app.js";
 
+//The reference to the library managing 3D stuff
+import * as THREE from 'three';
+
 var userList = [];
+
+//Setting up stuff for the ROTATING CUBE OF OMINOUS INTENT
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
 
 export async function init(container, appState){
 
@@ -25,6 +33,8 @@ FetchTableInfo(container, appState);
     appState.connection.on("UserSuccessfullyDisconnects", function (username)  {
         FetchTableInfo(container, appState)
     })
+
+    AddOminousCube(container);
 }
 
 
@@ -78,21 +88,16 @@ function UpdateTable(container, appState){
     var innerString = "<table><thead><tr><td>ID</td><td>Username</td><td>Edit Password</td><td>User Status</td><td>Kick User</td><td>Delete User</td></tr></thead><tr>";
 
     userList.forEach((e) => {
-        innerString += `<tr><td>${e.id}</td><td>${e.username}</td><td><input autocomplete=\"new-password\" type=\"password\" id=\"passwordChange${e.id}\"/><button id=\"passwordChangeSubmit${e.id}\">Change Password</button></td><td>`
+        innerString += `<tr><td>${e.id}</td><td>${e.username}</td><td><input autocomplete=\"new-password\" type=\"password\" id=\"passwordChange${e.id}\"/><button class="warning" id=\"passwordChangeSubmit${e.id}\">Change Password</button></td><td>`
         
         if(e.currentConnection && e.currentConnection.length > 0){
-            innerString += `Active</td><td><button id=\"kickUser${e.id}\">Kick</button></td><td><button id=\"deleteUser${e.id}\">Delete</button></td></tr>`
+            innerString += `Active</td><td><button class="info" id=\"kickUser${e.id}\">Kick</button></td><td><button class="danger" id=\"deleteUser${e.id}\">Delete</button></td></tr>`
         } else {
-            innerString += `</td><td><button id=\"kickUser${e.id}\" class=\"InactiveButton\">Kick</button></td><td><button id=\"deleteUser${e.id}\">Delete</button></td></tr>`
+            innerString += `</td><td><button id=\"kickUser${e.id}\" class=\"InactiveButton info\">Kick</button></td><td><button class="danger" id=\"deleteUser${e.id}\">Delete</button></td></tr>`
         }
         
     })
-
-
-
     innerString += "</table>";
-
-
     displayTableCont.innerHTML = innerString;
 
     //Setting up the listener set for all the buttons
@@ -156,4 +161,113 @@ async function kickUser(container, appState, id){
     } else {
         toastUser("Error", `Error kicking user`, 'error')
     }
+}
+
+
+
+function RandomIntGen() {
+    return Math.floor(Math.random() * 21) - 10;
+}
+
+function RandomIntGenPos() {
+    var num = RandomIntGen();
+    if(num >= 0){
+        return num;
+    }
+    return num * -1;
+}
+
+var xgoPositive = RandomIntGen() >= 0;
+var ygoPositive = RandomIntGen() >= 0;
+var zgoPositive = RandomIntGen() >= 0;
+
+
+function AddOminousCube(container){
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0x000000, 0); // transparent background
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+    var ominousCubeCont = container.querySelector("#OminousCube");
+
+    ominousCubeCont.appendChild(renderer.domElement);
+
+    const geometry = new THREE.BoxGeometry(1,1,1);
+    const material = new THREE.MeshBasicMaterial({color: 0x3688F4});
+
+    const cube = new THREE.Mesh(geometry, material);
+
+    const edges = new THREE.EdgesGeometry(geometry);
+
+    const edgeMaterial = new THREE.LineBasicMaterial({color: 0x000000, linewidth: 10});
+    const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
+
+    cube.add(edgeLines);
+
+
+    scene.add(cube);
+
+    camera.position.z = 5;
+    const randomYChng = RandomIntGen()
+    const randomXChng = RandomIntGen()
+    const randomZMove = RandomIntGenPos();
+    const randomYMove = RandomIntGenPos();
+    const randomXMove = RandomIntGenPos();
+
+
+function animate() {
+    var holdingXMove = 0;
+    var holdingYMove = 0;
+    var holdingZMove = 0;
+    if(xgoPositive){
+        holdingXMove = .01 * randomXMove;
+    } else {
+        holdingXMove = -.01 * randomXMove;
+    }
+
+    if(ygoPositive){
+        holdingYMove = .01 * randomYMove
+    } else {
+        holdingYMove = -.01 * randomYMove
+    }
+
+    if(zgoPositive){
+        holdingZMove = .01 * randomZMove
+    } else {
+        holdingZMove = -.01 * randomZMove
+    }
+
+     if(camera.position.x <= -3 ){
+        xgoPositive = true;
+    }
+    if( camera.position.x >= 3){
+        xgoPositive = false;
+    }
+
+    if(camera.position.y <= -2 ){
+        ygoPositive = true;
+    }
+    if( camera.position.y >= 2){
+        ygoPositive = false;
+    }
+
+    if(camera.position.z <= 2 ){
+        zgoPositive = true;
+    }
+    if( camera.position.z >= 10){
+        zgoPositive = false;
+    }
+    
+    camera.position.x += holdingXMove ;
+    camera.position.y += holdingYMove ;
+    camera.position.z += holdingZMove ;
+    cube.rotation.x += 0.01 * randomXChng;
+    cube.rotation.y += 0.01 * randomYChng;
+
+
+
+    renderer.render(scene, camera);
+}
+
+renderer.setAnimationLoop( animate );
+
 }

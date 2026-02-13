@@ -1,5 +1,8 @@
 body {
-  background-color: #1e1e24;;
+  background-color: #1e1e24;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #f0f0f5;
+  margin: 0;
 }
 
 

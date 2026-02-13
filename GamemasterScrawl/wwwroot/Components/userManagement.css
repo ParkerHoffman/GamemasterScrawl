@@ -1,3 +1,154 @@
 .InactiveButton {
     visibility: hidden;
 }
+
+#OminousCube{
+    z-index: -9999;
+}
+
+.cube-background {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+
+.UMItemHolder {
+    position: relative;
+    z-index: 100;
+
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+
+    background-color: rgba(30, 30, 36, 0.85);
+    border: 1px solid #3f3f4a;
+    border-radius: 8px;
+
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+
+button {
+    background-color: #26262d;
+    color: #f0f0f5;
+
+    border: 1px solid #3f3f4a;
+    border-radius: 4px;
+
+    padding: 6px 12px;
+    font-size: 0.85rem;
+
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+
+button {
+    background-color: #26262d;
+    color: #f0f0f5;
+
+    border: 1px solid #3f3f4a;
+    border-radius: 4px;
+
+    padding: 6px 12px;
+    font-size: 0.85rem;
+
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+button.primary {
+    border-color: #4CAF50;
+}
+
+button.primary:hover {
+    background-color: rgba(76, 175, 80, 0.15);
+}
+
+button.danger {
+    border-color: #F44336;
+}
+
+button.danger:hover {
+    background-color: rgba(244, 67, 54, 0.15);
+}
+
+button.info {
+    border-color: #3688f4;
+}
+
+button.info:hover {
+    background-color: rgba(54, 136, 244, 0.15);
+}
+
+button.warning {
+    border-color: #f4e736;
+    color: #f4e736;
+}
+
+button.warning:hover {
+    background-color: rgba(244, 231, 54, 0.15);
+}
+
+#returnHome {
+    margin-bottom: 16px;
+}
+
+
+#UsermanagementTableContainer {
+    z-index: 999;
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+thead {
+    background-color: #26262d;
+}
+
+thead td {
+    font-weight: 600;
+    padding: 8px;
+    border-bottom: 1px solid #3f3f4a;
+}
+
+tbody tr {
+    background-color: #1e1e24;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #22222a;
+}
+
+td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #2f2f38;
+    vertical-align: middle;
+}
+
+input[type="text"],
+input[type="password"] {
+    background-color: #26262d;
+    color: #f0f0f5;
+
+    border: 1px solid #3f3f4a;
+    border-radius: 4px;
+
+    padding: 6px 8px;
+    font-size: 0.85rem;
+
+    outline: none;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 1px rgba(76, 175, 80, 0.35);
+}
