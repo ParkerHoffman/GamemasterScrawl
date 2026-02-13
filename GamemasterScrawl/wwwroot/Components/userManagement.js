@@ -219,21 +219,21 @@ function animate() {
     var holdingYMove = 0;
     var holdingZMove = 0;
     if(xgoPositive){
-        holdingXMove = .01 * randomXMove;
+        holdingXMove = .001 * randomXMove;
     } else {
-        holdingXMove = -.01 * randomXMove;
+        holdingXMove = -.001 * randomXMove;
     }
 
     if(ygoPositive){
-        holdingYMove = .01 * randomYMove
+        holdingYMove = .001 * randomYMove
     } else {
-        holdingYMove = -.01 * randomYMove
+        holdingYMove = -.001 * randomYMove
     }
 
     if(zgoPositive){
-        holdingZMove = .01 * randomZMove
+        holdingZMove = .001 * randomZMove
     } else {
-        holdingZMove = -.01 * randomZMove
+        holdingZMove = -.001 * randomZMove
     }
 
      if(camera.position.x <= -3 ){
@@ -260,8 +260,8 @@ function animate() {
     camera.position.x += holdingXMove ;
     camera.position.y += holdingYMove ;
     camera.position.z += holdingZMove ;
-    cube.rotation.x += 0.01 * randomXChng;
-    cube.rotation.y += 0.01 * randomYChng;
+    cube.rotation.x += 0.005 * randomXChng;
+    cube.rotation.y += 0.005 * randomYChng;
 
 
 
