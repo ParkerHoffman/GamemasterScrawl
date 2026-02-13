@@ -29,9 +29,9 @@ if(appState.isHost == true){
   
     usrlogOutBtn.addEventListener("click", async () => {logUsrOut(appState)});
 
-    Generate3DSpace(container, appState)
+    
 }
-
+Generate3DSpace(container, appState)
 }
 
 //Logs the user out
@@ -49,5 +49,48 @@ async function logUsrOut(appState){
 
 
 async function Generate3DSpace(container, appState){
+ const renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0x000000, 0); // transparent background
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+    var spaceCont = container.querySelector("#Space3D");
+
+    spaceCont.appendChild(renderer.domElement);
+
+        const geometry = new THREE.BoxGeometry(1,1,1);
+        const material = new THREE.MeshBasicMaterial({color: 0x3688F4});
+
+        var i = 0;
+        const cube = new THREE.Mesh(geometry, material);
+    
+        const edges = new THREE.EdgesGeometry(geometry);
+    
+        const edgeMaterial = new THREE.LineBasicMaterial({color: 0x000000, linewidth: 10});
+        const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
+    
+        cube.add(edgeLines);
+
+        while (i < 10){
+    
+            scene.add(cube);
+
+            i++;
+        }
+
+        camera.position.z = 5;
+    
+
+        function animate() {
+            cube.rotation.x += 5;
+            cube.rotation.y += 5;
+            cube.scale.z += -.1;
+            cube.scale.x += -.1;
+            cube.scale.y += -.1;
+
+
+    renderer.render(scene, camera);
+}
+
+renderer.setAnimationLoop( animate );
 
 }

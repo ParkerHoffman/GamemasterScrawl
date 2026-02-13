@@ -22,6 +22,14 @@ const newUsrBtn = container.querySelector("#CreateNewUser");
   
 newUsrBtn.addEventListener("click", async () => {createNewUser(container, appState)});
 
+const newUsrPass = container.querySelector("#NewpasswordInput");
+  
+newUsrPass.addEventListener("keydown", async (event) => {
+            if (event.key === "Enter") {
+                await createNewUser(container, appState);
+            }
+        });
+
 FetchTableInfo(container, appState);
 
     //This handles a user logging in, and updates the list to reflect that
