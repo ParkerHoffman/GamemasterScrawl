@@ -88,12 +88,12 @@ function UpdateTable(container, appState){
     var innerString = "<table><thead><tr><td>ID</td><td>Username</td><td>Edit Password</td><td>User Status</td><td>Kick User</td><td>Delete User</td></tr></thead><tr>";
 
     userList.forEach((e) => {
-        innerString += `<tr><td>${e.id}</td><td>${e.username}</td><td><input autocomplete=\"new-password\" type=\"password\" id=\"passwordChange${e.id}\"/><button class="warning" id=\"passwordChangeSubmit${e.id}\">Change Password</button></td><td>`
+        innerString += `<tr><td>${e.id}</td><td>${e.username}</td><td><input autocomplete=\"new-password\" type=\"password\" id=\"passwordChange${e.id}\"/><button class="warn" id=\"passwordChangeSubmit${e.id}\">Change Password</button></td><td>`
         
         if(e.currentConnection && e.currentConnection.length > 0){
-            innerString += `Active</td><td><button class="info" id=\"kickUser${e.id}\">Kick</button></td><td><button class="danger" id=\"deleteUser${e.id}\">Delete</button></td></tr>`
+            innerString += `<div class="status-tag success">Active</div></td><td><button class="info" id=\"kickUser${e.id}\">Kick</button></td><td><button class="error" id=\"deleteUser${e.id}\">Delete</button></td></tr>`
         } else {
-            innerString += `</td><td><button id=\"kickUser${e.id}\" class=\"InactiveButton info\">Kick</button></td><td><button class="danger" id=\"deleteUser${e.id}\">Delete</button></td></tr>`
+            innerString += `<div class="status-tag error">Logged Out</div></td><td><button id=\"kickUser${e.id}\" class=\"InactiveButton info\">Kick</button></td><td><button class="error" id=\"deleteUser${e.id}\">Delete</button></td></tr>`
         }
         
     })

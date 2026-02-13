@@ -44,3 +44,141 @@ font-size: 1.4em;
 .toast.error   { border-left: 5px solid #F44336; }
 .toast.info   { border-left: 5px solid #3688f4; }
 .toast.warn   { border-left: 5px solid #f4e736; }
+
+/* This is the setup for the tag system*/ 
+.status-tag {
+    display: inline-block;
+    padding: 2px 8px;
+
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+
+    border-radius: 999px;
+    text-transform: uppercase;
+
+    border: 1px solid transparent;
+}
+.status-tag.success {
+    color: #4CAF50;
+    border-color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.15);
+}
+.status-tag.error {
+    color: #F44336;
+    border-color: #F44336;
+    background-color: rgba(244, 67, 54, 0.15);
+}
+.status-tag.info {
+    color: #3688f4;
+    border-color: #3688f4;
+    background-color: rgba(54, 136, 244, 0.15);
+}
+.status-tag.warn {
+    color: #f4e736;
+    border-color: #f4e736;
+    background-color: rgba(244, 231, 54, 0.15);
+}
+
+
+/* Input styling */
+input[type="text"],
+input[type="password"] {
+    background-color: #26262d;
+    color: #f0f0f5;
+
+    border: 1px solid #3f3f4a;
+    border-radius: 4px;
+
+    padding: 6px 8px;
+    font-size: 0.85rem;
+
+    outline: none;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 1px rgba(76, 175, 80, 0.35);
+}
+
+
+/* global table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+thead {
+    background-color: #26262d;
+}
+
+thead td {
+    font-weight: 600;
+    padding: 8px;
+    border-bottom: 1px solid #3f3f4a;
+}
+
+tbody tr {
+    background-color: #1e1e24;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #22222a;
+}
+
+td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #2f2f38;
+    vertical-align: middle;
+}
+
+
+/* Global Button Styling */
+button {
+    background-color: #26262d;
+    color: #f0f0f5;
+
+    border: 1px solid #3f3f4a;
+    border-radius: 4px;
+
+    padding: 6px 12px;
+    font-size: 0.85rem;
+
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+button.success {
+    border-color: #4CAF50;
+}
+
+button.success:hover {
+    background-color: rgba(76, 175, 80, 0.15);
+}
+
+button.error {
+    border-color: #F44336;
+}
+
+button.error:hover {
+    background-color: rgba(244, 67, 54, 0.15);
+}
+
+button.info {
+    border-color: #3688f4;
+}
+
+button.info:hover {
+    background-color: rgba(54, 136, 244, 0.15);
+}
+
+button.warn {
+    border-color: #f4e736;
+    color: #f4e736;
+}
+
+button.warn:hover {
+    background-color: rgba(244, 231, 54, 0.15);
+}

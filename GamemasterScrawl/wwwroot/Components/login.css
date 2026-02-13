@@ -49,29 +49,6 @@
     margin-bottom: 6px;
 }
 
-/* Inputs */
-.login-input {
-    background-color: #26262d;
-    color: #f0f0f5;
-
-    border: 1px solid #3f3f4a;
-    border-radius: 4px;
-
-    padding: 8px 10px;
-    font-size: 0.95rem;
-
-    outline: none;
-}
-
-.login-input::placeholder {
-    color: #9a9aa3;
-}
-
-.login-input:focus {
-    border-color: #4CAF50;
-    box-shadow: 0 0 0 1px rgba(76, 175, 80, 0.4);
-}
-
 /* Button */
 .login-button {
     background-color: #4CAF50;
@@ -90,10 +67,6 @@
 .login-button:hover {
     background-color: #5bcf60;
     box-shadow: 0 0 6px rgba(76, 175, 80, 0.5);
-}
-
-.login-button:active {
-    background-color: #43a047;
 }
 
 /* Styled select (dropdown) */
