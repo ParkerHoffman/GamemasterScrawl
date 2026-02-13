@@ -4,10 +4,11 @@ import { toastUser } from "../app.js";
 //The reference to the library managing 3D stuff
 import * as THREE from 'three';
 
+//Setting up stuff for the ROTATING CUBE OF OMINOUS INTENT
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
 export function init(container, appState){
-
-
-
 //If user is the host
 if(appState.isHost == true){
     //The holder for the UM Navigator Button
@@ -27,6 +28,8 @@ if(appState.isHost == true){
     const usrlogOutBtn = container.querySelector("#UserRequestsLogOut");
   
     usrlogOutBtn.addEventListener("click", async () => {logUsrOut(appState)});
+
+    Generate3DSpace(container, appState)
 }
 
 }
@@ -42,4 +45,9 @@ async function logUsrOut(appState){
             loadComponent("login");
         }
     
+}
+
+
+async function Generate3DSpace(container, appState){
+
 }

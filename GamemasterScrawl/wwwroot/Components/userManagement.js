@@ -107,6 +107,15 @@ function UpdateTable(container, appState){
             //Setting up the listener
             passEditBtn.addEventListener("click", async () => {changeUserPassword(container, appState, e.id)});
             
+            //Getting the password change input text
+            const passEditInp = container.querySelector("#passwordChange" + e.id);
+            //Setting up the listener for enter presses
+            passEditInp.addEventListener("keydown", async (event) => {
+            if (event.key === "Enter") {
+                await changeUserPassword(container, appState, e.id)
+            }});
+            
+
             //Getting the user delete button
             const usrDelBtn = container.querySelector("#deleteUser" + e.id);
   

@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/GamemasterScrawl.csproj": {}
+    "C:\\Users\\parkh\\Documents\\GitHub\\GamemasterScrawl\\GamemasterScrawl\\GamemasterScrawl.csproj": {}
   },
   "projects": {
-    "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/GamemasterScrawl.csproj": {
+    "C:\\Users\\parkh\\Documents\\GitHub\\GamemasterScrawl\\GamemasterScrawl\\GamemasterScrawl.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/GamemasterScrawl.csproj",
+        "projectUniqueName": "C:\\Users\\parkh\\Documents\\GitHub\\GamemasterScrawl\\GamemasterScrawl\\GamemasterScrawl.csproj",
         "projectName": "GamemasterScrawl",
-        "projectPath": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/GamemasterScrawl.csproj",
-        "packagesPath": "/home/xpc/.nuget/packages/",
-        "outputPath": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/obj/",
+        "projectPath": "C:\\Users\\parkh\\Documents\\GitHub\\GamemasterScrawl\\GamemasterScrawl\\GamemasterScrawl.csproj",
+        "packagesPath": "C:\\Users\\parkh\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\parkh\\Documents\\GitHub\\GamemasterScrawl\\GamemasterScrawl\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/xpc/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\parkh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -32,7 +38,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -56,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/8.0.123/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
