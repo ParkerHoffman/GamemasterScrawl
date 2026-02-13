@@ -1,0 +1,146 @@
+/* Root full-screen container */
+.login-root {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: #1e1e24; /* dark but not black */
+    overflow: hidden;
+    font-family: system-ui, sans-serif;
+}
+
+/* Cube background layer */
+.cube-background {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+/* Login panel centered above cube */
+.login-panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    padding: 24px 28px;
+    min-width: 280px;
+
+    background: rgba(30, 30, 36, 0.85);
+    backdrop-filter: blur(6px);
+
+    border: 1px solid #3a3a44;
+    border-radius: 8px;
+
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.03),
+        0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* Title */
+.login-title {
+    color: #e6e6eb;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+/* Inputs */
+.login-input {
+    background-color: #26262d;
+    color: #f0f0f5;
+
+    border: 1px solid #3f3f4a;
+    border-radius: 4px;
+
+    padding: 8px 10px;
+    font-size: 0.95rem;
+
+    outline: none;
+}
+
+.login-input::placeholder {
+    color: #9a9aa3;
+}
+
+.login-input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 1px rgba(76, 175, 80, 0.4);
+}
+
+/* Button */
+.login-button {
+    background-color: #4CAF50;
+    color: #0f1a10;
+
+    border: 1px solid #3f9e45;
+    border-radius: 4px;
+
+    padding: 8px 10px;
+    font-size: 0.95rem;
+    cursor: pointer;
+
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.login-button:hover {
+    background-color: #5bcf60;
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.5);
+}
+
+.login-button:active {
+    background-color: #43a047;
+}
+
+/* Styled select (dropdown) */
+.login-select {
+    width: 100%;
+
+    background-color: #26262d;
+    color: #f0f0f5;
+
+    border: 1px solid #3f3f4a;
+    border-radius: 4px;
+
+    padding: 8px 10px;
+    font-size: 0.95rem;
+
+    outline: none;
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-image:
+        linear-gradient(45deg, transparent 50%, #9a9aa3 50%),
+        linear-gradient(135deg, #9a9aa3 50%, transparent 50%),
+        linear-gradient(to right, #26262d, #26262d);
+    background-position:
+        calc(100% - 16px) calc(50% - 2px),
+        calc(100% - 11px) calc(50% - 2px),
+        100% 0;
+    background-size:
+        5px 5px,
+        5px 5px,
+        2.5em 100%;
+    background-repeat: no-repeat;
+}
+
+/* Focus state */
+.login-select:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 1px rgba(76, 175, 80, 0.4);
+}
+
+/* Option styling (limited browser support, but safe) */
+.login-select option {
+    background-color: #26262d;
+    color: #f0f0f5;
+}
+
+

@@ -1,3 +1,8 @@
+body {
+  background-color: #1e1e24;;
+}
+
+
 #toast-container {
     position: fixed;
     top: 20px;

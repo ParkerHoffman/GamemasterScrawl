@@ -555,8 +555,6 @@ private readonly IHostApplicationLifetime _appLifetime;
         /// <returns>N/A</returns>
         private async Task toastUser(string header, string message, string type, string connString)
         {
-            Console.WriteLine("Toasting user " + connString + ", at severity " + type + " with:");
-            Console.WriteLine(message);
             await Clients.Client(connString).SendAsync("callToast", header, message, type);
         }
 
