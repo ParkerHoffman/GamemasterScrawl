@@ -35,12 +35,11 @@ if(appState.isHost == true){
 async function logUsrOut(appState){
     //Tell the server the login creds for it to do it's magic
     var success = await appState.connection.invoke("LogUserOut");
-    console.log(success, appState);
 
+        //If success isn't true we should already get toasted.
+        //Or the user is host. Host should never use this, under any circumstances
         if(success === true){
             loadComponent("login");
-        } else {
-            toastUser("Error", "There was an unknown error. Please try again later", 'error')
         }
     
 }

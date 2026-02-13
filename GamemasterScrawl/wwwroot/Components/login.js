@@ -10,6 +10,8 @@ var ddList = [];
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
+var passInp = null;
+
 
 export function init(container, appState){
 
@@ -19,6 +21,7 @@ export function init(container, appState){
     //This is what happens on login attempt
     loginBtn.addEventListener("click", async () => {ValidateCreds(container, appState)});
 
+    
     //This is preloading the user list
     getUserList(appState, container);
 
@@ -34,6 +37,15 @@ export function init(container, appState){
     })
 
     AddOminousCube(container);
+
+    passInp = container.querySelector("#passwordInput");
+
+        //This is what happens on login attempt
+        passInp.addEventListener("keydown", async (event) => {
+            if (event.key === "Enter") {
+                await ValidateCreds(container, appState);
+            }
+        });
 
 }
 
@@ -77,7 +89,7 @@ function AddLoginOption(user, container){
 async function ValidateCreds(container, appState){
     // Get the username and the password
     var user = container.querySelector("#usernameInput").value;
-    var pass = container.querySelector("#passwordInput").value;
+    var pass = passInp.value;
 
     //If there is no username, alert the user to this fact
     if(!user){
