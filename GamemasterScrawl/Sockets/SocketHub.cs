@@ -458,6 +458,61 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
+        public async Task<bool> LogUserOut(){
+            try{
+            bool? perms = await CheckIfHost();
+            //Check the perms of the user. Deny if not allowed
+            if(perms == true)
+            {
+                return false;
+            }
+
+            //Setting up the temp list
+            List<User> tempList = new List<User>();
+
+            string user = "";
+
+
+            foreach(User person in _loginStore.Data.users)
+            {
+                Console.WriteLine("Current: " + Context.ConnectionId + ", new: " + person.currentConnection);
+
+
+                if(Context.ConnectionId.Equals(person.currentConnection))
+                {
+                    person.currentConnection = "";
+
+                    user = person.username;
+                }
+
+                tempList.Add(person);
+            }
+
+                //Save the state in the current state registry
+                _loginStore.Data.users = tempList.ToArray();
+
+                //Save teh changes in the file
+                _loginStore.SaveChanges();
+
+                await Clients.All.SendAsync("UserSuccessfullyDisconnects", user);
+
+                await disconnectSingleUserByConn(Context.ConnectionId);
+
+                //Notify the user of success
+                return true;
+            }catch(Exception ex)
+            {
+                //In the event of an error, make it obvious
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(ex.ToString());
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Black;
+
+                return false;
+            }
+        }
+
 
         public async Task<bool> forceDisconnectAUser(int ID)
         {

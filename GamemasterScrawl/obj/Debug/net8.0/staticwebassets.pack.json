@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/home.css",
+      "PackagePath": "staticwebassets/Components/home.css"
+    },
+    {
       "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/home.html",
       "PackagePath": "staticwebassets/Components/home.html"
     },

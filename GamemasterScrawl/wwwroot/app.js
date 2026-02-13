@@ -73,7 +73,7 @@ export async function checkHostStatus(){
  //On the event the host orders a logout, go to the login screen
  connection.on("LogOut", function (){
     if(!isHost){
-        toastUser('Kicked', `The host has decided to kick you. You've been logged out`, 'warn')
+        toastUser('Logged Out', `You have been logged out`, 'info')
         loadComponent("login")
     }
  });

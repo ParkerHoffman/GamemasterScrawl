@@ -191,7 +191,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
     ominousCubeCont.appendChild(renderer.domElement);
 
-    const geometry = new THREE.BoxGeometry(1,1,1);
+    const geometry = new THREE.DodecahedronGeometry(1,0);
     const material = new THREE.MeshBasicMaterial({color: 0x3688F4});
 
     const cube = new THREE.Mesh(geometry, material);
