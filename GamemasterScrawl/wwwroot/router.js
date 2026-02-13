@@ -20,7 +20,7 @@ export async function loadComponent(name) {
   const app = document.getElementById("app");
 
   //Fetch the new components
-    const res = await fetch(`/components/${name}.html`);
+    const res = await fetch(`/Components/${name}.html`);
 
     //Force the html to have to be loaded before continuing
     const html = await res.text();
@@ -28,7 +28,7 @@ export async function loadComponent(name) {
     //Set the inner HTML to the given
   app.innerHTML = html;
 
-  const cssFile =`/components/${name}.css?v=${Date.now()}`;
+  const cssFile =`/Components/${name}.css?v=${Date.now()}`;
 
   //Setting up the stylesheet reference
   const link = document.createElement("link");
@@ -46,7 +46,7 @@ export async function loadComponent(name) {
   currentStyle = link;
 
   //Get and load the correct JS
-  const module = await import(`/components/${name}.js?v=${Date.now()}`);
+  const module = await import(`/Components/${name}.js?v=${Date.now()}`);
   
   if(module){
   //Initialize the JS

@@ -55,7 +55,7 @@ export async function checkHostStatus(){
 
     if(isHost === true){
         //This is the super user. No need to log in
-        loadComponent("Home");
+        loadComponent("home");
         
     } else {
         //Go to the login screen

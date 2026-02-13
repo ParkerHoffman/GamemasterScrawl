@@ -101,7 +101,7 @@ async function ValidateCreds(container, appState){
         //Tell the user the good news
         toastUser("Success", `Successfully logged in as ${user}`, 'success')
         //Send the user home, into the app
-        loadComponent("Home");
+        loadComponent("home");
     } else {
         toastUser("Bad Credetials", `Please insert a valid password for the user '${user}`, 'error')
     }

@@ -1,0 +1,69 @@
+{
+  "Files": [
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/home.html",
+      "PackagePath": "staticwebassets/Components/home.html"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/home.js",
+      "PackagePath": "staticwebassets/Components/home.js"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/login.css",
+      "PackagePath": "staticwebassets/Components/login.css"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/login.html",
+      "PackagePath": "staticwebassets/Components/login.html"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/login.js",
+      "PackagePath": "staticwebassets/Components/login.js"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/userManagement.css",
+      "PackagePath": "staticwebassets/Components/userManagement.css"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/userManagement.html",
+      "PackagePath": "staticwebassets/Components/userManagement.html"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/userManagement.js",
+      "PackagePath": "staticwebassets/Components/userManagement.js"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/app.js",
+      "PackagePath": "staticwebassets/app.js"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/index.css",
+      "PackagePath": "staticwebassets/index.css"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/router.js",
+      "PackagePath": "staticwebassets/router.js"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.GamemasterScrawl.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.GamemasterScrawl.props",
+      "PackagePath": "build\\GamemasterScrawl.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.GamemasterScrawl.props",
+      "PackagePath": "buildMultiTargeting\\GamemasterScrawl.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.GamemasterScrawl.props",
+      "PackagePath": "buildTransitive\\GamemasterScrawl.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
