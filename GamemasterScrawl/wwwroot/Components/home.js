@@ -59,7 +59,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
     spaceCont.appendChild(renderer.domElement);
 
-        const geometry = new THREE.BoxGeometry(1,1,1);
+        //const geometry = new THREE.BoxGeometry(1,1,1);
+        const geometry = new THREE.IcosahedronGeometry();
 
         const catTexture = loader.load("/Components/FileMaterials/creepy-cat.webp");
         const material = new THREE.MeshBasicMaterial({map: catTexture});
@@ -86,8 +87,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
     
 
         function animate() {
-            cube.rotation.x += .05;
-            cube.rotation.y += .05;
+            cube.rotation.x += .005;
+            cube.rotation.y += .005;
             //cube.scale.z += -.1;
             //cube.scale.x += -.1;
             //cube.scale.y += -.1;
