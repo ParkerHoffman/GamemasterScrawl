@@ -7,6 +7,8 @@ import * as THREE from 'three';
 //Setting up stuff for the ROTATING CUBE OF OMINOUS INTENT
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+// Initialize the Texture Loader
+const loader = new THREE.TextureLoader();
 
 export function init(container, appState){
 //If user is the host
@@ -58,7 +60,10 @@ renderer.setSize(window.innerWidth, window.innerHeight);
     spaceCont.appendChild(renderer.domElement);
 
         const geometry = new THREE.BoxGeometry(1,1,1);
-        const material = new THREE.MeshBasicMaterial({color: 0x3688F4});
+
+        const catTexture = loader.load("/Components/FileMaterials/creepy-cat.webp");
+        const material = new THREE.MeshBasicMaterial({map: catTexture});
+        //const material = new THREE.MeshBasicMaterial({color: 0x3688F4});
 
         var i = 0;
         const cube = new THREE.Mesh(geometry, material);
@@ -81,11 +86,11 @@ renderer.setSize(window.innerWidth, window.innerHeight);
     
 
         function animate() {
-            cube.rotation.x += 5;
-            cube.rotation.y += 5;
-            cube.scale.z += -.1;
-            cube.scale.x += -.1;
-            cube.scale.y += -.1;
+            cube.rotation.x += .05;
+            cube.rotation.y += .05;
+            //cube.scale.z += -.1;
+            //cube.scale.x += -.1;
+            //cube.scale.y += -.1;
 
 
     renderer.render(scene, camera);

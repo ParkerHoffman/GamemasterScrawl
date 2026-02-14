@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/creepy-cat.webp",
+      "PackagePath": "staticwebassets/Components/FileMaterials/creepy-cat.webp"
+    },
+    {
       "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/home.css",
       "PackagePath": "staticwebassets/Components/home.css"
     },
