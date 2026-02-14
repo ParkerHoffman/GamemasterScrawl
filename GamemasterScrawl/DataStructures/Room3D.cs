@@ -16,7 +16,6 @@ namespace GamemasterScrawl
 
         public Block[] blockList {get; set;} = [];
 
-        public Material3D[] MaterialList {get; set;} = [];
+        public string[] MaterialList {get; set;} = [];
     }
-
 }

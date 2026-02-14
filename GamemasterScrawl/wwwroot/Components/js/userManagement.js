@@ -1,5 +1,5 @@
-import {loadComponent} from "../router.js";
-import { hashPassword, toastUser } from "../app.js";
+import {loadComponent} from "../../router.js";
+import { hashPassword, toastUser } from "../../app.js";
 
 //The reference to the library managing 3D stuff
 import * as THREE from 'three';

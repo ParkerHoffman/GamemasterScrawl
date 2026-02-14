@@ -1,44 +1,124 @@
 {
   "Files": [
     {
-      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/creepy-cat.webp",
-      "PackagePath": "staticwebassets/Components/FileMaterials/creepy-cat.webp"
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Asphalt.jpg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Asphalt.jpg"
     },
     {
-      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/home.css",
-      "PackagePath": "staticwebassets/Components/home.css"
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Decorated_Tile.jpg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Decorated_Tile.jpg"
     },
     {
-      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/home.html",
-      "PackagePath": "staticwebassets/Components/home.html"
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Gold.jpg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Gold.jpg"
     },
     {
-      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/home.js",
-      "PackagePath": "staticwebassets/Components/home.js"
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Grass.jpg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Grass.jpg"
     },
     {
-      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/login.css",
-      "PackagePath": "staticwebassets/Components/login.css"
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Ground_1.jpg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Ground_1.jpg"
     },
     {
-      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/login.html",
-      "PackagePath": "staticwebassets/Components/login.html"
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Ground_2.jpg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Ground_2.jpg"
     },
     {
-      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/login.js",
-      "PackagePath": "staticwebassets/Components/login.js"
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Ground_3.jpg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Ground_3.jpg"
     },
     {
-      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/userManagement.css",
-      "PackagePath": "staticwebassets/Components/userManagement.css"
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Ground_4.jpg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Ground_4.jpg"
     },
     {
-      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/userManagement.html",
-      "PackagePath": "staticwebassets/Components/userManagement.html"
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Marble.jpg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Marble.jpg"
     },
     {
-      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/userManagement.js",
-      "PackagePath": "staticwebassets/Components/userManagement.js"
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Mossy_Stone.jpg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Mossy_Stone.jpg"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Painted_Wood.jpg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Painted_Wood.jpg"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Path.jpg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Path.jpg"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Rock.jpg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Rock.jpg"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Stones.jpg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Stones.jpg"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Weathered_Tile.jpg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Weathered_Tile.jpg"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/TokenImages/Surp_Cat.webp",
+      "PackagePath": "staticwebassets/Components/FileMaterials/TokenImages/Surp_Cat.webp"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/TokenImages/creepy-cat.webp",
+      "PackagePath": "staticwebassets/Components/FileMaterials/TokenImages/creepy-cat.webp"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/TokenImages/madCat.webp",
+      "PackagePath": "staticwebassets/Components/FileMaterials/TokenImages/madCat.webp"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/css/home.css",
+      "PackagePath": "staticwebassets/Components/css/home.css"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/css/login.css",
+      "PackagePath": "staticwebassets/Components/css/login.css"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/css/mapManagement.css",
+      "PackagePath": "staticwebassets/Components/css/mapManagement.css"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/css/userManagement.css",
+      "PackagePath": "staticwebassets/Components/css/userManagement.css"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/html/home.html",
+      "PackagePath": "staticwebassets/Components/html/home.html"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/html/login.html",
+      "PackagePath": "staticwebassets/Components/html/login.html"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/html/mapManagement.html",
+      "PackagePath": "staticwebassets/Components/html/mapManagement.html"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/html/userManagement.html",
+      "PackagePath": "staticwebassets/Components/html/userManagement.html"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/js/home.js",
+      "PackagePath": "staticwebassets/Components/js/home.js"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/js/login.js",
+      "PackagePath": "staticwebassets/Components/js/login.js"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/js/mapManagement.js",
+      "PackagePath": "staticwebassets/Components/js/mapManagement.js"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/js/userManagement.js",
+      "PackagePath": "staticwebassets/Components/js/userManagement.js"
     },
     {
       "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/app.js",

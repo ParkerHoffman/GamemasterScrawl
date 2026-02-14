@@ -16,6 +16,7 @@ namespace GamemasterScrawl
 //Used to cleanly shutdown the app when relevant
 private readonly IHostApplicationLifetime _appLifetime;
         private readonly FileHandler<LoginState> _loginStore;
+        private readonly FileHandler<MapSystem> _mapStore;
         private static int _connectionCount = 0;
         private static readonly object _lock = new();
 
@@ -27,11 +28,13 @@ private readonly IHostApplicationLifetime _appLifetime;
         /// <param name="tempStore">Login Details File (FileHandler<LoginState>)</param>
         /// <param name="host">Reference to the HostIdentity class</param>
         /// <param name="_lifetime">Application reference, for termination</param>
-        public SocketHub(FileHandler<LoginState> tempStore, HostIdentity host, IHostApplicationLifetime _lifetime)
+        /// /// <param name="tempMap">Login Details File (FileHandler<MapSystem>)</param>
+        public SocketHub(FileHandler<LoginState> tempStore, HostIdentity host, IHostApplicationLifetime _lifetime, FileHandler<MapSystem> tempMap)
         {
             _loginStore = tempStore;
             _hostIdentity = host;
             _appLifetime = _lifetime;
+            _mapStore = tempMap;
         }
 
         /// <summary>
@@ -122,6 +125,7 @@ private readonly IHostApplicationLifetime _appLifetime;
 
             //Save the current filestate
             _loginStore.SaveChanges();
+            _mapStore.SaveChanges();
 
 
             //Tell all the users to close run their disconnect functions

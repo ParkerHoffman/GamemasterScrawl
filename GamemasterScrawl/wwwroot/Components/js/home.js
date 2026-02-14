@@ -1,5 +1,5 @@
-import {loadComponent} from "../router.js";
-import { toastUser } from "../app.js";
+import {loadComponent} from "../../router.js";
+import { toastUser } from "../../app.js";
 
 //The reference to the library managing 3D stuff
 import * as THREE from 'three';
@@ -16,11 +16,16 @@ if(appState.isHost == true){
     //The holder for the UM Navigator Button
     const manageBtn = container.querySelector("#userManagementHolder");
 
-    manageBtn.innerHTML = "<button id=\"openUserManagement\" class=\"info\">User Management</button>";
+    manageBtn.innerHTML = "<button id=\"openUserManagement\" class=\"info\">User Management</button><button id=\"openMapManagement\" class=\"info\">Map Editor</button>";
     //The button itself
     const usrMangBtn = container.querySelector("#openUserManagement");
   
     usrMangBtn.addEventListener("click", async () => {loadComponent("userManagement")});
+
+        //The button itself
+    const mapMangBtn = container.querySelector("#openMapManagement");
+  
+    mapMangBtn.addEventListener("click", async () => {loadComponent("mapManagement")});
     
 } else {
     const logOutBtn = container.querySelector("#LogoutButtonHolder");
@@ -59,40 +64,44 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
     spaceCont.appendChild(renderer.domElement);
 
-        //const geometry = new THREE.BoxGeometry(1,1,1);
-        const geometry = new THREE.IcosahedronGeometry();
+        const geometry = new THREE.BoxGeometry(1,1,1);
+        //const geometry = new THREE.IcosahedronGeometry();
 
-        const catTexture = loader.load("/Components/FileMaterials/creepy-cat.webp");
-        const material = new THREE.MeshBasicMaterial({map: catTexture});
+        const texture1 = loader.load("/Components/FileMaterials/Materials/Default_Asphalt.jpg");
+        //Be sure to credit: https://ambientcg.com/
+
+        const material = new THREE.MeshBasicMaterial({map: texture1});
         //const material = new THREE.MeshBasicMaterial({color: 0x3688F4});
 
         var i = 0;
+
+const edges = new THREE.EdgesGeometry(geometry);
+const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+
+for (let i = 0; i < 10; i++) {
+    for (let k = 0; k < 10; k++) {
+
         const cube = new THREE.Mesh(geometry, material);
-    
-        const edges = new THREE.EdgesGeometry(geometry);
-    
-        const edgeMaterial = new THREE.LineBasicMaterial({color: 0x000000, linewidth: 10});
+
         const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
-    
         cube.add(edgeLines);
 
-        while (i < 10){
-    
-            scene.add(cube);
+        cube.position.set(i, k, 0);
+        scene.add(cube);
+    }
+}
 
-            i++;
-        }
+        camera.position.z = 15;
 
-        camera.position.z = 5;
-    
+    let angle = 0;
 
         function animate() {
-            cube.rotation.x += .005;
-            cube.rotation.y += .005;
-            //cube.scale.z += -.1;
-            //cube.scale.x += -.1;
-            //cube.scale.y += -.1;
+            angle += 0.002;
 
+            camera.position.x = Math.cos(angle) * 10;
+            camera.position.y = Math.sin(angle) * 10;
+            camera.position.z = 15;
+            camera.lookAt(5,5,5)
 
     renderer.render(scene, camera);
 }

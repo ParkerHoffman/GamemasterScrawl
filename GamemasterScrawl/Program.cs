@@ -18,6 +18,7 @@ builder.Services.AddSignalR();
 //Manages who the host is, and services related to that
 builder.Services.AddSingleton<HostIdentity>();
 
+    
 //Registering the various data files
 builder.Services.AddSingleton(sp =>
 {
@@ -25,12 +26,19 @@ builder.Services.AddSingleton(sp =>
     var env = sp.GetRequiredService<IWebHostEnvironment>();
     var dataPath = Path.Combine(env.ContentRootPath, "App_Data");
     Directory.CreateDirectory(dataPath);
-
-
     //User info
     return new FileHandler<LoginState>(dataPath, "login.json");
 });
 
+builder.Services.AddSingleton(sp =>
+{
+    //Setting up the root directory path
+    var env = sp.GetRequiredService<IWebHostEnvironment>();
+    var dataPath = Path.Combine(env.ContentRootPath, "App_Data");
+    Directory.CreateDirectory(dataPath);
+    //Map info
+    return new FileHandler<MapSystem>(dataPath, "Map.json");
+});
 
 //Configuring the ports to use
 builder.WebHost.ConfigureKestrel(options =>
