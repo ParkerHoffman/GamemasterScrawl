@@ -71,18 +71,19 @@ renderer.setAnimationLoop( animate );
 }
 
 function HandleFileExplorerSetup(container){
-fileExplorer = [...map.maplist.map(e => ({...e, children: []})), {ID: -1, mapName: "Other", children: []}];
+fileExplorer = [...map.maplist.map(e => ({...e, children: []})), {id: -1, mapName: "Other", children: []}];
 
 map.roomList.forEach(room => {
     fileExplorer = fileExplorer.map(folder => {
-        if(room.containerID.includes(folder.ID) || folder.ID === -1){
+
+        if(room.containerID.includes(folder.id) || folder.id === -1){
             folder = {...folder, children: [...folder.children, room]}
         }
         return folder;
     })
 })
 
-renderTree(container, fileExplorer, selectItem)
+renderTree(container, fileExplorer, selectItem, "#MapTreeRoot")
 }
 
 
@@ -91,8 +92,8 @@ function selectItem(item){
 }
 
 
-function renderTree(container, data, onSelect){
-    const cont = container.querySelector("#MapTreeRoot");
+function renderTree(container, data, onSelect, comp){
+    const cont = container.querySelector(comp);
 
     cont.innerHTML = "";
 
