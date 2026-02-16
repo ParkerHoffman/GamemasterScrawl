@@ -43,7 +43,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 for (let i = 0; i < 10; i++) {
     for (let k = 0; k < 10; k++) {
 
-       const cube = make3DBlock();//"Default_Asphalt.jpg"
+       const cube = make3DBlock("Default_Asphalt.jpg");
 
         cube.position.set(i, k, 0);
         scene.add(cube);

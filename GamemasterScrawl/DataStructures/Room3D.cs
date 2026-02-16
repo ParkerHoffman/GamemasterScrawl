@@ -12,7 +12,7 @@ namespace GamemasterScrawl
 
         public ActiveToken[] tokens {get; set;} = [];
 
-        public int containerID {get; set;} = 0;
+        public int[] containerID {get; set;} = [];
 
         public Block[] blockList {get; set;} = [];
 

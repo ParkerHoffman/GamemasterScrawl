@@ -105,6 +105,10 @@
       "PackagePath": "staticwebassets/Components/html/userManagement.html"
     },
     {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/js/helper3D.js",
+      "PackagePath": "staticwebassets/Components/js/helper3D.js"
+    },
+    {
       "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/js/home.js",
       "PackagePath": "staticwebassets/Components/js/home.js"
     },
