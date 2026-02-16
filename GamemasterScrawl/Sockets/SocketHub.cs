@@ -248,13 +248,6 @@ private readonly IHostApplicationLifetime _appLifetime;
             
             } catch(Exception ex)
             {
-                //In the event of an error, make it obvious
-                Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine(ex.ToString());
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.BackgroundColor = ConsoleColor.Black;
-
                 return false;
             }
 
@@ -320,13 +313,6 @@ private readonly IHostApplicationLifetime _appLifetime;
             
             } catch(Exception ex)
             {
-                //In the event of an error, make it obvious
-                Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine(ex.ToString());
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.BackgroundColor = ConsoleColor.Black;
-
                 await toastHost("Error", "There was an error creating this user. Please try again later", "error");
 
                 return false;
@@ -382,13 +368,6 @@ private readonly IHostApplicationLifetime _appLifetime;
 
             }catch(Exception ex)
             {
-                //In the event of an error, make it obvious
-                Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine(ex.ToString());
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.BackgroundColor = ConsoleColor.Black;
-
                 await toastHost("Error", "An error occured while changing this user's password. Please try again later", "error");
 
                 return false;
@@ -450,13 +429,6 @@ private readonly IHostApplicationLifetime _appLifetime;
 
             }catch(Exception ex)
             {
-                //In the event of an error, make it obvious
-                Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine(ex.ToString());
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.BackgroundColor = ConsoleColor.Black;
-
                 await toastHost("Error", "There was an error kicking this user", "error");
 
                 return false;
@@ -480,8 +452,6 @@ private readonly IHostApplicationLifetime _appLifetime;
 
             foreach(User person in _loginStore.Data.users)
             {
-                Console.WriteLine("Current: " + Context.ConnectionId + ", new: " + person.currentConnection);
-
 
                 if(Context.ConnectionId.Equals(person.currentConnection))
                 {
@@ -507,13 +477,6 @@ private readonly IHostApplicationLifetime _appLifetime;
                 return true;
             }catch(Exception ex)
             {
-                //In the event of an error, make it obvious
-                Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine(ex.ToString());
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.BackgroundColor = ConsoleColor.Black;
-
                 return false;
             }
         }
@@ -566,14 +529,27 @@ private readonly IHostApplicationLifetime _appLifetime;
 
             }catch(Exception ex)
             {
-                //In the event of an error, make it obvious
-                Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine(ex.ToString());
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.BackgroundColor = ConsoleColor.Black;
-
                 return false;
+            }
+        }
+
+        public async Task<MapSystem> GetMapList(){
+             try
+            {
+            bool? perms = await CheckIfHost();
+            //Check the perms of the user. Deny if not allowed
+            if(perms != true)
+            {
+                throw new Exception("");
+            }
+
+
+            return _mapStore.Data;
+
+            }catch(Exception ex)
+            {
+                await toastUser("Error", "There was an error getting the map list", "error", Context.ConnectionId);
+                return null;
             }
         }
 

@@ -17,6 +17,8 @@ controls.enableDamping = true; // Adds that smooth "weight" to the movement
 controls.dampingFactor = 0.05;
 controls.screenSpacePanning = true; // Allows moving up/down/left/right relative to the camera view
 
+var map;
+
 
 export async function init(container, appState){
 
@@ -25,6 +27,8 @@ const returnHomeBtn = container.querySelector("#returnHome");
 returnHomeBtn.addEventListener("click", async () => {loadComponent("home")});
 
     Generate3DSpace(container);
+    map = await appState.connection.invoke("GetMapList");
+    console.log(map)
 }
 
 

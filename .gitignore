@@ -59,3 +59,8 @@ GamemasterScrawl/obj/GamemasterScrawl.csproj.nuget.dgspec.json
 GamemasterScrawl/obj/GamemasterScrawl.csproj.nuget.g.props
 GamemasterScrawl/obj/project.assets.json
 GamemasterScrawl/obj/project.nuget.cache
+*.dll
+*.pdb
+GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.AssemblyInfo.cs
+GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.AssemblyInfoInputs.cache
+GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.dll
