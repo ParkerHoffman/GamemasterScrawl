@@ -33,3 +33,4 @@ GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.csproj.FileListAbsolute.txt
 GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.GlobalUsings.g.cs
 *.pdb
 *.props
+/GamemasterScrawl/bin
