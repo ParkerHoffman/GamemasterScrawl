@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 
 
@@ -124,8 +125,8 @@ private readonly IHostApplicationLifetime _appLifetime;
             _loginStore.Data.users = tempList.ToArray();
 
             //Save the current filestate
-            _loginStore.SaveChanges();
-            _mapStore.SaveChanges();
+            await _loginStore.SaveChanges();
+            await _mapStore.SaveChanges();
 
 
             //Tell all the users to close run their disconnect functions
@@ -235,7 +236,7 @@ private readonly IHostApplicationLifetime _appLifetime;
 
                 _loginStore.Data.users = tempArray;
 
-                _loginStore.SaveChanges();
+                await _loginStore.SaveChanges();
 
                 //Now, we tell all clients this user is signed in
                 await Clients.All.SendAsync("UserSuccessfullyLoggedIn", username);
@@ -309,11 +310,11 @@ private readonly IHostApplicationLifetime _appLifetime;
                 //Set the storage array
                 _loginStore.Data.users = tempList.ToArray();
 
-                _loginStore.SaveChanges();
+                await _loginStore.SaveChanges();
 
                 await Clients.All.SendAsync("UserSuccessfullyDisconnects", user);
 
-                toastHost("Created", "The user '" + user + "' was successfully created", "success");
+                await toastHost("Created", "The user '" + user + "' was successfully created", "success");
 
                 return true;
             
@@ -326,7 +327,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.BackgroundColor = ConsoleColor.Black;
 
-                toastHost("Error", "There was an error creating this user. Please try again later", "error");
+                await toastHost("Error", "There was an error creating this user. Please try again later", "error");
 
                 return false;
             }
@@ -371,9 +372,9 @@ private readonly IHostApplicationLifetime _appLifetime;
                 _loginStore.Data.users = uList.ToArray();
 
                 //Save teh changes in the file
-                _loginStore.SaveChanges();
+                await _loginStore.SaveChanges();
 
-                toastHost("Success", "The password for " + holderName + " has successfully been updated", "success");
+                await toastHost("Success", "The password for " + holderName + " has successfully been updated", "success");
 
                 //Notify the user of success
                 return true;
@@ -388,7 +389,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.BackgroundColor = ConsoleColor.Black;
 
-                toastHost("Error", "An error occured while changing this user's password. Please try again later", "error");
+                await toastHost("Error", "An error occured while changing this user's password. Please try again later", "error");
 
                 return false;
             }
@@ -435,14 +436,14 @@ private readonly IHostApplicationLifetime _appLifetime;
                 _loginStore.Data.users = tempList.ToArray();
 
                 //Save teh changes in the file
-                _loginStore.SaveChanges();
+                await _loginStore.SaveChanges();
 
                 //Tell users to remove this user
                 await Clients.All.SendAsync("UserSuccessfullyLoggedIn", holderName);
 
                 await disconnectSingleUserByConn(holderConnection);
 
-                toastHost("Success", holderName + " has been successfully logged out", "success");
+                await toastHost("Success", holderName + " has been successfully logged out", "success");
                 //Notify the user of success
                 return true;
 
@@ -456,7 +457,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.BackgroundColor = ConsoleColor.Black;
 
-                toastHost("Error", "There was an error kicking this user", "error");
+                await toastHost("Error", "There was an error kicking this user", "error");
 
                 return false;
             }
@@ -496,7 +497,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 _loginStore.Data.users = tempList.ToArray();
 
                 //Save teh changes in the file
-                _loginStore.SaveChanges();
+                await _loginStore.SaveChanges();
 
                 await Clients.All.SendAsync("UserSuccessfullyDisconnects", user);
 
@@ -555,7 +556,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 _loginStore.Data.users = tempList.ToArray();
 
                 //Save teh changes in the file
-                _loginStore.SaveChanges();
+                await _loginStore.SaveChanges();
 
                 await disconnectSingleUserByConn(holderConnection);
 
@@ -626,7 +627,7 @@ private readonly IHostApplicationLifetime _appLifetime;
         /// <returns>N/A</returns>
         private async Task toastHost(string header, string message, string type)
         {
-            toastUser(header, message, type, _hostIdentity.GetHost());
+            await toastUser(header, message, type, _hostIdentity.GetHost());
         }
 
         /// <summary>

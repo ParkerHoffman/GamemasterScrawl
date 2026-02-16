@@ -4,6 +4,7 @@ import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/cont
 
 //The reference to the library managing 3D stuff
 import * as THREE from 'three';
+import { make3DBlock } from "./helper3D.js";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -37,29 +38,12 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
     spaceCont.appendChild(renderer.domElement);
 
-        const geometry = new THREE.BoxGeometry(1,1,1);
-        // Initialize the Texture Loader
-const loader = new THREE.TextureLoader();
 
-        //const texture1 = loader.load("/Components/FileMaterials/Materials/Default_Asphalt.jpg");
-        const texture1 = loader.load("/Components/FileMaterials/TokenImages/creepy-cat.webp");
-        //Be sure to credit: https://ambientcg.com/
-
-        const material = new THREE.MeshBasicMaterial({map: texture1});
-        //const material = new THREE.MeshBasicMaterial({color: 0x3688F4});
-
-        var i = 0;
-
-const edges = new THREE.EdgesGeometry(geometry);
-const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
 
 for (let i = 0; i < 10; i++) {
     for (let k = 0; k < 10; k++) {
 
-        const cube = new THREE.Mesh(geometry, material);
-
-        const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
-        cube.add(edgeLines);
+       const cube = make3DBlock();//"Default_Asphalt.jpg"
 
         cube.position.set(i, k, 0);
         scene.add(cube);

@@ -34,3 +34,5 @@ GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.GlobalUsings.g.cs
 *.pdb
 *.props
 /GamemasterScrawl/bin
+GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.AssemblyInfo.cs
+GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.AssemblyInfoInputs.cache
