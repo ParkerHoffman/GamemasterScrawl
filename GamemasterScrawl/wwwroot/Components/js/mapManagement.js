@@ -71,7 +71,7 @@ renderer.setAnimationLoop( animate );
 }
 
 function HandleFileExplorerSetup(container){
-fileExplorer = [...map.maplist.map(e => ({...e, children: []})), {id: -1, mapName: "Other", children: []}];
+fileExplorer = [...map.maplist.map(e => ({...e, children: []})), {id: -1, mapName: "All Rooms", children: []}];
 
 map.roomList.forEach(room => {
     fileExplorer = fileExplorer.map(folder => {
