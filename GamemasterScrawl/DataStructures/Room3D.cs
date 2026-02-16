@@ -17,5 +17,6 @@ namespace GamemasterScrawl
         public Block[] blockList {get; set;} = [];
 
         public string[] MaterialList {get; set;} = [];
+        public string nickname {get; set;} = "";
     }
 }

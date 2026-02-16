@@ -1,0 +1,51 @@
+.tree-root {
+    font-family: system-ui, sans-serif;
+    font-size: 0.9rem;
+    color: #ddd;
+}
+
+.tree-folder {
+    margin-bottom: 4px;
+}
+
+.tree-folder-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+
+    background: rgba(255,255,255,0.03);
+}
+
+.tree-folder-header:hover {
+    background: rgba(255,255,255,0.07);
+}
+
+.tree-folder-arrow {
+    width: 12px;
+    text-align: center;
+    font-size: 0.7rem;
+}
+
+.tree-children {
+    margin-left: 18px;
+    margin-top: 2px;
+}
+
+.tree-item {
+    padding: 3px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.tree-item:hover {
+    background: rgba(54,136,244,0.2);
+}
+
+.tree-item.selected {
+    background: rgba(54,136,244,0.35);
+    outline: 1px solid #3688f4;
+}

@@ -18,6 +18,8 @@ controls.dampingFactor = 0.05;
 controls.screenSpacePanning = true; // Allows moving up/down/left/right relative to the camera view
 
 var map;
+var fileExplorer = [];
+var selectedRoom;
 
 
 export async function init(container, appState){
@@ -28,7 +30,9 @@ returnHomeBtn.addEventListener("click", async () => {loadComponent("home")});
 
     Generate3DSpace(container);
     map = await appState.connection.invoke("GetMapList");
-    console.log(map)
+    selectedRoom = map.activeRoom;
+    HandleFileExplorerSetup(container);
+    
 }
 
 
@@ -64,4 +68,92 @@ for (let i = 0; i < 10; i++) {
 
 renderer.setAnimationLoop( animate );
 
+}
+
+function HandleFileExplorerSetup(container){
+fileExplorer = [...map.maplist.map(e => ({...e, children: []})), {ID: -1, mapName: "Other", children: []}];
+
+map.roomList.forEach(room => {
+    fileExplorer = fileExplorer.map(folder => {
+        if(room.containerID.includes(folder.ID) || folder.ID === -1){
+            folder = {...folder, children: [...folder.children, room]}
+        }
+        return folder;
+    })
+})
+
+renderTree(container, fileExplorer, selectItem)
+}
+
+
+function selectItem(item){
+    console.log(item)
+}
+
+
+function renderTree(container, data, onSelect){
+    const cont = container.querySelector("#MapTreeRoot");
+
+    cont.innerHTML = "";
+
+    data.forEach(folder => {
+        const folderDiv = document.createElement("div");
+        folderDiv.className = "tree-folder";
+
+        const header = document.createElement("div");
+        header.className = "tree-folder-header"
+
+        const arrow = document.createElement("span")
+        arrow.className = "tree-folder-arrow";
+
+        //Handles the specific arrow state
+        arrow.textContent = folder.expanded ? "▼" : "▶";
+
+        const label = document.createElement("span")
+        label.textContent = folder.mapName;
+
+        header.appendChild(arrow);
+        header.appendChild(label);
+
+
+        //Now we deal with the children
+
+        const childrenDiv = document.createElement("div");
+        childrenDiv.className = "tree-children";
+        childrenDiv.style.display = folder.expanded ? "block" : "none";
+
+        folder.children?.forEach(child => {
+            const childItem = document.createElement("div");
+            childItem.className = "tree-item";
+            childItem.textContent = child.nickname;
+
+
+            childItem.addEventListener("click", e => {
+                e.stopPropagation();
+                selectItem(childItem);
+                onSelect(child);
+            });
+
+
+            childrenDiv.appendChild(childItem);
+
+
+        });
+
+
+        //Deal with expanding the rows
+        header.addEventListener("click", () => {
+            //Update the bool
+            folder.expanded = !folder.expanded;
+            //Update the arrow
+            arrow.textContent = folder.expanded ? "▼" : "▶";
+            //Update child display
+            childrenDiv.style.display = folder.expanded ? "block" : "none";
+        });
+
+        folderDiv.appendChild(header);
+        folderDiv.appendChild(childrenDiv);
+        cont.appendChild(folderDiv)
+
+    });
 }
