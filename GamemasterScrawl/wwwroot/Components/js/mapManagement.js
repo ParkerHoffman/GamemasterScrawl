@@ -41,7 +41,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
         // Initialize the Texture Loader
 const loader = new THREE.TextureLoader();
 
-        const texture1 = loader.load("/Components/FileMaterials/Materials/Default_Asphalt.jpg");
+        //const texture1 = loader.load("/Components/FileMaterials/Materials/Default_Asphalt.jpg");
+        const texture1 = loader.load("/Components/FileMaterials/TokenImages/creepy-cat.webp");
         //Be sure to credit: https://ambientcg.com/
 
         const material = new THREE.MeshBasicMaterial({map: texture1});

@@ -23,3 +23,13 @@ TestResults.xml
 GamemasterScrawl/App_Data/login.json
 GamemasterScrawl/App_Data/login.json
 *.json
+*.dll
+*.pdb
+*.json
+GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.AssemblyInfo.cs
+*.cache
+GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.csproj.FileListAbsolute.txt
+*.editorconfig
+GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.GlobalUsings.g.cs
+*.pdb
+*.props
