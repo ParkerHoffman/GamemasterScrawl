@@ -64,3 +64,4 @@ GamemasterScrawl/obj/project.nuget.cache
 GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.AssemblyInfo.cs
 GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.AssemblyInfoInputs.cache
 GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.dll
+*.gz

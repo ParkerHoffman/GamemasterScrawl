@@ -24,9 +24,9 @@ var selectedRoom;
 
 export async function init(container, appState){
 
-const returnHomeBtn = container.querySelector("#returnHome");
+    const returnHomeBtn = container.querySelector("#returnHome");
   
-returnHomeBtn.addEventListener("click", async () => {loadComponent("home")});
+    returnHomeBtn.addEventListener("click", async () => {loadComponent("home")});
 
     Generate3DSpace(container);
     map = await appState.connection.invoke("GetMapList");
@@ -51,7 +51,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 for (let i = 0; i < 10; i++) {
     for (let k = 0; k < 10; k++) {
 
-       const cube = make3DBlock("Default_Asphalt.jpg");
+       const cube = make3DBlock("Default_Gold.jpg");
 
         cube.position.set(i, k, 0);
         scene.add(cube);
