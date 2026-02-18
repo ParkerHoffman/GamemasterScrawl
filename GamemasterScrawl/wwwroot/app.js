@@ -7,6 +7,9 @@ const connection = new signalR.HubConnectionBuilder().withUrl("/socketHub").buil
 //This boolean controls the app's host status
 var isHost = false;
 
+//Deals with the modalPopup
+let activeModal = "";
+
 //This function checks if the user is the host
 export function CheckAmIHost(){
     return isHost;
@@ -133,10 +136,87 @@ export async function checkHostStatus(){
 
  }
 
+
   //On the event a user calls a toast
  connection.on("callToast", function (header, message, type){
     toastUser(header, message, type);
  });
+
+
+ //This function is to handle dealing with the modal popups
+export function popupModal({title = "",
+    content = "",
+    closeable = true,
+    onClose = null
+}){
+    if(activeModal){
+        closeDialog();
+    }
+
+    //Where this thing is located
+    const root = document.getElementById("dialog-root");
+
+    //Covering up the entire background of teh modal
+    const overlay = document.createElement("div");
+    overlay.className="dialog-overlay";
+
+
+    //Create the styled panel for the modal
+    const panel = document.createElement("div");
+    panel.className="dialog-panel"
+
+    //Create the header for hte panel
+    const header = document.createElement("div");
+    header.className="dialog-header";
+    header.innerHTML = `<span>${title}</span>`;
+
+    //Add the closing button to the header
+    if(closeable){
+        const closeBtn = document.createElement("span");
+        closeBtn.className = "dialog-close";
+        closeBtn.textContent = "✕";
+        closeBtn.onclick = closeModal();
+        header.appendChild(closeBtn);
+    }
+
+    //Create the body element
+    const body = document.createElement("div");
+    body.className = "dialog-body";
+
+    if(typeof content === "string"){
+        body.innerHTML = content;
+    } else {
+        body.appendChild(content);
+    }
+
+
+    panel.appendChild(header);
+    panel.appendChild(body);
+
+    overlay.appendChild(panel);
+    root.appendChild(overlay);
+
+
+    //Click outside the overlay
+    overlay.addEventListener("keydown", escHandler);
+    activeModal = {overlay, onClose}
+}
+
+//Closes the modal
+export function closeModal(){
+    //If there is nto active modal, cease
+    if(!activeModal) return;
+
+    document.removeEventListener("keydown", escHandler);
+    activeModal.overlay.remove();
+    activeModal = null;
+}
+
+function escHandler(e){
+    if (e.key === "Escape"){
+        closeModal();
+    }
+}
 
  //This is run on page load. It initializes the socket connection
  async function startConnection(){
@@ -150,10 +230,6 @@ export async function checkHostStatus(){
 setTimeout(startConnection, 5000);
     }
  }
-
-
-
-
 
 //Start the socket connection (And other startup functions)
 startConnection();

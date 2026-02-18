@@ -1,5 +1,5 @@
 import {loadComponent} from "../../router.js";
-import { toastUser } from "../../app.js";
+import { toastUser, popupModal } from "../../app.js";
 import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
 
 //The reference to the library managing 3D stuff
@@ -32,9 +32,21 @@ export async function init(container, appState){
     map = await appState.connection.invoke("GetMapList");
     selectedRoom = map.activeRoom;
     HandleFileExplorerSetup(container);
-    
+
+
+        const newRoomBtn = container.querySelector("#create-new-room");
+  
+    newRoomBtn.addEventListener("click", async () => {loadComponent("home")});
+
+            const newMapBtn = container.querySelector("#create-new-map");
+  
+    newMapBtn.addEventListener("click", async () => {popupNewMap()});
 }
 
+
+function popupNewMap(){
+popupModal({title: "New Map", content: "This is the new map pane (I'll add html later)", closeable: true, onClose: console.log("closed")})
+}
 
 
 async function Generate3DSpace(container, appState){
@@ -92,6 +104,7 @@ function selectItem(item){
 }
 
 
+//This function creates (and updates) the file Tree
 function renderTree(container, data, onSelect, comp){
     const cont = container.querySelector(comp);
 
