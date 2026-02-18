@@ -21,8 +21,13 @@ var map;
 var fileExplorer = [];
 var selectedRoom;
 
-//This is the constant for the map name input:
+//This is the constant for the map and room inputs:
     var mapNinput = null;
+    var xcoordInp = null;
+    var ycoordInp = null;
+    var zcoordInp = null;
+    var roomNinput = null;
+    
 
 
 export async function init(container, appState){
@@ -63,13 +68,33 @@ function newMapContent(container, appState) {
 
     const button = document.createElement("button");
     button.id = "mapCreationBtn";
-    button.className = "status-tag info";
+    button.className = "info";
     button.textContent = "Create Map";
 
     wrapper.appendChild(mapNinput);
     wrapper.appendChild(button);
 
     button.addEventListener("click", async () => {CreateNewMap(container, appState)})
+
+    return wrapper;
+}
+
+function newRoomContent(container, appState) {
+    const wrapper = document.createElement("div");
+
+
+
+    const button = document.createElement("button");
+    button.id = "roomCreationBtn";
+    button.className = "info";
+    button.textContent = "Create Room";
+
+
+    //On room creation/edit: We need dimensions, nickname, and material list. For he latter: We need some kind of multiselect
+    //wrapper.appendChild(mapNinput);
+    wrapper.appendChild(button);
+
+    //button.addEventListener("click", async () => {CreateNewMap(container, appState)})
 
     return wrapper;
 
