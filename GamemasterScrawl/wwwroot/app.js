@@ -175,7 +175,7 @@ export function popupModal({title = "",
         const closeBtn = document.createElement("span");
         closeBtn.className = "dialog-close";
         closeBtn.textContent = "✕";
-        closeBtn.onclick = closeModal();
+        closeBtn.onclick = closeModal;
         header.appendChild(closeBtn);
     }
 

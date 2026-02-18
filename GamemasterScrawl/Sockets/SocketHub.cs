@@ -553,6 +553,37 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
+        public async Task<SingleMap> CreateNewMap(string newMapName)
+        {
+            SingleMap newMap = new SingleMap();
+
+            newMap.mapName = newMapName;
+
+
+            List<SingleMap> mapList = new List<SingleMap>();
+
+            mapList.AddRange(_mapStore.Data.maplist);
+
+            int newID = 1;
+
+            foreach (SingleMap map in mapList)
+            {
+                if(newID <= map.ID)
+                {
+                    newID = map.ID + 1;
+                }
+            }
+
+            newMap.ID = newID;
+            mapList.Add(newMap);
+
+            _mapStore.Data.maplist = mapList.ToArray();
+
+            await _mapStore.SaveChanges();
+
+            return newMap;
+        }
+
         /// <summary>
         /// This function is used to disconnect a single user on call. It does this by forcing them back to the login screen, and their connection string should be cleared before using this
         /// </summary>

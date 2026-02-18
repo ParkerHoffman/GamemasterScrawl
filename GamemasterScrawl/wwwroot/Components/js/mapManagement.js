@@ -1,5 +1,5 @@
 import {loadComponent} from "../../router.js";
-import { toastUser, popupModal } from "../../app.js";
+import { toastUser, popupModal, closeModal } from "../../app.js";
 import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
 
 //The reference to the library managing 3D stuff
@@ -21,6 +21,9 @@ var map;
 var fileExplorer = [];
 var selectedRoom;
 
+//This is the constant for the map name input:
+    var mapNinput = null;
+
 
 export async function init(container, appState){
 
@@ -40,13 +43,78 @@ export async function init(container, appState){
 
             const newMapBtn = container.querySelector("#create-new-map");
   
-    newMapBtn.addEventListener("click", async () => {popupNewMap()});
+    newMapBtn.addEventListener("click", async () => {popupNewMap(container, appState)});
+
+    //Setting up the editing modal components
+    mapNinput = document.createElement("input");
+    mapNinput.type = "text";
+    mapNinput.id = "NewMapNameInput";
+    mapNinput.placeholder = "New Map Name";
 }
 
 
-function popupNewMap(){
-popupModal({title: "New Map", content: "This is the new map pane (I'll add html later)", closeable: true, onClose: console.log("closed")})
+
+
+
+function newMapContent(container, appState) {
+    const wrapper = document.createElement("div");
+
+
+
+    const button = document.createElement("button");
+    button.id = "mapCreationBtn";
+    button.className = "status-tag info";
+    button.textContent = "Create Map";
+
+    wrapper.appendChild(mapNinput);
+    wrapper.appendChild(button);
+
+    button.addEventListener("click", async () => {CreateNewMap(container, appState)})
+
+    return wrapper;
+
+
 }
+
+function popupNewMap(container, appState){
+popupModal({title: "Create New Map", content: newMapContent(container, appState), closeable: true, onClose: closeModal})
+
+}
+
+async function CreateNewMap(container, appState){
+    //Get the value
+    const inpVal = mapNinput.value;
+
+    if(inpVal && inpVal.length > 0){
+        try{
+            const success = await appState.connection.invoke("CreateNewMap", inpVal);
+
+            if(!success){
+                throw new Error();
+            }
+
+            fileExplorer = [success, ...fileExplorer];
+
+            renderTree(container, fileExplorer, selectItem, "#MapTreeRoot")
+
+            //Tell user success
+            toastUser("More Info", `Created map '${inpVal}'`, "success")
+
+            //Close the modal after success
+            closeModal()
+        } catch{
+            toastUser("Error", 'There was an error creating the map', 'error')
+        }
+
+
+    } else {
+        toastUser("More Info", "Please give the map a name", "info")
+    }
+
+
+}
+
+
 
 
 async function Generate3DSpace(container, appState){
@@ -83,6 +151,7 @@ renderer.setAnimationLoop( animate );
 }
 
 function HandleFileExplorerSetup(container){
+
 fileExplorer = [...map.maplist.map(e => ({...e, children: []})), {id: -1, mapName: "All Rooms", children: []}];
 
 map.roomList.forEach(room => {
