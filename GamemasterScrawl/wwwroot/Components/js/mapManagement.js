@@ -44,7 +44,7 @@ export async function init(container, appState){
 
         const newRoomBtn = container.querySelector("#create-new-room");
   
-    newRoomBtn.addEventListener("click", async () => {loadComponent("home")});
+    newRoomBtn.addEventListener("click", async () => {popupNewRoom(container, appState)});
 
             const newMapBtn = container.querySelector("#create-new-map");
   
@@ -55,6 +55,28 @@ export async function init(container, appState){
     mapNinput.type = "text";
     mapNinput.id = "NewMapNameInput";
     mapNinput.placeholder = "New Map Name";
+
+        //Setting up the editing modal components
+    roomNinput = document.createElement("input");
+    roomNinput.type = "text";
+    roomNinput.id = "NewRoomNameInput";
+    roomNinput.placeholder = "New Room NickName";
+
+    xcoordInp = document.createElement("input");
+    xcoordInp.type = "number";
+    xcoordInp.id = "xDimensionSize";
+    xcoordInp.placeholder = "X Size";
+
+    ycoordInp = document.createElement("input");
+    ycoordInp.type = "number";
+    ycoordInp.id = "yDimensionSize";
+    ycoordInp.placeholder = "Y Size";
+
+    zcoordInp = document.createElement("input");
+    zcoordInp.type = "number";
+    zcoordInp.id = "zDimensionSize";
+    zcoordInp.placeholder = "Z Size";
+    
 }
 
 
@@ -92,9 +114,13 @@ function newRoomContent(container, appState) {
 
     //On room creation/edit: We need dimensions, nickname, and material list. For he latter: We need some kind of multiselect
     //wrapper.appendChild(mapNinput);
+    wrapper.appendChild(roomNinput);
+    wrapper.appendChild(xcoordInp);
+wrapper.appendChild(ycoordInp);
+wrapper.appendChild(zcoordInp);
     wrapper.appendChild(button);
 
-    //button.addEventListener("click", async () => {CreateNewMap(container, appState)})
+    button.addEventListener("click", async () => {CreateNewMap(container, appState)})
 
     return wrapper;
 
@@ -104,6 +130,10 @@ function newRoomContent(container, appState) {
 function popupNewMap(container, appState){
 popupModal({title: "Create New Map", content: newMapContent(container, appState), closeable: true, onClose: closeModal})
 
+}
+
+function popupNewRoom(container, appState){
+    popupModal({title: "Create new Room", content: newRoomContent(container, appState), closeable: true, onClose: closeModal})
 }
 
 async function CreateNewMap(container, appState){
@@ -156,7 +186,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 for (let i = 0; i < 10; i++) {
     for (let k = 0; k < 10; k++) {
 
-       const cube = make3DBlock("Default_Gold.jpg");
+       const cube = make3DBlock("Default_Decorated_Tile.jpg");
 
         cube.position.set(i, k, 0);
         scene.add(cube);
