@@ -88,15 +88,15 @@ function newMapContent(container, appState) {
 
 
 
-    const button = document.createElement("button");
-    button.id = "mapCreationBtn";
-    button.className = "info";
-    button.textContent = "Create Map";
+    const mapbutton = document.createElement("button");
+    mapbutton.id = "mapCreationBtn";
+    mapbutton.className = "info";
+    mapbutton.textContent = "Create Map";
 
     wrapper.appendChild(mapNinput);
-    wrapper.appendChild(button);
+    wrapper.appendChild(mapbutton);
 
-    button.addEventListener("click", async () => {CreateNewMap(container, appState)})
+    mapbutton.addEventListener("click", async () => {CreateNewMap(container, appState)})
 
     return wrapper;
 }
@@ -116,11 +116,11 @@ function newRoomContent(container, appState) {
     //wrapper.appendChild(mapNinput);
     wrapper.appendChild(roomNinput);
     wrapper.appendChild(xcoordInp);
-wrapper.appendChild(ycoordInp);
-wrapper.appendChild(zcoordInp);
+    wrapper.appendChild(ycoordInp);
+    wrapper.appendChild(zcoordInp);
     wrapper.appendChild(button);
 
-    button.addEventListener("click", async () => {CreateNewMap(container, appState)})
+    button.addEventListener("click", async () => {CreateNewRoom(container, appState)})
 
     return wrapper;
 
@@ -169,6 +169,43 @@ async function CreateNewMap(container, appState){
 
 }
 
+
+async function CreateNewRoom(container, appState){
+    const roomNick = roomNinput.value;
+
+    if(!roomNick || roomNick.length < 1){
+        toastUser("More Info Needed", "Please enter a name for the room", "info");
+        return;
+    }
+
+    const xCoordVal = xcoordInp.value;
+    const yCoordVal = ycoordInp.value;
+    const zCoordVal = zcoordInp.value;
+
+    if(!xCoordVal || !yCoordVal || !zCoordVal){
+        toastUser("More Info Needed", "Please enter room dismensions", "info");
+        return;
+    }
+
+    if(xCoordVal <= 0 || xCoordVal > 50 || yCoordVal <= 0 || yCoordVal > 50 || zCoordVal <= 0 || zCoordVal > 50){
+        toastUser("Validate Dimensions", "Invalid Room Dimesions. Each size must be at least 1, and less than 50", "warn");
+        return;
+    }
+
+console.log(roomNick, xCoordVal, yCoordVal, zCoordVal, appState);
+//const success = await appState.connection.invoke("CreateNewMap", inpVal);
+
+    var newRoom = await appState.connection.invoke("CreateNew3DRoom", roomNick, xCoordVal, yCoordVal, zCoordVal);
+
+    
+    xcoordInp.value = null;
+    ycoordInp.value = null;
+    zcoordInp.value = null;
+    roomNinput.value = null;
+    closeModal();
+
+
+}
 
 
 

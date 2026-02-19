@@ -86,9 +86,8 @@ private readonly IHostApplicationLifetime _appLifetime;
                     }
 
                     _loginStore.Data.users = tempList.ToArray();
-
-                    _loginStore.SaveChanges();
                 }
+
             }
 
 
@@ -100,6 +99,9 @@ private readonly IHostApplicationLifetime _appLifetime;
 
                 //Gracefully close the program
                 _appLifetime.StopApplication();
+            } else
+            {
+                await _loginStore.SaveChanges();
             }
         }
 
@@ -246,7 +248,7 @@ private readonly IHostApplicationLifetime _appLifetime;
 
                 return true;
             
-            } catch(Exception ex)
+            } catch(Exception)
             {
                 return false;
             }
@@ -311,7 +313,7 @@ private readonly IHostApplicationLifetime _appLifetime;
 
                 return true;
             
-            } catch(Exception ex)
+            } catch(Exception)
             {
                 await toastHost("Error", "There was an error creating this user. Please try again later", "error");
 
@@ -366,7 +368,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 return true;
 
 
-            }catch(Exception ex)
+            }catch(Exception)
             {
                 await toastHost("Error", "An error occured while changing this user's password. Please try again later", "error");
 
@@ -427,7 +429,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 return true;
 
 
-            }catch(Exception ex)
+            }catch(Exception)
             {
                 await toastHost("Error", "There was an error kicking this user", "error");
 
@@ -475,7 +477,7 @@ private readonly IHostApplicationLifetime _appLifetime;
 
                 //Notify the user of success
                 return true;
-            }catch(Exception ex)
+            }catch(Exception)
             {
                 return false;
             }
@@ -527,13 +529,13 @@ private readonly IHostApplicationLifetime _appLifetime;
                 return true;
 
 
-            }catch(Exception ex)
+            }catch(Exception)
             {
                 return false;
             }
         }
 
-        public async Task<MapSystem> GetMapList(){
+        public async Task<MapSystem?> GetMapList(){
              try
             {
             bool? perms = await CheckIfHost();
@@ -546,13 +548,18 @@ private readonly IHostApplicationLifetime _appLifetime;
 
             return _mapStore.Data;
 
-            }catch(Exception ex)
+            }catch(Exception)
             {
                 await toastUser("Error", "There was an error getting the map list", "error", Context.ConnectionId);
                 return null;
             }
         }
 
+        /// <summary>
+        /// This creates a rew map on call
+        /// </summary>
+        /// <param name="newMapName">This is the new map's name</param>
+        /// <returns>The newly created map</returns>
         public async Task<SingleMap> CreateNewMap(string newMapName)
         {
             SingleMap newMap = new SingleMap();
@@ -582,6 +589,49 @@ private readonly IHostApplicationLifetime _appLifetime;
             await _mapStore.SaveChanges();
 
             return newMap;
+        }
+
+        /// <summary>
+        /// This creates a new room on call
+        /// </summary>
+        /// <param name="nick">Display name of the room</param>
+        /// <param name="x">The max x coord value</param>
+        /// <param name="y">The max y coord value</param>
+        /// <param name="z">The max z coord value</param>
+        /// <returns>Newly created Room</returns>
+        public async Task<Room3D> CreateNew3DRoom(string nick, string x, string y, string z)
+        {
+            Room3D newRoom = new Room3D();
+
+            newRoom.nickname = nick;
+            newRoom.roomSize = (int.Parse(x), int.Parse(y), int.Parse(z));
+
+
+
+            //Holds the 
+            int tempID = 1;
+
+            foreach(Room3D room in _mapStore.Data.roomList)
+            {
+                if(room.ID > tempID)
+                {
+                    tempID = room.ID + 1;
+                }
+            }
+
+            newRoom.ID = tempID;
+
+            List<Room3D> tempArray = new List<Room3D>();
+
+            tempArray.AddRange(_mapStore.Data.roomList);
+            tempArray.Add(newRoom);
+
+            _mapStore.Data.roomList = tempArray.ToArray();
+
+            await _mapStore.SaveChanges();
+
+            return newRoom;
+            
         }
 
         /// <summary>
@@ -620,8 +670,12 @@ private readonly IHostApplicationLifetime _appLifetime;
         /// <param name="type">Severity of the toast ('success', 'error', etc)</param>
         /// <param name="connString">The specific user to be toasted</param>
         /// <returns>N/A</returns>
-        private async Task toastUser(string header, string message, string type, string connString)
+        private async Task toastUser(string header, string message, string type, string? connString)
         {
+            if(connString == null)
+            {
+                return; 
+            }
             await Clients.Client(connString).SendAsync("callToast", header, message, type);
         }
 
@@ -644,14 +698,14 @@ private readonly IHostApplicationLifetime _appLifetime;
         /// <returns>The hashed version of the above string</returns>
         private string HashString(string? unhashedString)
         {
-            //Setting up the SHA instance
-                using (var sha = new System.Security.Cryptography.SHA256Managed())
+            if(unhashedString == null)
             {
-                byte[] textData = System.Text.Encoding.UTF8.GetBytes(unhashedString);
-                byte[] hash = sha.ComputeHash(textData);
-                return BitConverter.ToString(hash).Replace("-", String.Empty);
+                return "";
             }
-       
+
+            var inputBytes = System.Text.Encoding.UTF8.GetBytes(unhashedString);
+            var inputHash = SHA256.HashData(inputBytes);
+            return Convert.ToHexString(inputHash);
         }
 
     }
