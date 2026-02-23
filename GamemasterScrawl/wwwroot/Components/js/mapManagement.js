@@ -342,3 +342,14 @@ function renderTree(container, data, onSelect, comp){
 
     });
 }
+
+
+function matPickerItem(mat){
+    return `<div class="material-picker">
+    <div class="material-tile"
+         data-id="${mat}"
+         style="background-image: url('/Components/FileMaterials/Materials/${mat}')">
+        <span class="material-label">${mat}</span>
+    </div>
+</div>`
+}

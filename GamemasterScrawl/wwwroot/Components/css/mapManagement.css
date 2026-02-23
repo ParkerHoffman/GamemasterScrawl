@@ -1,0 +1,44 @@
+.material-picker {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 10px;
+}
+
+.material-tile {
+    position: relative;
+    aspect-ratio: 1 / 1;
+
+    background-size: cover;
+    background-position: center;
+    background-color: #2b2b33;
+
+    border: 2px solid #3f3f4a;
+    border-radius: 6px;
+
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+}
+
+.material-tile:hover {
+    transform: scale(1.03);
+    border-color: #3688f4;
+}
+
+.material-tile.selected {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.4);
+}
+
+.material-label {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    right: 4px;
+
+    font-size: 0.7rem;
+    text-align: center;
+
+    background: rgba(0, 0, 0, 0.55);
+    border-radius: 4px;
+    padding: 2px 4px;
+}
