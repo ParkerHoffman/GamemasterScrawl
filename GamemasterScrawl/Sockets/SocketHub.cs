@@ -23,19 +23,23 @@ private readonly IHostApplicationLifetime _appLifetime;
 
         private readonly HostIdentity _hostIdentity;
 
+        private readonly IWebHostEnvironment _env;
+
         /// <summary>
         /// The constructor for a SocketHub
         /// </summary>
         /// <param name="tempStore">Login Details File (FileHandler<LoginState>)</param>
         /// <param name="host">Reference to the HostIdentity class</param>
         /// <param name="_lifetime">Application reference, for termination</param>
-        /// /// <param name="tempMap">Login Details File (FileHandler<MapSystem>)</param>
-        public SocketHub(FileHandler<LoginState> tempStore, HostIdentity host, IHostApplicationLifetime _lifetime, FileHandler<MapSystem> tempMap)
+        /// <param name="tempMap">Login Details File (FileHandler<MapSystem>)</param>
+        /// <param name="env">Reference to the phyical enviornment (For file access)</param>
+        public SocketHub(FileHandler<LoginState> tempStore, HostIdentity host, IHostApplicationLifetime _lifetime, FileHandler<MapSystem> tempMap, IWebHostEnvironment env)
         {
             _loginStore = tempStore;
             _hostIdentity = host;
             _appLifetime = _lifetime;
             _mapStore = tempMap;
+            _env = env;
         }
 
         /// <summary>
@@ -601,16 +605,20 @@ private readonly IHostApplicationLifetime _appLifetime;
         /// <returns>Newly created Room</returns>
         public async Task<Room3D> CreateNew3DRoom(string nick, string x, string y, string z)
         {
+            //The new room
             Room3D newRoom = new Room3D();
 
+            //Setting the display name
             newRoom.nickname = nick;
-            newRoom.roomSize = (int.Parse(x), int.Parse(y), int.Parse(z));
+            //The dimensions
+            newRoom.xDimension = int.Parse(x);
+            newRoom.yDimension = int.Parse(y);
+            newRoom.zDimension = int.Parse(z);
 
-
-
-            //Holds the 
+            //Holds the new ID
             int tempID = 1;
 
+            //Determines the next available ID
             foreach(Room3D room in _mapStore.Data.roomList)
             {
                 if(room.ID > tempID)
@@ -619,19 +627,40 @@ private readonly IHostApplicationLifetime _appLifetime;
                 }
             }
 
+            //Setting the ID
             newRoom.ID = tempID;
 
+            //This is used to save the array back into the list
             List<Room3D> tempArray = new List<Room3D>();
 
+            //Setting up the array
             tempArray.AddRange(_mapStore.Data.roomList);
             tempArray.Add(newRoom);
 
+            //Putting back into the master store
             _mapStore.Data.roomList = tempArray.ToArray();
 
+            //Saving the master store
             await _mapStore.SaveChanges();
 
+            //Returning it to the user
             return newRoom;
             
+        }
+
+        /// <summary>
+        /// Gets a list of all current materials for use in the 3D space
+        /// </summary>
+        /// <returns>Array of materials that can be used</returns>
+        public async Task<string?[]> GetMasterMaterialList()
+        {
+            var MatDir = Path.Combine(
+            _env.WebRootPath,
+            "Components",
+            "FileMaterials",
+            "Materials"
+            );
+            return Directory.GetFiles(MatDir).Select(Path.GetFileName).ToArray();
         }
 
         /// <summary>

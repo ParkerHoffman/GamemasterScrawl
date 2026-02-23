@@ -8,7 +8,12 @@ namespace GamemasterScrawl
 
         public int[] connectingRoomsID {get; set;} = [];
 
-        public (int, int, int) roomSize {get; set;} = (0,0,0);
+        
+        public int xDimension {get; set;} = 0;
+
+        public int yDimension {get; set;} = 0;
+
+        public int zDimension {get; set;} = 0;
 
         public ActiveToken[] tokens {get; set;} = [];
 

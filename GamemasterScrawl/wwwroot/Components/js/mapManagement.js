@@ -21,12 +21,18 @@ var map;
 var fileExplorer = [];
 var selectedRoom;
 
+//Array of all possible mats
+var matList= [];
+
+
 //This is the constant for the map and room inputs:
     var mapNinput = null;
     var xcoordInp = null;
     var ycoordInp = null;
     var zcoordInp = null;
     var roomNinput = null;
+
+
     
 
 
@@ -76,6 +82,9 @@ export async function init(container, appState){
     zcoordInp.type = "number";
     zcoordInp.id = "zDimensionSize";
     zcoordInp.placeholder = "Z Size";
+
+    matList = await appState.connection.invoke("GetMasterMaterialList");
+    console.log(matList)
     
 }
 
@@ -192,10 +201,11 @@ async function CreateNewRoom(container, appState){
         return;
     }
 
-console.log(roomNick, xCoordVal, yCoordVal, zCoordVal, appState);
-//const success = await appState.connection.invoke("CreateNewMap", inpVal);
 
     var newRoom = await appState.connection.invoke("CreateNew3DRoom", roomNick, xCoordVal, yCoordVal, zCoordVal);
+
+    console.log(newRoom);
+
 
     
     xcoordInp.value = null;
