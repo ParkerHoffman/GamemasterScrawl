@@ -36,7 +36,7 @@ export function init(container, appState){
         AddLoginOption(username, container)
     })
 
-    AddOminousCube(container);
+    AddOminousCube(container, appState);
 
     passInp = container.querySelector("#passwordInput");
 
@@ -137,7 +137,8 @@ var ygoPositive = RandomIntGen() >= 0;
 var zgoPositive = RandomIntGen() >= 0;
 
 
-function AddOminousCube(container){
+function AddOminousCube(container, appState){
+        appState.sceneSet.add({renderer: renderer, scene: scene})
         const renderer = new THREE.WebGLRenderer();
         renderer.setClearColor(0x000000, 0); // transparent background
 renderer.setSize(window.innerWidth, window.innerHeight);

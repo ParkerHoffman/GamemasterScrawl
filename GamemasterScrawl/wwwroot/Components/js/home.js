@@ -57,6 +57,8 @@ async function logUsrOut(appState){
 
 async function Generate3DSpace(container, appState){
  const renderer = new THREE.WebGLRenderer();
+
+     appState.sceneSet.add({renderer: renderer, scene: scene})
         renderer.setClearColor(0x000000, 0); // transparent background
 renderer.setSize(window.innerWidth, window.innerHeight);
 

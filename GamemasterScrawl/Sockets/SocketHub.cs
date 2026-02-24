@@ -603,7 +603,7 @@ private readonly IHostApplicationLifetime _appLifetime;
         /// <param name="y">The max y coord value</param>
         /// <param name="z">The max z coord value</param>
         /// <returns>Newly created Room</returns>
-        public async Task<Room3D> CreateNew3DRoom(string nick, string x, string y, string z)
+        public async Task<Room3D> CreateNew3DRoom(string nick, string x, string y, string z, int[] mapList)
         {
             //The new room
             Room3D newRoom = new Room3D();
@@ -621,7 +621,7 @@ private readonly IHostApplicationLifetime _appLifetime;
             //Determines the next available ID
             foreach(Room3D room in _mapStore.Data.roomList)
             {
-                if(room.ID > tempID)
+                if(room.ID >= tempID)
                 {
                     tempID = room.ID + 1;
                 }
@@ -629,6 +629,8 @@ private readonly IHostApplicationLifetime _appLifetime;
 
             //Setting the ID
             newRoom.ID = tempID;
+
+            newRoom.containerID = mapList;
 
             //This is used to save the array back into the list
             List<Room3D> tempArray = new List<Room3D>();

@@ -10,6 +10,8 @@ var isHost = false;
 //Deals with the modalPopup
 let activeModal = "";
 
+var sceneSet = new Set();
+
 //This function checks if the user is the host
 export function CheckAmIHost(){
     return isHost;
@@ -18,7 +20,8 @@ export function CheckAmIHost(){
 //A global state variable with references to the variables stored in this global layer
 export const appState = {
     isHost: false,
-    connection: connection
+    connection: connection,
+    sceneSet: sceneSet
 }
 
 //Set the reference to the global state

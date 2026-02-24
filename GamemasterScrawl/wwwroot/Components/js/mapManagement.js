@@ -21,8 +21,8 @@ var map;
 var fileExplorer = [];
 var selectedRoom;
 
-//Array of all possible mats
-var matList= [];
+var selectedFolderList = [];
+var matList = [];
 
 
 //This is the constant for the map and room inputs:
@@ -42,7 +42,7 @@ export async function init(container, appState){
   
     returnHomeBtn.addEventListener("click", async () => {loadComponent("home")});
 
-    Generate3DSpace(container);
+    Generate3DSpace(container, appState);
     map = await appState.connection.invoke("GetMapList");
     selectedRoom = map.activeRoom;
     HandleFileExplorerSetup(container);
@@ -114,6 +114,43 @@ function newRoomContent(container, appState) {
     const wrapper = document.createElement("div");
 
 
+    //Folder picker
+    const fpicker = document.createElement("div");
+    fpicker.className = "material-picker";
+
+    selectedFolderList = new Set();
+
+    fileExplorer.forEach((folder) => {
+        if(folder.id !== -1){
+        const tile = document.createElement("div");
+        tile.className = "material-tile";
+        tile.dataset.id = folder.id;
+
+
+                const label = document.createElement("span");
+        label.className = "material-label";
+        label.textContent = folder.mapName;
+
+        tile.appendChild(label);
+
+        tile.addEventListener("click", () => {
+            if (selectedFolderList.has(folder.id)) {
+                selectedFolderList.delete(folder.id);
+                tile.classList.remove("selected");
+            } else {
+                selectedFolderList.add(folder.id);
+                tile.classList.add("selected");
+            }
+        });
+
+        fpicker.appendChild(tile);
+        }
+       
+    })
+
+
+
+
 
     const button = document.createElement("button");
     button.id = "roomCreationBtn";
@@ -127,6 +164,7 @@ function newRoomContent(container, appState) {
     wrapper.appendChild(xcoordInp);
     wrapper.appendChild(ycoordInp);
     wrapper.appendChild(zcoordInp);
+    wrapper.appendChild(fpicker);
     wrapper.appendChild(button);
 
     button.addEventListener("click", async () => {CreateNewRoom(container, appState)})
@@ -201,8 +239,29 @@ async function CreateNewRoom(container, appState){
         return;
     }
 
+    //TH temp list to send the array of corrsponding folders back to the server
+    var foldList = [];
 
-    var newRoom = await appState.connection.invoke("CreateNew3DRoom", roomNick, xCoordVal, yCoordVal, zCoordVal);
+    if(selectedFolderList.size > 0){
+        foldList = [...selectedFolderList];
+    } 
+
+
+    
+    //Get the sevrer to create the new room
+    var newRoom = await appState.connection.invoke("CreateNew3DRoom", roomNick, xCoordVal, yCoordVal, zCoordVal, foldList, matList);
+
+    //Update the fileExplorer
+    fileExplorer = fileExplorer.map(folder => {
+        if(newRoom.containerID.includes(folder.id) || folder.id === -1){
+            folder.children = [...folder.children, newRoom]
+        }
+
+        return folder;
+    })
+
+    renderTree(container, fileExplorer, selectItem, "#MapTreeRoot")
+    selectItem(newRoom.id)
 
     console.log(newRoom);
 
@@ -212,6 +271,7 @@ async function CreateNewRoom(container, appState){
     ycoordInp.value = null;
     zcoordInp.value = null;
     roomNinput.value = null;
+    selectedFolderList = [];
     closeModal();
 
 
@@ -220,6 +280,8 @@ async function CreateNewRoom(container, appState){
 
 
 async function Generate3DSpace(container, appState){
+
+    appState.sceneSet.add({renderer: renderer, scene: scene})
 
         renderer.setClearColor(0x000000, 0); // transparent background
 renderer.setSize(window.innerWidth, window.innerHeight);

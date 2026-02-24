@@ -42,7 +42,7 @@ FetchTableInfo(container, appState);
         FetchTableInfo(container, appState)
     })
 
-    AddOminousCube(container);
+    AddOminousCube(container, appState);
 }
 
 
@@ -199,8 +199,10 @@ var ygoPositive = RandomIntGen() >= 0;
 var zgoPositive = RandomIntGen() >= 0;
 
 
-function AddOminousCube(container){
+function AddOminousCube(container, appState){
         const renderer = new THREE.WebGLRenderer();
+
+            appState.sceneSet.add({renderer: renderer, scene: scene})
         renderer.setClearColor(0x000000, 0); // transparent background
 renderer.setSize(window.innerWidth, window.innerHeight);
 
