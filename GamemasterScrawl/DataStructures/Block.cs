@@ -2,9 +2,11 @@ namespace GamemasterScrawl {
 
 
     public class Block {
-        public (int, int, int) Coords {get; set;} = (0,0,0);
+        public int x {get; set;}
+        public int y {get; set;}
+        public int z {get; set;}
         //The ID of the material (See the Room's Material List)
-        public int material {get; set;} = 0;
+        public string material {get; set;}
     }
 
 }

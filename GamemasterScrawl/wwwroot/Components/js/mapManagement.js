@@ -120,6 +120,12 @@ function newRoomContent(container, appState) {
 
     selectedFolderList = new Set();
 
+    if(fileExplorer.length === 1){
+        const notifyDiv = document.createElement("div");
+        notifyDiv.innerHTML = "<span>No folders to put the room in exist...</span>"
+        fpicker.appendChild(notifyDiv)
+    }
+
     fileExplorer.forEach((folder) => {
         if(folder.id !== -1){
         const tile = document.createElement("div");
@@ -164,6 +170,11 @@ function newRoomContent(container, appState) {
     wrapper.appendChild(xcoordInp);
     wrapper.appendChild(ycoordInp);
     wrapper.appendChild(zcoordInp);
+    
+    const headerDiv = document.createElement("div");
+    headerDiv.innerHTML = "<h1>Choose Folder(s) for the room to appear in</h1>"
+    wrapper.appendChild(headerDiv)
+    //adding 
     wrapper.appendChild(fpicker);
     wrapper.appendChild(button);
 
@@ -261,7 +272,7 @@ async function CreateNewRoom(container, appState){
     })
 
     renderTree(container, fileExplorer, selectItem, "#MapTreeRoot")
-    selectItem(newRoom.id)
+    selectItem(newRoom, container)
 
     console.log(newRoom);
 
@@ -332,8 +343,69 @@ renderTree(container, fileExplorer, selectItem, "#MapTreeRoot")
 }
 
 
-function selectItem(item){
-    console.log(item)
+function selectItem(item, container){
+    selectedRoom = item.id;
+    renderRoom(item, container);
+}
+
+function renderRoom(room, container){
+    clearScene();
+
+    const maxDims = getRoomBounds(room);
+
+    renderRoomBounds(maxDims);
+    renderBlocks(room.blockList)
+}
+
+function getRoomBounds(room){
+    return {
+        x: room.xDimension,
+        y: room.yDimension,
+        z: room.yDimension,
+
+        maxX: room.xDimension - 1,
+        maxY: room.yDimension - 1,
+        maxZ: room.zDimension - 1
+
+    }
+}
+
+function renderBlocks(blockList){
+    blockList.forEach(block => {
+        const cube = make3DBlock(block.material);
+        cube.position.x = block.x;
+        cube.position.y = block.y;
+        cube.position.z = block.z;
+
+        scene.add(cube);
+
+    })
+}
+
+function renderRoomBounds(bounds){
+    const geometry = new THREE.BoxGeometry(
+        bounds.x, bounds.y, bounds.z
+    )
+
+    const edges = new THREE.EdgesGeometry(geometry);
+    const material = new THREE.LineBasicMaterial({color: 0x3688f4})
+
+    const wireframe = new THREE.LineSegments(edges, material);
+    wireframe.position.set(
+        bounds.x / 2 - .5,
+        bounds.y / 2 - .5,
+        bounds.z / 2 - .5
+    );
+
+    scene.add(wireframe);
+}
+
+function clearScene(){
+    for(let i = scene.children.length - 1; i >= 0; i--){
+            const obj = scene.children[i];
+            if(obj.userData?.persistent) continue;
+            scene.remove(obj);
+    }
 }
 
 
@@ -377,7 +449,7 @@ function renderTree(container, data, onSelect, comp){
 
             childItem.addEventListener("click", e => {
                 e.stopPropagation();
-                selectItem(childItem);
+                selectItem(childItem, container);
                 onSelect(child);
             });
 
@@ -403,15 +475,4 @@ function renderTree(container, data, onSelect, comp){
         cont.appendChild(folderDiv)
 
     });
-}
-
-
-function matPickerItem(mat){
-    return `<div class="material-picker">
-    <div class="material-tile"
-         data-id="${mat}"
-         style="background-image: url('/Components/FileMaterials/Materials/${mat}')">
-        <span class="material-label">${mat}</span>
-    </div>
-</div>`
 }
