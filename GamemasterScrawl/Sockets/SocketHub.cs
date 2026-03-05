@@ -487,7 +487,40 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
+        /// <summary>
+        /// This will save any changes to the structure of a room on call
+        /// </summary>
+        /// <param name="edited">The room that was just edited</param>
+        public async void EditRoom(Room3D edited){
+            //MAke a list of every room
+                List<Room3D> rooms = new List<Room3D>();
 
+                //For each room
+                foreach(Room3D room in _mapStore.Data.roomList){
+                    //If it's the edited room
+                    if(room.ID == edited.ID){
+                        //Return the edited room
+                        rooms.Add(edited);
+                    } else {
+                        //Otherwise, return the normal room
+                        rooms.Add(room);
+                    }
+                }
+
+                //Set the room
+                _mapStore.Data.roomList = rooms.ToArray();
+
+                //Save the changes past persistance
+                await _mapStore.SaveChanges();
+
+
+        }
+
+        /// <summary>
+        /// On call, it forces a user to sign out
+        /// </summary>
+        /// <param name="ID">Connection ID of that given user</param>
+        /// <returns>T/F of success</returns>
         public async Task<bool> forceDisconnectAUser(int ID)
         {
              try
@@ -539,6 +572,11 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
+
+        /// <summary>
+        /// This returns a full lsit of the map system
+        /// </summary>
+        /// <returns>Null if not allowed/Error, map system if allowed</returns>
         public async Task<MapSystem?> GetMapList(){
              try
             {

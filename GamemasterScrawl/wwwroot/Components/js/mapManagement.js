@@ -12,6 +12,10 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
  const renderer = new THREE.WebGLRenderer();
 const controls = new OrbitControls(camera, renderer.domElement);
 
+//Deals with block manipulation
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
 // Tinkercad-style settings:
 controls.enableDamping = true; // Adds that smooth "weight" to the movement
 controls.dampingFactor = 0.05;
@@ -32,29 +36,35 @@ var matList = [];
     var zcoordInp = null;
     var roomNinput = null;
 
+    var container = null;
+    var appState = null;
+
 
     
 
 
-export async function init(container, appState){
+export async function init(cont, app){
+
+    container = cont;
+    appState = app;
 
     const returnHomeBtn = container.querySelector("#returnHome");
   
     returnHomeBtn.addEventListener("click", async () => {loadComponent("home")});
 
-    Generate3DSpace(container, appState);
+    Generate3DSpace();
     map = await appState.connection.invoke("GetMapList");
     selectedRoom = map.activeRoom;
-    HandleFileExplorerSetup(container);
+    HandleFileExplorerSetup();
 
 
         const newRoomBtn = container.querySelector("#create-new-room");
   
-    newRoomBtn.addEventListener("click", async () => {popupNewRoom(container, appState)});
+    newRoomBtn.addEventListener("click", async () => {popupNewRoom()});
 
             const newMapBtn = container.querySelector("#create-new-map");
   
-    newMapBtn.addEventListener("click", async () => {popupNewMap(container, appState)});
+    newMapBtn.addEventListener("click", async () => {popupNewMap()});
 
     //Setting up the editing modal components
     mapNinput = document.createElement("input");
@@ -85,14 +95,80 @@ export async function init(container, appState){
 
     matList = await appState.connection.invoke("GetMasterMaterialList");
     console.log(matList)
+
+    renderer.domElement.addEventListener("click", (e) => onSceneClick(e));
     
 }
 
 
 
+function onSceneClick(event){
+    //No room is active, wait
+    if(!selectedRoom || !event){
+        return;
+    }
+
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) /rect.height) * 2 + 1;
+
+    raycaster.setFromCamera(mouse,camera);
+
+    const hits = raycaster.intersectObjects(scene.children, true);
+
+    if(!hits.length || hits.length === 0){
+        return;
+    }
+
+    handleBlockPlacement(hits[0])
+}
+
+function handleBlockPlacement(hit){
+    const pos = hit.point;
+
+    const snapped = snapToGrid(pos);
 
 
-function newMapContent(container, appState) {
+    var CurrentRoom = fileExplorer[(fileExplorer.length - 1)].children.filter((room) => room.id === selectedRoom)[0];
+
+    if(!isWithinBounds(snapped, CurrentRoom)) return;
+    if(blockExists(snapped, CurrentRoom)) return;
+    console.log(CurrentRoom)
+
+    CurrentRoom.blockList = [...CurrentRoom.blockList, {
+        x: snapped.x,
+        y: snapped.y,
+        z: snapped.z,
+        material: "Default_Decorated_Tile.jpg"
+    }]
+
+    //Now we tell the server to update the current Room
+    console.log(CurrentRoom)
+    appState.connection.invoke("EditRoom", CurrentRoom)
+
+    renderRoom(CurrentRoom)
+}
+
+function snapToGrid(vec){
+    return{ 
+        x: Math.floor(vec.x + .5),
+        y: Math.floor(vec.y + .5),
+        z: Math.floor(vec.z + .5)
+
+    }
+}
+
+function isWithinBounds(pos, room){
+    return (
+        pos.x >= 0 && pos.x < room.xDimension && pos.y >= 0 && pos.y < room.yDimension && pos.z >= 0 && pos.z < room.zDimension
+    )
+}
+
+function blockExists(pos, room){
+    return room.blockList.some(b => b.x === pos.x && b.y === pos.y && b.z === pos.z)
+}
+
+function newMapContent() {
     const wrapper = document.createElement("div");
 
 
@@ -105,12 +181,12 @@ function newMapContent(container, appState) {
     wrapper.appendChild(mapNinput);
     wrapper.appendChild(mapbutton);
 
-    mapbutton.addEventListener("click", async () => {CreateNewMap(container, appState)})
+    mapbutton.addEventListener("click", async () => {CreateNewMap()})
 
     return wrapper;
 }
 
-function newRoomContent(container, appState) {
+function newRoomContent() {
     const wrapper = document.createElement("div");
 
 
@@ -178,23 +254,23 @@ function newRoomContent(container, appState) {
     wrapper.appendChild(fpicker);
     wrapper.appendChild(button);
 
-    button.addEventListener("click", async () => {CreateNewRoom(container, appState)})
+    button.addEventListener("click", async () => {CreateNewRoom()})
 
     return wrapper;
 
 
 }
 
-function popupNewMap(container, appState){
-popupModal({title: "Create New Map", content: newMapContent(container, appState), closeable: true, onClose: closeModal})
+function popupNewMap(){
+popupModal({title: "Create New Map", content: newMapContent(), closeable: true, onClose: closeModal})
 
 }
 
-function popupNewRoom(container, appState){
-    popupModal({title: "Create new Room", content: newRoomContent(container, appState), closeable: true, onClose: closeModal})
+function popupNewRoom(){
+    popupModal({title: "Create new Room", content: newRoomContent(), closeable: true, onClose: closeModal})
 }
 
-async function CreateNewMap(container, appState){
+async function CreateNewMap(){
     //Get the value
     const inpVal = mapNinput.value;
 
@@ -208,7 +284,7 @@ async function CreateNewMap(container, appState){
 
             fileExplorer = [success, ...fileExplorer];
 
-            renderTree(container, fileExplorer, selectItem, "#MapTreeRoot")
+            renderTree(fileExplorer, selectItem, "#MapTreeRoot")
 
             //Tell user success
             toastUser("More Info", `Created map '${inpVal}'`, "success")
@@ -228,7 +304,7 @@ async function CreateNewMap(container, appState){
 }
 
 
-async function CreateNewRoom(container, appState){
+async function CreateNewRoom(){
     const roomNick = roomNinput.value;
 
     if(!roomNick || roomNick.length < 1){
@@ -271,8 +347,8 @@ async function CreateNewRoom(container, appState){
         return folder;
     })
 
-    renderTree(container, fileExplorer, selectItem, "#MapTreeRoot")
-    selectItem(newRoom, container)
+    renderTree( fileExplorer, selectItem, "#MapTreeRoot")
+    selectItem(newRoom)
 
     console.log(newRoom);
 
@@ -290,7 +366,7 @@ async function CreateNewRoom(container, appState){
 
 
 
-async function Generate3DSpace(container, appState){
+async function Generate3DSpace(){
 
     appState.sceneSet.add({renderer: renderer, scene: scene})
 
@@ -325,7 +401,7 @@ renderer.setAnimationLoop( animate );
 
 }
 
-function HandleFileExplorerSetup(container){
+function HandleFileExplorerSetup(){
 
 fileExplorer = [...map.maplist.map(e => ({...e, children: []})), {id: -1, mapName: "All Rooms", children: []}];
 
@@ -339,39 +415,27 @@ map.roomList.forEach(room => {
     })
 })
 
-renderTree(container, fileExplorer, selectItem, "#MapTreeRoot")
+renderTree( fileExplorer, selectItem, "#MapTreeRoot")
 }
 
 
-function selectItem(item, container){
+function selectItem(item){
     selectedRoom = item.id;
-    renderRoom(item, container);
+    renderRoom(item);
 }
 
-function renderRoom(room, container){
+function renderRoom(room){
+console.log(room)
     clearScene();
+    console.log(room)
 
     const maxDims = getRoomBounds(room);
 
     renderRoomBounds(maxDims);
-    renderBlocks(room.blockList)
-}
+    console.log(room, room.blockList)
 
-function getRoomBounds(room){
-    return {
-        x: room.xDimension,
-        y: room.yDimension,
-        z: room.yDimension,
-
-        maxX: room.xDimension - 1,
-        maxY: room.yDimension - 1,
-        maxZ: room.zDimension - 1
-
-    }
-}
-
-function renderBlocks(blockList){
-    blockList.forEach(block => {
+    
+    room.blockList.forEach(block => {
         const cube = make3DBlock(block.material);
         cube.position.x = block.x;
         cube.position.y = block.y;
@@ -380,7 +444,22 @@ function renderBlocks(blockList){
         scene.add(cube);
 
     })
+        
 }
+
+function getRoomBounds(room){
+    return {
+        x: room.xDimension,
+        y: room.yDimension,
+        z: room.zDimension,
+
+        maxX: room.xDimension - 1,
+        maxY: room.yDimension - 1,
+        maxZ: room.zDimension - 1
+
+    }
+}
+
 
 function renderRoomBounds(bounds){
     const geometry = new THREE.BoxGeometry(
@@ -410,7 +489,7 @@ function clearScene(){
 
 
 //This function creates (and updates) the file Tree
-function renderTree(container, data, onSelect, comp){
+function renderTree( data, onSelect, comp){
     const cont = container.querySelector(comp);
 
     cont.innerHTML = "";
@@ -449,7 +528,6 @@ function renderTree(container, data, onSelect, comp){
 
             childItem.addEventListener("click", e => {
                 e.stopPropagation();
-                selectItem(childItem, container);
                 onSelect(child);
             });
 
