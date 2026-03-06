@@ -40,14 +40,16 @@ builder.Services.AddSingleton(sp =>
     return new FileHandler<MapSystem>(dataPath, "Map.json");
 });
 
+
 //Configuring the ports to use
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(80);
-    options.ListenAnyIP(443, listenOptions =>
-    {
-        listenOptions.UseHttps();
-    });
+    //options.ListenAnyIP(80);
+    //options.ListenAnyIP(443, listenOptions =>
+    //{
+    //    listenOptions.UseHttps();
+    //});
+    options.ListenAnyIP(5000);
 });
 
 

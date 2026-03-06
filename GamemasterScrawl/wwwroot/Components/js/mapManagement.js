@@ -336,7 +336,7 @@ async function CreateNewRoom(){
 
     
     //Get the sevrer to create the new room
-    var newRoom = await appState.connection.invoke("CreateNew3DRoom", roomNick, xCoordVal, yCoordVal, zCoordVal, foldList, matList);
+    var newRoom = await appState.connection.invoke("CreateNew3DRoom", roomNick, xCoordVal, yCoordVal, zCoordVal, foldList);
 
     //Update the fileExplorer
     fileExplorer = fileExplorer.map(folder => {
@@ -349,9 +349,6 @@ async function CreateNewRoom(){
 
     renderTree( fileExplorer, selectItem, "#MapTreeRoot")
     selectItem(newRoom)
-
-    console.log(newRoom);
-
 
     
     xcoordInp.value = null;
