@@ -492,7 +492,7 @@ private readonly IHostApplicationLifetime _appLifetime;
         /// </summary>
         /// <param name="edited">The room that was just edited</param>
         public async void EditRoom(Room3D edited){
-            if(await CheckIfHost() == true){
+            if(await CheckIfHost() != true){
                 return;
             }
             //MAke a list of every room

@@ -212,7 +212,7 @@ function createGhostCube(){
 
     ghostCube = make3DBlock(selectedMaterial, {       
          transparent: true,
-        opacity: 0.4,
+        opacity: 0.6,
         depthWrite: false,
     });
 
@@ -221,6 +221,8 @@ function createGhostCube(){
     scene.add(ghostCube); //Add the cube
 }
 
+
+//Handles placing a block on the grid
 function handleBlockPlacement(hit, CurrentRoom, event){
 
     if(CurrentRoom.blockList.length === 0 ){
@@ -244,7 +246,7 @@ function handleBlockPlacement(hit, CurrentRoom, event){
     }
 
     //Now we tell the server to update the current Room
-    
+
     appState.connection.invoke("EditRoom", CurrentRoom)
 
         fileExplorer = fileExplorer.map((folder) => {
@@ -359,6 +361,7 @@ function updateMatList(mats){
                 }
             )
 
+            ghostCube.material.color.set(0xaaaaaa);
             ghostCube.material.map = texture;
             ghostCube.material.needsUpdate = true; 
             deleteMode = false;
