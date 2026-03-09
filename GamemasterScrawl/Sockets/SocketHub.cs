@@ -691,6 +691,12 @@ private readonly IHostApplicationLifetime _appLifetime;
             
         }
 
+
+        public async Task<int?> GetGlobalActiveRoom()
+        {
+            return _mapStore.Data.activeRoom;
+        }
+
         /// <summary>
         /// Gets a list of all current materials for use in the 3D space
         /// </summary>

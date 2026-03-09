@@ -27,6 +27,9 @@ var selectedRoom;
 
 var selectedFolderList = [];
 var matList = [];
+var selectedMaterial = null;
+var deleteMode = false;
+let ghostCube = null;
 
 
 //This is the constant for the map and room inputs:
@@ -56,6 +59,21 @@ export async function init(cont, app){
     map = await appState.connection.invoke("GetMapList");
     selectedRoom = map.activeRoom;
     HandleFileExplorerSetup();
+
+    if(!app.activeRoom){
+        app.activeRoom = await app.connection.invoke("GetGlobalActiveRoom");
+    }
+
+    var newRoom;
+
+    
+    if(app.activeRoom && app.activeRoom !== -1){
+        newRoom = fileExplorer[fileExplorer.length - 1].children.filter((e) => e.id === app.activeRoom)[0]
+    } else {
+        newRoom = fileExplorer[fileExplorer.length - 1].children[0];
+    }
+
+    selectItem(newRoom)
 
 
         const newRoomBtn = container.querySelector("#create-new-room");
@@ -94,13 +112,36 @@ export async function init(cont, app){
     zcoordInp.placeholder = "Z Size";
 
     matList = await appState.connection.invoke("GetMasterMaterialList");
-    console.log(matList)
+    selectedMaterial = matList[0];
+    updateMatList(matList);
 
     renderer.domElement.addEventListener("click", (e) => onSceneClick(e));
+    renderer.domElement.addEventListener("mousemove", (e) => onSceneMouseMove(e));
+
+    createGhostCube();
     
 }
 
+function onSceneMouseMove(event){
+    if(!event || !selectedRoom) return; //If nothing happened, do nothing (duh)
 
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    //Ghost cube is now exempt from casting
+    const hittable = scene.children.filter((e) => e !== ghostCube);
+    const hitCast = raycaster.intersectObjects(hittable, true);
+
+    if(!hitCast.length){
+        ghostCube.visible = false;
+        return;
+    }
+
+    updateGhostCubePosition(hitCast[0])
+}
 
 function onSceneClick(event){
     //No room is active, wait
@@ -114,13 +155,70 @@ function onSceneClick(event){
 
     raycaster.setFromCamera(mouse,camera);
 
-    const hits = raycaster.intersectObjects(scene.children, true);
+    const hittable = scene.children.filter(obj => obj !== ghostCube);
+    const hits = raycaster.intersectObjects(hittable, true)
 
     if(!hits.length || hits.length === 0){
         return;
     }
 
-    handleBlockPlacement(hits[0])
+    if(deleteMode === true){
+        handleBlockDeletion(hits[0])
+    } else {
+        handleBlockPlacement(hits[0])
+    }
+
+}
+
+function updateGhostCubePosition(hit){
+    const CurrentRoom = fileExplorer[(fileExplorer.length - 1)].children
+        .filter((room) => room.id === selectedRoom)[0];
+
+        let snapped;
+
+        //Check if the cube is rendered 
+        if(deleteMode === true){
+
+            snapped = snapToGrid(hit.object.position);
+
+            const exists = blockExists(snapped, CurrentRoom);
+
+            ghostCube.visible = exists;
+
+            if(!exists) return;
+        } else {
+            console.log(hit)
+            //Snap to an adjacent block
+            const faceN = hit.face.normal.clone();
+            faceN.transformDirection(hit.object.matrixWorld);
+
+            const placementPosition = hit.point.clone().add(faceN.multiplyScalar(0.5))
+
+            snapped = snapToGrid(placementPosition);
+
+            if(!isWithinBounds(snapped, CurrentRoom) || blockExists(snapped, CurrentRoom)){
+                ghostCube.visible = false;
+                return;
+            } 
+            ghostCube.visible = true;
+        }
+
+        ghostCube.position.set(snapped.x, snapped.y, snapped.z);
+        
+
+}
+
+
+function createGhostCube(){
+
+    ghostCube = make3DBlock(selectedMaterial, {        transparent: true,
+        opacity: 0.4,
+        depthWrite: false,
+    });
+
+    ghostCube.userData.persistent = true; // survives clearScene(), and thus remains after room changes
+    ghostCube.visible = false; //Starts invisible
+    scene.add(ghostCube); //Add the cube
 }
 
 function handleBlockPlacement(hit){
@@ -139,14 +237,29 @@ function handleBlockPlacement(hit){
         x: snapped.x,
         y: snapped.y,
         z: snapped.z,
-        material: "Default_Decorated_Tile.jpg"
+        material: selectedMaterial ? selectedMaterial : "Default_Decorated_Tile.jpg"
     }]
 
     //Now we tell the server to update the current Room
-    console.log(CurrentRoom)
+    
     appState.connection.invoke("EditRoom", CurrentRoom)
 
     renderRoom(CurrentRoom)
+}
+
+function handleBlockDeletion(hit) {
+    const snapped = snapToGrid(hit.object.position);
+    const CurrentRoom = fileExplorer[(fileExplorer.length - 1)].children
+        .filter((room) => room.id === selectedRoom)[0];
+
+    if (!blockExists(snapped, CurrentRoom)) return;
+
+    CurrentRoom.blockList = CurrentRoom.blockList.filter(
+        b => !(b.x === snapped.x && b.y === snapped.y && b.z === snapped.z)
+    );
+
+    appState.connection.invoke("EditRoom", CurrentRoom);
+    renderRoom(CurrentRoom);
 }
 
 function snapToGrid(vec){
@@ -186,6 +299,66 @@ function newMapContent() {
     return wrapper;
 }
 
+function updateMatList(mats){
+
+    var wrapper = container.querySelector("#MatListSelector");
+    wrapper.innerHTML = "";
+
+        //Folder picker
+    const mpicker = document.createElement("div");
+    mpicker.className = "material-picker";
+
+    
+
+    mats.forEach(material => {
+         const tile = document.createElement("div");
+        tile.className = "material-tile";
+        tile.dataset.id = material;
+
+        tile.style = `background-image: url('/Components/FileMaterials/Materials/${material}')`;
+
+
+        tile.addEventListener("click", () => {
+            deleteMode = false;
+            selectedMaterial = material;
+
+            var oldSelected = mpicker.querySelector(".selected")
+            tile.classList.add("selected");
+
+            oldSelected.classList.remove("selected");
+
+                
+        });
+
+        mpicker.appendChild(tile);
+    })
+
+    //Adding the delete button:
+     const del = document.createElement("div");
+        del.className = "material-tile";
+        del.dataset.id = "deleteBlock";
+
+        del.style = `background-image: url('/Components/FileMaterials/Assets/DeleteIcon.png')`;
+
+
+        del.addEventListener("click", () => {
+
+            deleteMode = true;
+            var oldSelected = mpicker.querySelector(".selected")
+            del.classList.add("selected");
+
+            oldSelected?.classList.remove("selected");
+
+                
+        });
+
+        mpicker.appendChild(del);
+
+
+    wrapper.appendChild(mpicker);
+    
+}
+
 function newRoomContent() {
     const wrapper = document.createElement("div");
 
@@ -209,7 +382,7 @@ function newRoomContent() {
         tile.dataset.id = folder.id;
 
 
-                const label = document.createElement("span");
+        const label = document.createElement("span");
         label.className = "material-label";
         label.textContent = folder.mapName;
 
@@ -229,9 +402,6 @@ function newRoomContent() {
         }
        
     })
-
-
-
 
 
     const button = document.createElement("button");
@@ -375,16 +545,6 @@ renderer.setSize(window.innerWidth, window.innerHeight);
     spaceCont.appendChild(renderer.domElement);
 
 
-
-for (let i = 0; i < 10; i++) {
-    for (let k = 0; k < 10; k++) {
-
-       const cube = make3DBlock("Default_Decorated_Tile.jpg");
-
-        cube.position.set(i, k, 0);
-        scene.add(cube);
-    }
-}
         camera.position.z = 15;
 
         function animate() {
@@ -422,15 +582,11 @@ function selectItem(item){
 }
 
 function renderRoom(room){
-console.log(room)
     clearScene();
-    console.log(room)
 
     const maxDims = getRoomBounds(room);
 
     renderRoomBounds(maxDims);
-    console.log(room, room.blockList)
-
     
     room.blockList.forEach(block => {
         const cube = make3DBlock(block.material);
@@ -483,6 +639,8 @@ function clearScene(){
             scene.remove(obj);
     }
 }
+
+
 
 
 //This function creates (and updates) the file Tree

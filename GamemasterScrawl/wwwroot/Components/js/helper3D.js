@@ -19,7 +19,7 @@ export function getTokenImage(ref){
 
 }
 
-export function make3DBlock(imgRef){
+export function make3DBlock(imgRef, moreArgs){
 
 
     
@@ -40,7 +40,7 @@ export function make3DBlock(imgRef){
 
             //Be sure to credit: https://ambientcg.com/
     
-            const material = new THREE.MeshBasicMaterial({map: texture});
+            const material = new THREE.MeshBasicMaterial({map: texture, ...moreArgs});
             //const material = new THREE.MeshBasicMaterial({color: 0x3688F4});
 
      const cube = new THREE.Mesh(geometry, material);

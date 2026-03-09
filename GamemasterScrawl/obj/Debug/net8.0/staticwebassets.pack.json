@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Assets/DeleteIcon.png",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Assets/DeleteIcon.png"
+    },
+    {
       "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Asphalt.jpg",
       "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Asphalt.jpg"
     },

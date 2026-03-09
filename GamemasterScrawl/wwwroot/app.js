@@ -12,6 +12,8 @@ let activeModal = "";
 
 var sceneSet = new Set();
 
+var activeRoom = null;
+
 //This function checks if the user is the host
 export function CheckAmIHost(){
     return isHost;
@@ -21,7 +23,8 @@ export function CheckAmIHost(){
 export const appState = {
     isHost: false,
     connection: connection,
-    sceneSet: sceneSet
+    sceneSet: sceneSet,
+    activeRoom: activeRoom
 }
 
 //Set the reference to the global state
