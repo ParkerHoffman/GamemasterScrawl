@@ -49,7 +49,7 @@ let ghostCube = null;
     var container = null;
     var appState = null;
 
-
+    const maxDimensionSize = 100
     
 
 
@@ -310,8 +310,6 @@ function blockExists(pos, room){
 function newMapContent() {
     const wrapper = document.createElement("div");
 
-
-
     const mapbutton = document.createElement("button");
     mapbutton.id = "mapCreationBtn";
     mapbutton.className = "info";
@@ -333,8 +331,6 @@ function updateMatList(mats){
         //Folder picker
     const mpicker = document.createElement("div");
     mpicker.className = "material-picker";
-
-    
 
     mats.forEach(material => {
          const tile = document.createElement("div");
@@ -378,6 +374,31 @@ function updateMatList(mats){
 
         mpicker.appendChild(tile);
     })
+
+        //Adding the delete button:
+     const por = document.createElement("div");
+        por.className = "material-tile";
+        por.dataset.id = "interactBlock";
+
+        por.style = `background-image: url('/Components/FileMaterials/Assets/PortalIcon.png')`;
+
+
+        por.addEventListener("click", () => {
+
+            ghostCube.material.color.set(0xb200ed);
+            ghostCube.material.needsUpdate = true; 
+
+            deleteMode = false;
+            clickMode = false;
+            var oldSelected = mpicker.querySelector(".selected")
+            por.classList.add("selected");
+
+            oldSelected?.classList.remove("selected");
+
+                
+        });
+
+        mpicker.appendChild(por);
 
     //Adding the delete button:
      const del = document.createElement("div");
@@ -566,8 +587,8 @@ async function CreateNewRoom(){
         return;
     }
 
-    if(xCoordVal <= 0 || xCoordVal > 50 || yCoordVal <= 0 || yCoordVal > 50 || zCoordVal <= 0 || zCoordVal > 50){
-        toastUser("Validate Dimensions", "Invalid Room Dimesions. Each size must be at least 1, and less than 50", "warn");
+    if(xCoordVal <= 0 || xCoordVal > maxDimensionSize || yCoordVal <= 0 || yCoordVal > maxDimensionSize || zCoordVal <= 0 || zCoordVal > maxDimensionSize){
+        toastUser("Validate Dimensions", `Invalid Room Dimesions. Each size must be at least 1, and less than ${maxDimensionSize}`, "warn");
         return;
     }
 
