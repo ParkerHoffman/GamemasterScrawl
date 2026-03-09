@@ -35,6 +35,7 @@ var selectedFolderList = [];
 var matList = [];
 var selectedMaterial = null;
 var deleteMode = false;
+var clickMode = false;
 let ghostCube = null;
 
 
@@ -178,7 +179,7 @@ function updateGhostCubePosition(hit){
         let snapped;
 
         //Check if the cube is rendered 
-        if(deleteMode === true){
+        if(deleteMode === true || clickMode === true){
 
             snapped = snapToGrid(hit.object.position);
 
@@ -361,6 +362,7 @@ function updateMatList(mats){
             ghostCube.material.map = texture;
             ghostCube.material.needsUpdate = true; 
             deleteMode = false;
+            clickMode = false;
             selectedMaterial = material;
 
             var oldSelected = mpicker.querySelector(".selected")
@@ -388,6 +390,7 @@ function updateMatList(mats){
             ghostCube.material.needsUpdate = true; 
 
             deleteMode = true;
+            clickMode = false;
             var oldSelected = mpicker.querySelector(".selected")
             del.classList.add("selected");
 
@@ -397,6 +400,31 @@ function updateMatList(mats){
         });
 
         mpicker.appendChild(del);
+
+        //Adding the delete button:
+     const cli = document.createElement("div");
+        cli.className = "material-tile";
+        cli.dataset.id = "deleteBlock";
+
+        cli.style = `background-image: url('/Components/FileMaterials/Assets/ClickIcon.png')`;
+
+
+        cli.addEventListener("click", () => {
+
+            ghostCube.material.color.set(0xffffff);
+            ghostCube.material.needsUpdate = true; 
+
+            deleteMode = false;
+            clickMode = true;
+            var oldSelected = mpicker.querySelector(".selected")
+            cli.classList.add("selected");
+
+            oldSelected?.classList.remove("selected");
+
+                
+        });
+
+        mpicker.appendChild(cli);
 
 
     wrapper.appendChild(mpicker);
