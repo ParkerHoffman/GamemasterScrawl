@@ -4,11 +4,11 @@ import * as THREE from 'three';
 
     const geometry = new THREE.BoxGeometry(1,1,1);
     // Initialize the Texture Loader
-    const loader = new THREE.TextureLoader();
+    export const loader = new THREE.TextureLoader();
     //Path to the material Folder
-    const rootPathMat = `/Components/FileMaterials/Materials`;
+    export const rootPathMat = `/Components/FileMaterials/Materials`;
     //Path to the Token Folder
-    const rootPathTok = `/Components/FileMaterials/TokenImages`;
+    export const rootPathTok = `/Components/FileMaterials/TokenImages`;
 
     //Cube constants
     const edges = new THREE.EdgesGeometry(geometry);

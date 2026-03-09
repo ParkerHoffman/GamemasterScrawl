@@ -4,7 +4,7 @@ import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/cont
 
 //The reference to the library managing 3D stuff
 import * as THREE from 'three';
-import { make3DBlock } from "./helper3D.js";
+import { loader, make3DBlock, rootPathMat } from "./helper3D.js";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -342,6 +342,24 @@ function updateMatList(mats){
 
 
         tile.addEventListener("click", () => {
+
+            var texture =  loader.load(
+                `${rootPathMat}/${material}`,
+                //On success: We don't care
+                undefined,
+                //On Progress: We don't care
+                undefined,
+                //On error:
+                (err) =>{
+                    loader.load(`${rootPathMat}/Default_Mossy_Stone.jpg`, (defaultTex) => {
+                texture.image = defaultTex.image;
+                texture.needsUpdate = true;
+            });
+                }
+            )
+
+            ghostCube.material.map = texture;
+            ghostCube.material.needsUpdate = true; 
             deleteMode = false;
             selectedMaterial = material;
 
@@ -365,6 +383,9 @@ function updateMatList(mats){
 
 
         del.addEventListener("click", () => {
+
+            ghostCube.material.color.set(0xf44336);
+            ghostCube.material.needsUpdate = true; 
 
             deleteMode = true;
             var oldSelected = mpicker.querySelector(".selected")
@@ -550,11 +571,7 @@ async function CreateNewRoom(){
     roomNinput.value = null;
     selectedFolderList = [];
     closeModal();
-
-
 }
-
-
 
 async function Generate3DSpace(){
 
@@ -578,7 +595,6 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 renderer.setAnimationLoop( animate );
-
 }
 
 function HandleFileExplorerSetup(){
@@ -664,8 +680,6 @@ function clearScene(){
 }
 
 
-
-
 //This function creates (and updates) the file Tree
 function renderTree( data, onSelect, comp){
     const cont = container.querySelector(comp);
@@ -691,7 +705,6 @@ function renderTree( data, onSelect, comp){
         header.appendChild(arrow);
         header.appendChild(label);
 
-
         //Now we deal with the children
 
         const childrenDiv = document.createElement("div");
@@ -709,10 +722,7 @@ function renderTree( data, onSelect, comp){
                 onSelect(child);
             });
 
-
             childrenDiv.appendChild(childItem);
-
-
         });
 
 
