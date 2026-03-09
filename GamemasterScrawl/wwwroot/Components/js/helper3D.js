@@ -21,8 +21,6 @@ export function getTokenImage(ref){
 
 export function make3DBlock(imgRef, moreArgs){
 
-
-    
             var texture =  loader.load(
                 `${rootPathMat}/${imgRef}`,
                 //On success: We don't care

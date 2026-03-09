@@ -132,14 +132,14 @@ function onSceneMouseMove(event){
     raycaster.setFromCamera(mouse, camera);
 
     //Ghost cube is now exempt from casting
-    const hittable = scene.children.filter((e) => e !== ghostCube);
-    const hitCast = raycaster.intersectObjects(hittable, true);
+    const hittable = scene.children.filter((e) => e !== ghostCube && e instanceof THREE.Mesh);
+    const hitCast = raycaster.intersectObjects(hittable, true).filter(h => h.object instanceof THREE.Mesh);
 
     if(!hitCast.length){
         ghostCube.visible = false;
         return;
     }
-
+    
     updateGhostCubePosition(hitCast[0])
 }
 
@@ -148,29 +148,22 @@ function onSceneClick(event){
     if(!selectedRoom || !event){
         return;
     }
+        console.log(ghostCube)
 
-    const rect = renderer.domElement.getBoundingClientRect();
-    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.y = -((event.clientY - rect.top) /rect.height) * 2 + 1;
-
-    raycaster.setFromCamera(mouse,camera);
-
-    const hittable = scene.children.filter(obj => obj !== ghostCube);
-    const hits = raycaster.intersectObjects(hittable, true)
-
-    if(!hits.length || hits.length === 0){
+    if(!ghostCube || !ghostCube.position|| ghostCube.position.x < 0){
         return;
     }
 
     if(deleteMode === true){
-        handleBlockDeletion(hits[0])
+        handleBlockDeletion(ghostCube.position)
     } else {
-        handleBlockPlacement(hits[0])
+        handleBlockPlacement(ghostCube.position)
     }
 
 }
 
 function updateGhostCubePosition(hit){
+
     const CurrentRoom = fileExplorer[(fileExplorer.length - 1)].children
         .filter((room) => room.id === selectedRoom)[0];
 
@@ -187,7 +180,6 @@ function updateGhostCubePosition(hit){
 
             if(!exists) return;
         } else {
-            console.log(hit)
             //Snap to an adjacent block
             const faceN = hit.face.normal.clone();
             faceN.transformDirection(hit.object.matrixWorld);
@@ -222,21 +214,16 @@ function createGhostCube(){
 }
 
 function handleBlockPlacement(hit){
-    const pos = hit.point;
-
-    const snapped = snapToGrid(pos);
-
 
     var CurrentRoom = fileExplorer[(fileExplorer.length - 1)].children.filter((room) => room.id === selectedRoom)[0];
 
-    if(!isWithinBounds(snapped, CurrentRoom)) return;
-    if(blockExists(snapped, CurrentRoom)) return;
-    console.log(CurrentRoom)
+    if(!isWithinBounds(hit, CurrentRoom)) return;
+    if(blockExists(hit, CurrentRoom)) return;
 
     CurrentRoom.blockList = [...CurrentRoom.blockList, {
-        x: snapped.x,
-        y: snapped.y,
-        z: snapped.z,
+        x: hit.x,
+        y: hit.y,
+        z: hit.z,
         material: selectedMaterial ? selectedMaterial : "Default_Decorated_Tile.jpg"
     }]
 
@@ -248,14 +235,14 @@ function handleBlockPlacement(hit){
 }
 
 function handleBlockDeletion(hit) {
-    const snapped = snapToGrid(hit.object.position);
+    
     const CurrentRoom = fileExplorer[(fileExplorer.length - 1)].children
         .filter((room) => room.id === selectedRoom)[0];
 
-    if (!blockExists(snapped, CurrentRoom)) return;
+    if (!blockExists(hit, CurrentRoom)) return;
 
     CurrentRoom.blockList = CurrentRoom.blockList.filter(
-        b => !(b.x === snapped.x && b.y === snapped.y && b.z === snapped.z)
+        b => !(b.x === hit.x && b.y === hit.y && b.z === hit.z)
     );
 
     appState.connection.invoke("EditRoom", CurrentRoom);
@@ -325,9 +312,9 @@ function updateMatList(mats){
             var oldSelected = mpicker.querySelector(".selected")
             tile.classList.add("selected");
 
-            oldSelected.classList.remove("selected");
-
-                
+            if(oldSelected){
+                oldSelected.classList.remove("selected");
+            } 
         });
 
         mpicker.appendChild(tile);
