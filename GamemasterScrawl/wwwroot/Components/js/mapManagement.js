@@ -12,6 +12,12 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
  const renderer = new THREE.WebGLRenderer();
 const controls = new OrbitControls(camera, renderer.domElement);
 
+controls.mouseButtons = {
+    LEFT: null,
+    MIDDLE: THREE.MOUSE.ROTATE,
+    RIGHT: THREE.MOUSE.PAN
+};
+
 //Deals with block manipulation
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
@@ -139,7 +145,7 @@ function onSceneMouseMove(event){
         ghostCube.visible = false;
         return;
     }
-    
+
     updateGhostCubePosition(hitCast[0])
 }
 
@@ -148,22 +154,24 @@ function onSceneClick(event){
     if(!selectedRoom || !event){
         return;
     }
-        console.log(ghostCube)
 
-    if(!ghostCube || !ghostCube.position|| ghostCube.position.x < 0){
+    const CurrentRoom = fileExplorer[(fileExplorer.length - 1)].children
+        .filter((room) => room.id === selectedRoom)[0];
+    
+    if((!ghostCube || !ghostCube.position|| ghostCube.position.x < 0) && CurrentRoom.blockList.length > 0){
         return;
     }
 
     if(deleteMode === true){
-        handleBlockDeletion(ghostCube.position)
+        handleBlockDeletion(ghostCube.position, CurrentRoom, event)
     } else {
-        handleBlockPlacement(ghostCube.position)
+        handleBlockPlacement(ghostCube.position, CurrentRoom, event)
     }
 
 }
 
 function updateGhostCubePosition(hit){
-
+    if(!hit) return;
     const CurrentRoom = fileExplorer[(fileExplorer.length - 1)].children
         .filter((room) => room.id === selectedRoom)[0];
 
@@ -196,14 +204,13 @@ function updateGhostCubePosition(hit){
         }
 
         ghostCube.position.set(snapped.x, snapped.y, snapped.z);
-        
-
 }
 
 
 function createGhostCube(){
 
-    ghostCube = make3DBlock(selectedMaterial, {        transparent: true,
+    ghostCube = make3DBlock(selectedMaterial, {       
+         transparent: true,
         opacity: 0.4,
         depthWrite: false,
     });
@@ -213,9 +220,16 @@ function createGhostCube(){
     scene.add(ghostCube); //Add the cube
 }
 
-function handleBlockPlacement(hit){
+function handleBlockPlacement(hit, CurrentRoom, event){
 
-    var CurrentRoom = fileExplorer[(fileExplorer.length - 1)].children.filter((room) => room.id === selectedRoom)[0];
+    if(CurrentRoom.blockList.length === 0 ){
+    CurrentRoom.blockList = [...CurrentRoom.blockList, {
+        x: 0,
+        y: 0,
+        z: 0,
+        material: selectedMaterial ? selectedMaterial : "Default_Decorated_Tile.jpg"
+    }]
+    } else {
 
     if(!isWithinBounds(hit, CurrentRoom)) return;
     if(blockExists(hit, CurrentRoom)) return;
@@ -226,27 +240,49 @@ function handleBlockPlacement(hit){
         z: hit.z,
         material: selectedMaterial ? selectedMaterial : "Default_Decorated_Tile.jpg"
     }]
+    }
 
     //Now we tell the server to update the current Room
     
     appState.connection.invoke("EditRoom", CurrentRoom)
 
-    renderRoom(CurrentRoom)
+        fileExplorer = fileExplorer.map((folder) => {
+        folder.children = folder.children.map((room) => {if(room.id === CurrentRoom.id){
+            return CurrentRoom;
+        }
+        return room;
+    });
+
+        return folder
+    })
+    renderRoom(CurrentRoom);
+    
+requestAnimationFrame(() => onSceneMouseMove(event))
 }
 
-function handleBlockDeletion(hit) {
-    
-    const CurrentRoom = fileExplorer[(fileExplorer.length - 1)].children
-        .filter((room) => room.id === selectedRoom)[0];
+function handleBlockDeletion(hit, CurrentRoom, event) {
 
-    if (!blockExists(hit, CurrentRoom)) return;
+    if (!blockExists(hit, CurrentRoom) || CurrentRoom.blockList.length === 0) return;
 
     CurrentRoom.blockList = CurrentRoom.blockList.filter(
         b => !(b.x === hit.x && b.y === hit.y && b.z === hit.z)
     );
 
     appState.connection.invoke("EditRoom", CurrentRoom);
+
+    fileExplorer = fileExplorer.map((folder) => {
+        folder.children = folder.children.map((room) => {if(room.id === CurrentRoom.id){
+            return CurrentRoom;
+        }
+        return room;
+    });
+        return folder
+    })
+
     renderRoom(CurrentRoom);
+
+requestAnimationFrame(() => onSceneMouseMove(event))
+    
 }
 
 function snapToGrid(vec){
