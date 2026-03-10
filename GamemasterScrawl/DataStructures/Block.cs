@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace GamemasterScrawl {
 
 
@@ -5,8 +7,9 @@ namespace GamemasterScrawl {
         public int x {get; set;}
         public int y {get; set;}
         public int z {get; set;}
-        //The ID of the material (See the Room's Material List)
-        public string material {get; set;}
+        public string material {get; set;} = "";
+        public bool? isInteractable {get; set;} = false;
+        public JsonElement? interactableInfo {get; set;} = null;
     }
 
 }

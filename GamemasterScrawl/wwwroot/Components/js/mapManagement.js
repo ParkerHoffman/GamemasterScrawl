@@ -4,7 +4,7 @@ import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/cont
 
 //The reference to the library managing 3D stuff
 import * as THREE from 'three';
-import { loader, make3DBlock, rootPathMat } from "./helper3D.js";
+import { createSpecialBlock, loader, make3DBlock, rootPathMat } from "./helper3D.js";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -36,6 +36,7 @@ var matList = [];
 var selectedMaterial = null;
 var deleteMode = false;
 var clickMode = false;
+var interactableMode = false;
 let ghostCube = null;
 
 
@@ -164,10 +165,21 @@ function onSceneClick(event){
     }
 
     if(deleteMode === true){
-        handleBlockDeletion(ghostCube.position, CurrentRoom, event)
-    } else {
-        handleBlockPlacement(ghostCube.position, CurrentRoom, event)
+        handleBlockDeletion(ghostCube.position, CurrentRoom, event);
+        return;
+    }  
+    if(clickMode === true){
+        return;
     }
+
+    if(interactableMode === true){
+        handleInteractablePlacement(ghostCube.position, CurrentRoom, event)
+        return;
+    }
+
+    handleBlockPlacement(ghostCube.position, CurrentRoom, event)
+        
+    
 
 }
 
@@ -221,6 +233,50 @@ function createGhostCube(){
     scene.add(ghostCube); //Add the cube
 }
 
+function handleInteractablePlacement(hit, CurrentRoom, event){
+
+    if(CurrentRoom.blockList.length === 0 ){
+    CurrentRoom.blockList = [...CurrentRoom.blockList, {
+        x: 0,
+        y: 0,
+        z: 0,
+        material: "0xb200ed",
+        isInteractable: true,
+        interactableInfo: {type: "TrueTP", roomDest: "N/A", visible: true, coordDest: "N/A"}
+
+    }]
+    } else {
+
+    if(!isWithinBounds(hit, CurrentRoom)) return;
+    if(blockExists(hit, CurrentRoom)) return;
+
+    CurrentRoom.blockList = [...CurrentRoom.blockList, {
+        x: hit.x,
+        y: hit.y,
+        z: hit.z,
+        material: "#b200ed",
+        isInteractable: true,
+        interactableInfo: {type: "TrueTP", roomDest: "N/A", visible: true, coordDest: "N/A"}
+    }]
+    }
+
+    //Now we tell the server to update the current Room
+
+    appState.connection.invoke("EditRoom", CurrentRoom)
+
+        fileExplorer = fileExplorer.map((folder) => {
+        folder.children = folder.children.map((room) => {if(room.id === CurrentRoom.id){
+            return CurrentRoom;
+        }
+        return room;
+    });
+
+        return folder
+    })
+    renderRoom(CurrentRoom);
+    
+requestAnimationFrame(() => onSceneMouseMove(event))
+}
 
 //Handles placing a block on the grid
 function handleBlockPlacement(hit, CurrentRoom, event){
@@ -230,7 +286,9 @@ function handleBlockPlacement(hit, CurrentRoom, event){
         x: 0,
         y: 0,
         z: 0,
-        material: selectedMaterial ? selectedMaterial : "Default_Decorated_Tile.jpg"
+        material: selectedMaterial ? selectedMaterial : "Default_Decorated_Tile.jpg",
+        isInteractable: false,
+        interactableInfo: null,
     }]
     } else {
 
@@ -362,6 +420,7 @@ function updateMatList(mats){
             ghostCube.material.needsUpdate = true; 
             deleteMode = false;
             clickMode = false;
+            interactableMode = false
             selectedMaterial = material;
 
             var oldSelected = mpicker.querySelector(".selected")
@@ -390,6 +449,7 @@ function updateMatList(mats){
 
             deleteMode = false;
             clickMode = false;
+            interactableMode = true;
             var oldSelected = mpicker.querySelector(".selected")
             por.classList.add("selected");
 
@@ -415,6 +475,7 @@ function updateMatList(mats){
 
             deleteMode = true;
             clickMode = false;
+            interactableMode = false;
             var oldSelected = mpicker.querySelector(".selected")
             del.classList.add("selected");
 
@@ -440,6 +501,7 @@ function updateMatList(mats){
 
             deleteMode = false;
             clickMode = true;
+            interactableMode = false;
             var oldSelected = mpicker.querySelector(".selected")
             cli.classList.add("selected");
 
@@ -668,6 +730,7 @@ renderTree( fileExplorer, selectItem, "#MapTreeRoot")
 
 
 function selectItem(item){
+    if(!item){ return;}
     selectedRoom = item.id;
     renderRoom(item);
 }
@@ -680,12 +743,25 @@ function renderRoom(room){
     renderRoomBounds(maxDims);
     
     room.blockList.forEach(block => {
+        if(block.isInteractable && block.isInteractable === true){
+            console.log(block)
+
+            const magicTorus = createSpecialBlock(block);
+                magicTorus.position.x = block.x;
+                magicTorus.position.y = block.y;
+                magicTorus.position.z = block.z;
+
+                scene.add(magicTorus)
+
+        } else {
         const cube = make3DBlock(block.material);
         cube.position.x = block.x;
         cube.position.y = block.y;
         cube.position.z = block.z;
 
         scene.add(cube);
+        }
+
 
     })
         

@@ -19,6 +19,19 @@ export function getTokenImage(ref){
 
 }
 
+export function createSpecialBlock(block){
+            const geometry = new THREE.TorusKnotGeometry( 1, .2, 10, 1 )
+            const material = new THREE.MeshBasicMaterial( { color: block.material } );
+            const magicTorus = new THREE.Mesh( geometry, material );
+
+            magicTorus.wireframe = true;
+
+            const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
+            magicTorus.add(edgeLines);
+
+            return magicTorus;
+}
+
 export function make3DBlock(imgRef, moreArgs){
 
             var texture =  loader.load(
