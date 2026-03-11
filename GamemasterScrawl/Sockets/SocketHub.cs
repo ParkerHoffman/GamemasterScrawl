@@ -719,6 +719,79 @@ private readonly IHostApplicationLifetime _appLifetime;
             return Directory.GetFiles(MatDir).Select(Path.GetFileName).ToArray();
         }
 
+        public async Task<bool> DeleteRoom(int ID)
+        {
+            try
+            {
+                List<Room3D> roomList = new List<Room3D>();
+
+
+                foreach(Room3D room in _mapStore.Data.roomList)
+                {
+                    if(!(room.ID == ID))
+                    {
+                        roomList.Add(room);
+                    }
+                }
+
+                _mapStore.Data.roomList = roomList.ToArray();
+
+                await _mapStore.SaveChanges();
+                return true;
+            } catch(Exception)
+            {
+                return false;
+            }
+        }
+
+
+        public async Task<bool> DeleteFolder(int id)
+        {
+            try
+            {
+
+                List<Room3D> rooms = new List<Room3D>();
+                List<SingleMap> maps = new List<SingleMap>();
+
+                foreach( SingleMap map in _mapStore.Data.maplist)
+                {
+                    if(map.ID != id)
+                    {
+                        maps.Add(map);
+                    }
+                }
+
+                foreach (Room3D room in _mapStore.Data.roomList)
+                {
+                    List<int> conts = new List<int>();
+
+                    foreach(int cont in room.containerID)
+                    {
+                        if(cont != id)
+                        {
+                            conts.Add(cont);
+                        }
+                    }
+                    room.containerID = conts.ToArray();
+
+                    rooms.Add(room);
+                }
+
+
+
+                _mapStore.Data.maplist = maps.ToArray();
+                _mapStore.Data.roomList = rooms.ToArray();
+
+                await _mapStore.SaveChanges();
+
+                return true;
+            } catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
         /// <summary>
         /// This function is used to disconnect a single user on call. It does this by forcing them back to the login screen, and their connection string should be cleared before using this
         /// </summary>

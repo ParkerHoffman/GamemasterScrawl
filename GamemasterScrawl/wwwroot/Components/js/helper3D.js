@@ -20,21 +20,24 @@ export function getTokenImage(ref){
 }
 
 export function createSpecialBlock(block){
-            const geometry = new THREE.TorusKnotGeometry( 1, .2, 10, 1 )
+            const geometry = new THREE.TorusKnotGeometry( .3, .02, 64, 8 , generateRandomNumber(1, 21), generateRandomNumber(1, 21))
             const material = new THREE.MeshBasicMaterial( { color: block.material } );
             const magicTorus = new THREE.Mesh( geometry, material );
 
-            magicTorus.wireframe = true;
+            //Setting a random rotation speed
+            magicTorus.userData.rotation = {    x: generateRandomNumber(1, 9) * .1, y: generateRandomNumber(1, 9) * .1, }
+            magicTorus.userData.stutterInterval = generateRandomNumber(1, 9) * .1;
 
-            const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
-            magicTorus.add(edgeLines);
+            magicTorus.userData.stutterTimer = 0;
 
             return magicTorus;
 }
 
 export function make3DBlock(imgRef, moreArgs){
 
-            var texture =  loader.load(
+    var material = null;
+    if(imgRef !== null){
+        var texture =  loader.load(
                 `${rootPathMat}/${imgRef}`,
                 //On success: We don't care
                 undefined,
@@ -51,16 +54,27 @@ export function make3DBlock(imgRef, moreArgs){
 
             //Be sure to credit: https://ambientcg.com/
     
-            const material = new THREE.MeshBasicMaterial({map: texture, ...moreArgs});
-            //const material = new THREE.MeshBasicMaterial({color: 0x3688F4});
+             material = new THREE.MeshBasicMaterial({map: texture, ...moreArgs});
+            
 
-     const cube = new THREE.Mesh(geometry, material);
+            
+    } else {
+       material = new THREE.MeshBasicMaterial({color: 0xb200ed, transparent: true, opacity: 0});
+    }
+
+            const cube = new THREE.Mesh(geometry, material);
+
+     
 
         const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
         cube.add(edgeLines);
+
 
         return cube;
 }
 
 
 
+export function generateRandomNumber(min, max){
+    return Math.floor(Math.random() * (max - min) + min);
+}

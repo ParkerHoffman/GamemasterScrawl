@@ -124,7 +124,11 @@ string? ip = null;
 lifetime.ApplicationStopping.Register(() =>
 {
     Console.WriteLine("");
+    Console.WriteLine("");
+    Console.WriteLine("");
     Console.WriteLine("Application stopping — cleaning up...");
+    Console.WriteLine("");
+    Console.WriteLine("");
 
     //Setting up to tell all Socket clients to DC
     var hubContext = app.Services.GetRequiredService<Microsoft.AspNetCore.SignalR.IHubContext<SocketHub>>();

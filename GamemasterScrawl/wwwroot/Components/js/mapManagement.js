@@ -4,7 +4,7 @@ import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/cont
 
 //The reference to the library managing 3D stuff
 import * as THREE from 'three';
-import { createSpecialBlock, loader, make3DBlock, rootPathMat } from "./helper3D.js";
+import { createSpecialBlock, generateRandomNumber, loader, make3DBlock, rootPathMat } from "./helper3D.js";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -701,8 +701,36 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
         camera.position.z = 15;
 
+        let lastTime = performance.now();
+
         function animate() {
-            controls.update(); // Only required if enableDamping is true
+
+            //Require damping is true, and thus I must update the controls
+            controls.update(); 
+
+            const now = performance.now();
+            const delta = (now - lastTime) / 1000;
+            lastTime = now;
+
+             const knots = scene.children.filter(obj => obj.geometry?.type === "TorusKnotGeometry");
+
+             knots.forEach(knot => {
+    // Smooth rotation using knot's own speed
+    knot.rotation.x += delta * knot.userData.rotation.x;
+    knot.rotation.y += delta * knot.userData.rotation.y;
+
+    // Stutter using knot's own timer and interval
+    knot.userData.stutterTimer += delta;
+    if (knot.userData.stutterTimer >= knot.userData.stutterInterval) {
+        knot.userData.stutterTimer = 0;
+        const p = generateRandomNumber(1,21);
+        const q = generateRandomNumber(1,21);
+        const { radius, tube, tubularSegments, radialSegments } = knot.geometry.parameters;
+        knot.geometry.dispose();
+        knot.geometry = new THREE.TorusKnotGeometry(radius, tube, tubularSegments, radialSegments, p, q);
+    }
+});
+
 
 
     renderer.render(scene, camera);
@@ -744,13 +772,20 @@ function renderRoom(room){
     
     room.blockList.forEach(block => {
         if(block.isInteractable && block.isInteractable === true){
-            console.log(block)
+            
 
             const magicTorus = createSpecialBlock(block);
                 magicTorus.position.x = block.x;
                 magicTorus.position.y = block.y;
                 magicTorus.position.z = block.z;
 
+            const magicTorusCube = make3DBlock(null);
+
+                magicTorusCube.position.x = block.x;
+                magicTorusCube.position.y = block.y;
+                magicTorusCube.position.z = block.z;
+
+                scene.add(magicTorusCube)
                 scene.add(magicTorus)
 
         } else {
@@ -807,6 +842,61 @@ function clearScene(){
     }
 }
 
+async function deleteFolder(id) {
+    try{
+
+        var success = await appState.connection.invoke("DeleteFolder", id);
+
+        if(!success){
+            throw new Error();
+        }
+
+        fileExplorer = fileExplorer.map(folder => {
+            if(folder.id !== id){
+                folder.children = folder.children.map((room) => {
+                    //Wipe the references to this folder
+                    room.containerID = room.containerID.filter((x) => x !== id);
+                    return room;
+                })
+
+                return folder;
+            }
+        }).filter(e => e)
+
+        renderTree( fileExplorer, selectItem, "#MapTreeRoot");
+
+    } catch {
+        toastUser("error", "Error", "There was an error deleting this map. Please try again later")
+    }
+    
+}
+
+async function deleteRoom(room){
+    try{
+        
+        var success = await appState.connection.invoke("DeleteRoom", room.id);
+
+        if(!success){
+            throw new Error();
+        }
+
+        fileExplorer = fileExplorer.map(folder => {
+            folder.children = folder.children.filter((e) => e.id !== room.id)
+        return folder;
+            
+        })
+
+        renderTree( fileExplorer, selectItem, "#MapTreeRoot");
+
+        if(selectedRoom === room.id){
+            selectedRoom = null;
+            clearScene();
+        }
+
+    } catch{toastUser("error", "Error", "There was an error deleting the room. Please try again later")}
+    
+}
+
 
 //This function creates (and updates) the file Tree
 function renderTree( data, onSelect, comp){
@@ -821,6 +911,7 @@ function renderTree( data, onSelect, comp){
         const header = document.createElement("div");
         header.className = "tree-folder-header"
 
+
         const arrow = document.createElement("span")
         arrow.className = "tree-folder-arrow";
 
@@ -832,6 +923,19 @@ function renderTree( data, onSelect, comp){
 
         header.appendChild(arrow);
         header.appendChild(label);
+        
+        if(folder.id !== -1){
+            const deleteFolderButton = document.createElement("button");
+            deleteFolderButton.className = "error";
+            deleteFolderButton.addEventListener("click", e => {
+                e.stopPropagation();
+                deleteFolder(folder.id);
+            })
+
+            deleteFolderButton.innerHTML = "Delete Folder"
+
+            header.appendChild(deleteFolderButton);
+        }
 
         //Now we deal with the children
 
@@ -850,6 +954,16 @@ function renderTree( data, onSelect, comp){
                 onSelect(child);
             });
 
+
+            const deleteRoomButton = document.createElement("button");
+            deleteRoomButton.innerHTML = "Delete Room"
+            deleteRoomButton.className = "error"
+            deleteRoomButton.addEventListener("click", e => {
+                e.stopPropagation();
+                deleteRoom(child)
+            })
+
+            childItem.appendChild(deleteRoomButton)
             childrenDiv.appendChild(childItem);
         });
 
