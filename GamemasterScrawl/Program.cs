@@ -50,8 +50,22 @@ builder.WebHost.ConfigureKestrel(options =>
     //    listenOptions.UseHttps();
     //});
     options.ListenAnyIP(5000);
+
+    options.ListenAnyIP(8787); // Rest API Only
 });
 
+//Configuring Controllers
+builder.Services.AddControllers();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 //Building the actual app
 var app = builder.Build();
@@ -146,6 +160,23 @@ app.MapGet("/", async context =>
         Path.Combine(app.Environment.WebRootPath, "index.html")
     );
 });
+
+
+
+//This forces the API to use port 8787
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/api") && context.Connection.LocalPort != 8787)
+    {
+        context.Response.StatusCode = 404;
+        return;
+    }
+    await next();
+});
+
+app.UseCors();
+
+app.MapControllers();
 app.MapHub<SocketHub>("/socketHub");
 
 app.Run("http://0.0.0.0:5000");

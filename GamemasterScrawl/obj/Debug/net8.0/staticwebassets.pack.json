@@ -113,6 +113,14 @@
       "PackagePath": "staticwebassets/Components/html/userManagement.html"
     },
     {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/js/FileGrabber.js",
+      "PackagePath": "staticwebassets/Components/js/FileGrabber.js"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/js/FileService.js",
+      "PackagePath": "staticwebassets/Components/js/FileService.js"
+    },
+    {
       "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/js/helper3D.js",
       "PackagePath": "staticwebassets/Components/js/helper3D.js"
     },

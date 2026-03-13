@@ -5,6 +5,8 @@ import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/cont
 //The reference to the library managing 3D stuff
 import * as THREE from 'three';
 import { createSpecialBlock, generateRandomNumber, loader, make3DBlock, rootPathMat } from "./helper3D.js";
+import { UploadMaterial } from "./FileService.js";
+import { getImageFile } from "./FileGrabber.js";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -91,6 +93,9 @@ export async function init(cont, app){
             const newMapBtn = container.querySelector("#create-new-map");
   
     newMapBtn.addEventListener("click", async () => {popupNewMap()});
+
+    const uploadMatBtn = container.querySelector("#UploadMaterial");
+    uploadMatBtn.addEventListener("click", async () => AttemptMatUpload());
 
     //Setting up the editing modal components
     mapNinput = document.createElement("input");
@@ -675,6 +680,7 @@ async function CreateNewRoom(){
         return folder;
     })
 
+
     renderTree( fileExplorer, selectItem, "#MapTreeRoot")
     selectItem(newRoom)
 
@@ -895,6 +901,25 @@ async function deleteRoom(room){
 
     } catch{toastUser("error", "Error", "There was an error deleting the room. Please try again later")}
     
+}
+
+
+async function AttemptMatUpload(){
+    try{
+        console.log("Hitting")
+        const file = await getImageFile();
+        console.log(file);
+        if(file){
+
+            var success = await UploadMaterial(file);
+
+            console.log(success);
+
+        }
+    } catch (error){
+        console.error(error);
+        toastUser("Error", "Error Uploading the Material. Please try again later", "error")
+    }
 }
 
 
