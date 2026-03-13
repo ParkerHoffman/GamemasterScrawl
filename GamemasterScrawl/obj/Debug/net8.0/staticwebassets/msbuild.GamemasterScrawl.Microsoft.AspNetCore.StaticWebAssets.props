@@ -128,6 +128,22 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\Components\FileMaterials\Assets\PortalIcon.png))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\Components\FileMaterials\Materials\060e5418a8f502564e3d0e82953d05228ddbfac2db96c6c96c3ee6df3fc03ebc.jpeg))">
+      <SourceType>Package</SourceType>
+      <SourceId>GamemasterScrawl</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/GamemasterScrawl</BasePath>
+      <RelativePath>Components/FileMaterials/Materials/060e5418a8f502564e3d0e82953d05228ddbfac2db96c6c96c3ee6df3fc03ebc.jpeg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\Components\FileMaterials\Materials\060e5418a8f502564e3d0e82953d05228ddbfac2db96c6c96c3ee6df3fc03ebc.jpeg))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\Components\FileMaterials\Materials\Default_Asphalt.jpg))">
       <SourceType>Package</SourceType>
       <SourceId>GamemasterScrawl</SourceId>

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "03BSC8rHnJg7npGiQb9Dvq9TEvFap4zh37SFtEkyg3s=",
+  "Hash": "beX4v9tU192piPMn0a6l0oTnifutsppEHIx2UFetgQo=",
   "Source": "GamemasterScrawl",
   "BasePath": "_content/GamemasterScrawl",
   "Mode": "Default",
@@ -167,6 +167,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/Components/FileMaterials/Assets/PortalIcon.png"
+    },
+    {
+      "Identity": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/060e5418a8f502564e3d0e82953d05228ddbfac2db96c6c96c3ee6df3fc03ebc.jpeg",
+      "SourceId": "GamemasterScrawl",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/",
+      "BasePath": "_content/GamemasterScrawl",
+      "RelativePath": "Components/FileMaterials/Materials/060e5418a8f502564e3d0e82953d05228ddbfac2db96c6c96c3ee6df3fc03ebc.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/Components/FileMaterials/Materials/060e5418a8f502564e3d0e82953d05228ddbfac2db96c6c96c3ee6df3fc03ebc.jpeg"
     },
     {
       "Identity": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Materials/Default_Asphalt.jpg",
