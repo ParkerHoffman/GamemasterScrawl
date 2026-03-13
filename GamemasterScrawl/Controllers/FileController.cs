@@ -13,18 +13,39 @@ namespace GamemasterScrawl.Controllers
     {
 
 
-            public FileController()
-        {
+            private readonly IWebHostEnvironment _env;
 
-        }
+public FileController(IWebHostEnvironment env)
+{
+    _env = env;
+}
 
         [HttpPost]
         [Route("UploadMaterial")]
-        public JsonResult UploadMaterial([FromBody] object file)
+        public JsonResult UploadMaterial([FromForm] IFormFile file)
         {
             try
             {
-                Console.WriteLine(file.ToString());
+
+                using var stream = file.OpenReadStream();
+
+
+                var hash = System.Security.Cryptography.SHA256.HashData(stream);
+                var hashString = Convert.ToHexString(hash).ToLower();
+
+                var extension = Path.GetExtension(file.FileName);
+                var uniqueName = $"{hashString}{extension}";
+
+
+                var savePath = Path.Combine(_env.WebRootPath, "Components", "FileMaterials", "Materials", uniqueName);
+                
+                stream.Position = 0;
+
+                using var outStream = System.IO.File.Create(savePath);
+                stream.CopyTo(outStream);
+
+
+
                 return new JsonResult(true);
             } catch (Exception)
             {
@@ -32,12 +53,32 @@ namespace GamemasterScrawl.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("TestGet")]
-        public JsonResult TestGet()
+        [HttpPost]
+        [Route("UploadToken")]
+        public JsonResult UploadToken([FromForm] IFormFile file)
         {
             try
             {
+
+                using var stream = file.OpenReadStream();
+
+
+                var hash = System.Security.Cryptography.SHA256.HashData(stream);
+                var hashString = Convert.ToHexString(hash).ToLower();
+
+                var extension = Path.GetExtension(file.FileName);
+                var uniqueName = $"{hashString}{extension}";
+
+
+                var savePath = Path.Combine(_env.WebRootPath, "Components", "FileMaterials", "TokenImages", uniqueName);
+                
+                stream.Position = 0;
+
+                using var outStream = System.IO.File.Create(savePath);
+                stream.CopyTo(outStream);
+
+
+
                 return new JsonResult(true);
             } catch (Exception)
             {

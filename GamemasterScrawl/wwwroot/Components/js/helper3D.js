@@ -59,7 +59,7 @@ export function make3DBlock(imgRef, moreArgs){
 
             
     } else {
-       material = new THREE.MeshBasicMaterial({color: 0xb200ed, transparent: true, opacity: 0});
+       material = new THREE.MeshBasicMaterial({color: "#b200ed", transparent: true, opacity: 0});
     }
 
             const cube = new THREE.Mesh(geometry, material);

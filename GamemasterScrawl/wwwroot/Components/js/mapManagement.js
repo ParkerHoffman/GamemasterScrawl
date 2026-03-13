@@ -124,9 +124,8 @@ export async function init(cont, app){
     zcoordInp.id = "zDimensionSize";
     zcoordInp.placeholder = "Z Size";
 
-    matList = await appState.connection.invoke("GetMasterMaterialList");
-    selectedMaterial = matList[0];
-    updateMatList(matList);
+
+    updateMatList();
 
     renderer.domElement.addEventListener("click", (e) => onSceneClick(e));
     renderer.domElement.addEventListener("mousemove", (e) => onSceneMouseMove(e));
@@ -245,7 +244,7 @@ function handleInteractablePlacement(hit, CurrentRoom, event){
         x: 0,
         y: 0,
         z: 0,
-        material: "0xb200ed",
+        material: "#b200ed",
         isInteractable: true,
         interactableInfo: {type: "TrueTP", roomDest: "N/A", visible: true, coordDest: "N/A"}
 
@@ -386,7 +385,10 @@ function newMapContent() {
     return wrapper;
 }
 
-function updateMatList(mats){
+async function updateMatList(){
+
+    const mats = await appState.connection.invoke("GetMasterMaterialList");
+    selectedMaterial = matList[0];
 
     var wrapper = container.querySelector("#MatListSelector");
     wrapper.innerHTML = "";
@@ -449,7 +451,7 @@ function updateMatList(mats){
 
         por.addEventListener("click", () => {
 
-            ghostCube.material.color.set(0xb200ed);
+            ghostCube.material.color.set("#b200ed");
             ghostCube.material.needsUpdate = true; 
 
             deleteMode = false;
@@ -903,21 +905,25 @@ async function deleteRoom(room){
     
 }
 
-
+//This gets a file and attempts to upload it as a material
 async function AttemptMatUpload(){
     try{
-        console.log("Hitting")
         const file = await getImageFile();
-        console.log(file);
+
         if(file){
 
             var success = await UploadMaterial(file);
 
-            console.log(success);
+            if(success && success === true){
+
+                toastUser('Success', 'Successfuly uploaded the material', 'success');
+                updateMatList();
+            } else {
+                throw new Error();
+            }
 
         }
     } catch (error){
-        console.error(error);
         toastUser("Error", "Error Uploading the Material. Please try again later", "error")
     }
 }
