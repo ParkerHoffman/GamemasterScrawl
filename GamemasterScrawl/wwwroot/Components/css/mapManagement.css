@@ -42,3 +42,89 @@
     border-radius: 4px;
     padding: 2px 4px;
 }
+
+#editor-layout {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+#Space3D {
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+
+#sidebar {
+  width: 280px;
+  height: 100%;
+  background: #0f0f0f;
+  border-left: 1px solid #2a2a2a;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  font-family: 'Courier New', monospace;
+}
+
+#sidebar-tabs {
+  display: flex;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 4px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #555;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.tab-btn:hover { color: #aaa; }
+
+.tab-btn.active {
+  color: #3688f4;
+  border-bottom-color: #3688f4;
+}
+
+.tab-pane {
+  display: none;
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.tab-pane.active { display: flex; flex-direction: column; gap: 8px; }
+
+.sidebar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.no-selection {
+  color: #444;
+  font-size: 12px;
+  font-style: italic;
+  margin: auto;
+}
+
+#MatListSelector {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 280px; /* leave room for sidebar */
+  z-index: 10;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid #2a2a2a;
+  padding: 8px;
+}

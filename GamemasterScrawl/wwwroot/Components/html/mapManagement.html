@@ -1,9 +1,44 @@
 <div>
     <button id="returnHome">Return Home</button>
 </div>
-<button id="create-new-map">New Map</button>
-<button id="create-new-room">New Room</button>
-<button id="UploadMaterial" class="info">Upload Material</button>
-<div id="MapTreeRoot" class="tree-root"></div>
-<div id="Space3D"></div>
-<div id="MatListSelector">This is the material selector pane. </div>
+
+<div id="EditorLayout">
+
+    <div id="Space3D"></div>
+
+    <div id="sidebar">
+        <!--The sidebar navigation-->
+        <div id="sidebar-tabs">
+            <button class="tab-btn active" data-tab="rooms">Rooms</button>"
+            <button class="tab-btn" data-tab="room-props">Room Properties</button>
+            <button class="tab-btn" data-tab="block-props">Block Properties</button>
+        </div>
+
+        <!--The initial tab (Room Selection/creation)-->
+        <div id="tab-rooms" class="tab-pane active">
+            <div class="sidebar-actions">
+                <button id="create-new-map">New Map</button>
+                <button id="create-new-room">New Room</button>
+            </div>
+            <div id="MapTreeRoot" class="tree-root"></div>
+        </div>
+
+        <!--Room Properties Pane-->
+        <div id="tab-room-props" class="tab-pane">
+            <div id="RoomPropertiesPane">
+                <span class="no-selection">No Room Selected</span>
+            </div>
+        </div>
+
+        <!--Block Properties Pane-->
+        <div id="tab-block-props" class="tab-pane">
+            <div id="BlockPropertiesPane">
+                <span class="no-selection">No Room Selected</span>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<div id="MatListSelector"></div>

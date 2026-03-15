@@ -68,6 +68,7 @@ export async function init(cont, app){
     Generate3DSpace();
     map = await appState.connection.invoke("GetMapList");
     selectedRoom = map.activeRoom;
+    setUpSidebarTabs();
     HandleFileExplorerSetup();
 
     if(!app.activeRoom){
@@ -94,8 +95,6 @@ export async function init(cont, app){
   
     newMapBtn.addEventListener("click", async () => {popupNewMap()});
 
-    const uploadMatBtn = container.querySelector("#UploadMaterial");
-    uploadMatBtn.addEventListener("click", async () => AttemptMatUpload());
 
     //Setting up the editing modal components
     mapNinput = document.createElement("input");
@@ -226,11 +225,19 @@ function updateGhostCubePosition(hit){
 
 function createGhostCube(){
 
+    if(selectedMaterial){
     ghostCube = make3DBlock(selectedMaterial, {       
          transparent: true,
         opacity: 0.6,
         depthWrite: false,
     });
+} else {
+        ghostCube = make3DBlock("#aaaaaa", {       
+         transparent: true,
+        opacity: 0.6,
+        depthWrite: false,
+    });
+}
 
     ghostCube.userData.persistent = true; // survives clearScene(), and thus remains after room changes
     ghostCube.visible = false; //Starts invisible
@@ -422,7 +429,7 @@ async function updateMatList(){
                 }
             )
 
-            ghostCube.material.color.set(0xaaaaaa);
+            ghostCube.material.color.set("#aaaaaa");
             ghostCube.material.map = texture;
             ghostCube.material.needsUpdate = true; 
             deleteMode = false;
@@ -452,6 +459,7 @@ async function updateMatList(){
         por.addEventListener("click", () => {
 
             ghostCube.material.color.set("#b200ed");
+            ghostCube.material.map = null;
             ghostCube.material.needsUpdate = true; 
 
             deleteMode = false;
@@ -477,8 +485,9 @@ async function updateMatList(){
 
         del.addEventListener("click", () => {
 
-            ghostCube.material.color.set(0xf44336);
+            ghostCube.material.color.set("#f44336");
             ghostCube.material.needsUpdate = true; 
+            ghostCube.material.map = null;
 
             deleteMode = true;
             clickMode = false;
@@ -493,7 +502,7 @@ async function updateMatList(){
 
         mpicker.appendChild(del);
 
-        //Adding the delete button:
+        //Adding the Select button:
      const cli = document.createElement("div");
         cli.className = "material-tile";
         cli.dataset.id = "deleteBlock";
@@ -503,8 +512,9 @@ async function updateMatList(){
 
         cli.addEventListener("click", () => {
 
-            ghostCube.material.color.set(0xffffff);
+            ghostCube.material.color.set("#ffffff");
             ghostCube.material.needsUpdate = true; 
+            ghostCube.material.map = null;
 
             deleteMode = false;
             clickMode = true;
@@ -519,9 +529,36 @@ async function updateMatList(){
 
         mpicker.appendChild(cli);
 
+                //Adding the add button:
+     const add = document.createElement("div");
+        add.className = "material-tile";
+        add.dataset.id = "addBlock";
+
+        add.style = `background-image: url('/Components/FileMaterials/Assets/Plus.jpg')`;
+
+
+        add.addEventListener("click", () => {
+                AttemptMatUpload();
+        });
+
+        mpicker.appendChild(add);
+
 
     wrapper.appendChild(mpicker);
     
+}
+
+function setUpSidebarTabs(){
+    const tabs = container.querySelectorAll(".tab-btn");
+
+    tabs.forEach(btn => {
+        btn.addEventListener("click", () => {
+            tabs.forEach(t => t.classList.remove("active"));
+            container.querySelector(".tab-pane").forEach(p => p.classList.remove("active"));
+            btn.classList.add("active");
+            container.querySelector(`#tab-${btn.dataset.tab}`).classList.add("active");
+        })
+    })
 }
 
 function newRoomContent() {
