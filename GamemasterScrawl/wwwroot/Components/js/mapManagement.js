@@ -32,12 +32,14 @@ controls.screenSpacePanning = true; // Allows moving up/down/left/right relative
 var map;
 var fileExplorer = [];
 var selectedRoom;
+var selectedRoomObject = null;
+var selectedBlockObject = null;
 
 var selectedFolderList = [];
 var matList = [];
 var selectedMaterial = null;
 var deleteMode = false;
-var clickMode = false;
+var clickMode = true;
 var interactableMode = false;
 let ghostCube = null;
 
@@ -52,6 +54,7 @@ let ghostCube = null;
     var container = null;
     var appState = null;
 
+    //Controls the maximum size of each dimension
     const maxDimensionSize = 100
     
 
@@ -172,6 +175,7 @@ function onSceneClick(event){
         return;
     }  
     if(clickMode === true){
+        handleBlockSelection(ghostCube.position, CurrentRoom);
         return;
     }
 
@@ -330,6 +334,19 @@ function handleBlockPlacement(hit, CurrentRoom, event){
     renderRoom(CurrentRoom);
     
 requestAnimationFrame(() => onSceneMouseMove(event))
+}
+
+
+function handleBlockSelection(hit, CurrentRoom) {
+
+    if (!blockExists(hit, CurrentRoom) || CurrentRoom.blockList.length === 0) return;
+
+
+    selectedBlockObject = CurrentRoom.blockList.filter(
+        b => !b.x === hit.x && b.y === hit.y && b.z === hit.z)
+    [0];
+
+    
 }
 
 function handleBlockDeletion(hit, CurrentRoom, event) {
@@ -550,12 +567,13 @@ async function updateMatList(){
 
 function setUpSidebarTabs(){
     const tabs = container.querySelectorAll(".tab-btn");
-
+ 
     tabs.forEach(btn => {
         btn.addEventListener("click", () => {
             tabs.forEach(t => t.classList.remove("active"));
-            container.querySelector(".tab-pane").forEach(p => p.classList.remove("active"));
+            container.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
             btn.classList.add("active");
+            console.log(btn)
             container.querySelector(`#tab-${btn.dataset.tab}`).classList.add("active");
         })
     })
@@ -737,7 +755,7 @@ async function Generate3DSpace(){
     appState.sceneSet.add({renderer: renderer, scene: scene})
 
         renderer.setClearColor(0x000000, 0); // transparent background
-renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(window.innerWidth, window.innerHeight);
 
     var spaceCont = container.querySelector("#Space3D");
 
@@ -805,6 +823,7 @@ renderTree( fileExplorer, selectItem, "#MapTreeRoot")
 function selectItem(item){
     if(!item){ return;}
     selectedRoom = item.id;
+    selectedRoomObject = item;
     renderRoom(item);
 }
 

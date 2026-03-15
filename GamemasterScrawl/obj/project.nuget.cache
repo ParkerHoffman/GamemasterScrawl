@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "SjYLGuseY04=",
+  "dgSpecHash": "BHoN/Wp+HUM=",
   "success": true,
   "projectFilePath": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/GamemasterScrawl.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/home/xpc/.nuget/packages/microsoft.netcore.app.ref/8.0.24/microsoft.netcore.app.ref.8.0.24.nupkg.sha512",
+    "/home/xpc/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.24/microsoft.aspnetcore.app.ref.8.0.24.nupkg.sha512",
+    "/home/xpc/.nuget/packages/microsoft.netcore.app.host.linux-x64/8.0.24/microsoft.netcore.app.host.linux-x64.8.0.24.nupkg.sha512"
+  ],
   "logs": []
 }
