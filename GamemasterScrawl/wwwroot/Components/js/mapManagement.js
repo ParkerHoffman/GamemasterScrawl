@@ -185,9 +185,6 @@ function onSceneClick(event){
     }
 
     handleBlockPlacement(ghostCube.position, CurrentRoom, event)
-        
-    
-
 }
 
 function updateGhostCubePosition(hit){
@@ -228,20 +225,19 @@ function updateGhostCubePosition(hit){
 
 
 function createGhostCube(){
+ const geometry = new THREE.BoxGeometry(1,1,1);
+        const edges = new THREE.EdgesGeometry(geometry);
+        const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
 
-    if(selectedMaterial){
-    ghostCube = make3DBlock(selectedMaterial, {       
-         transparent: true,
-        opacity: 0.6,
-        depthWrite: false,
-    });
-} else {
-        ghostCube = make3DBlock("#aaaaaa", {       
-         transparent: true,
-        opacity: 0.6,
-        depthWrite: false,
-    });
-}
+    var material = new THREE.MeshBasicMaterial({color: "#aaaaaa", transparent: true, opacity: .6, depthWrite: false,});
+
+    ghostCube = new THREE.Mesh(geometry, material);
+    
+         
+    
+            const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
+            ghostCube.add(edgeLines);
+    
 
     ghostCube.userData.persistent = true; // survives clearScene(), and thus remains after room changes
     ghostCube.visible = false; //Starts invisible
@@ -342,11 +338,29 @@ function handleBlockSelection(hit, CurrentRoom) {
     if (!blockExists(hit, CurrentRoom) || CurrentRoom.blockList.length === 0) return;
 
 
+    if(!selectedBlockObject){
+        
+    container.querySelectorAll(".block-prop-input").forEach(i => 
+        {
+            i.classList.remove("hide-element")
+        })
+    container.querySelector("#NullOptionBlock").classList.add("hide-element")
+    }
+
     selectedBlockObject = CurrentRoom.blockList.filter(
-        b => !b.x === hit.x && b.y === hit.y && b.z === hit.z)
+        b => b.x === hit.x && b.y === hit.y && b.z === hit.z)
     [0];
 
-    
+    console.log(selectedBlockObject)
+
+    const xCoordLocal = container.querySelector("#showXCoord");
+    xCoordLocal.value =selectedBlockObject.x;
+
+        const yCoordLocal = container.querySelector("#showYCoord");
+    yCoordLocal.value = selectedBlockObject.y;
+
+        const zCoordLocal = container.querySelector("#showZCoord");
+    zCoordLocal.value = selectedBlockObject.z;
 }
 
 function handleBlockDeletion(hit, CurrentRoom, event) {
@@ -573,7 +587,6 @@ function setUpSidebarTabs(){
             tabs.forEach(t => t.classList.remove("active"));
             container.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
             btn.classList.add("active");
-            console.log(btn)
             container.querySelector(`#tab-${btn.dataset.tab}`).classList.add("active");
         })
     })
@@ -820,10 +833,43 @@ renderTree( fileExplorer, selectItem, "#MapTreeRoot")
 }
 
 
+function DeselectBlock(){
+    //Deselect Block
+    selectedBlockObject = null;
+    container.querySelectorAll(".block-prop-input").forEach(i => 
+        {
+            i.classList.add("hide-element")
+        })
+    container.querySelector("#NullOptionBlock").classList.remove("hide-element")
+}
+
 function selectItem(item){
-    if(!item){ return;}
+
+DeselectBlock();
+
+    if(!item){ 
+            container.querySelectorAll(".room-prop-input").forEach(i => 
+        {i.classList.add("hide-element")})
+    container.querySelector("#NullOptionRoom").classList.remove("hide-element")
+        return;}
+
+
+    container.querySelectorAll(".room-prop-input").forEach(i => 
+        {i.classList.remove("hide-element")})
+    container.querySelector("#NullOptionRoom").classList.add("hide-element")
     selectedRoom = item.id;
     selectedRoomObject = item;
+
+    const xCoordEditor = container.querySelector("#editXCoord")
+    xCoordEditor.value = selectedRoomObject.xDimension;
+
+    const yCoordEditor = container.querySelector("#editYCoord")
+    yCoordEditor.value = selectedRoomObject.yDimension;
+
+    const zCoordEditor = container.querySelector("#editZCoord")
+    zCoordEditor.value = selectedRoomObject.zDimension;
+    console.log(selectedRoomObject);
+
     renderRoom(item);
 }
 

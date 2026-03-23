@@ -24,14 +24,23 @@
         <!--Room Properties Pane-->
         <div id="tab-room-props" class="tab-pane">
             <div id="RoomPropertiesPane">
-                <span class="no-selection">No Room Selected</span>
+                <span class="no-selection" id="NullOptionRoom">No Room Selected</span>
+                <input type="number" class="hide-element room-prop-input" id="editXCoord" placeholder="Maximum X size" readonly disabled />
+                <input type="number" class="hide-element room-prop-input" id="editYCoord" placeholder="Maximum Y size" readonly disabled />
+                <input type="number" class="hide-element room-prop-input" id="editZCoord" placeholder="Maximum Z size" readonly disabled />
+                <div class="room-prop-input"></div>
+                <button class="info hide-element room-prop-input" id="EditRoomButton" >Edit Room</button>
             </div>
         </div>
 
         <!--Block Properties Pane-->
         <div id="tab-block-props" class="tab-pane">
             <div id="BlockPropertiesPane">
-                <span class="no-selection">No Room Selected</span>
+                <span class="no-selection" id="NullOptionBlock">No Block Selected</span>
+                <input type="number" class="hide-element block-prop-input" id="showXCoord" placeholder="X Coord" readonly disabled />
+                <input type="number" class="hide-element block-prop-input" id="showYCoord" placeholder="Y Coord" readonly disabled />
+                <input type="number" class="hide-element block-prop-input" id="showZCoord" placeholder="Z Coord" readonly disabed />
+                <button class="info hide-element block-prop-input" id="EditRoomButton" >Edit Block</button>
             </div>
         </div>
     </div>

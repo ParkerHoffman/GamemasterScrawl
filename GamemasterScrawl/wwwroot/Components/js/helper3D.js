@@ -35,26 +35,25 @@ export function createSpecialBlock(block){
 
 export function make3DBlock(imgRef, moreArgs){
 
-    var material = null;
+    var material = new THREE.MeshBasicMaterial({color: imgRef || "#aaaaaa", transparent: true, opacity: 0});
     if(imgRef !== null){
-        var texture =  loader.load(
+
+        try{
+            var texture =  loader.load(
                 `${rootPathMat}/${imgRef}`,
                 //On success: We don't care
                 undefined,
                 //On Progress: We don't care
                 undefined,
                 //On error:
-                (err) =>{
-                    loader.load(`${rootPathMat}/Default_Mossy_Stone.jpg`, (defaultTex) => {
-                texture.image = defaultTex.image;
-                texture.needsUpdate = true;
-            });
-                }
-            )
-
-            //Be sure to credit: https://ambientcg.com/
+                undefined
+            );
     
              material = new THREE.MeshBasicMaterial({map: texture, ...moreArgs});
+        } catch {
+            
+        }
+        
             
 
             

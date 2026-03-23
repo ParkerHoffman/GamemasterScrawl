@@ -120,8 +120,8 @@ string? ip = null;
         
 
         var url = ip != null
-            ? $"http://{ip}"
-            : "https://localhost";
+            ? $"http://{ip}:5000"
+            : "https://localhost:5000";
 
         Process.Start(new ProcessStartInfo
         {
