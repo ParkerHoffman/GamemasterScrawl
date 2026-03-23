@@ -225,18 +225,16 @@ function updateGhostCubePosition(hit){
 
 
 function createGhostCube(){
- const geometry = new THREE.BoxGeometry(1,1,1);
-        const edges = new THREE.EdgesGeometry(geometry);
-        const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+    const geometry = new THREE.BoxGeometry(1,1,1);
+    const edges = new THREE.EdgesGeometry(geometry);
+    const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
 
     var material = new THREE.MeshBasicMaterial({color: "#aaaaaa", transparent: true, opacity: .6, depthWrite: false,});
 
-    ghostCube = new THREE.Mesh(geometry, material);
+    ghostCube = new THREE.Mesh(geometry, material); 
     
-         
-    
-            const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
-            ghostCube.add(edgeLines);
+    const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
+    ghostCube.add(edgeLines);
     
 
     ghostCube.userData.persistent = true; // survives clearScene(), and thus remains after room changes
@@ -247,28 +245,32 @@ function createGhostCube(){
 function handleInteractablePlacement(hit, CurrentRoom, event){
 
     if(CurrentRoom.blockList.length === 0 ){
-    CurrentRoom.blockList = [...CurrentRoom.blockList, {
-        x: 0,
-        y: 0,
-        z: 0,
-        material: "#b200ed",
-        isInteractable: true,
-        interactableInfo: {type: "TrueTP", roomDest: "N/A", visible: true, coordDest: "N/A"}
-
-    }]
+    CurrentRoom.blockList = 
+        [...CurrentRoom.blockList, 
+            {
+                x: 0,
+                y: 0,
+                z: 0,
+                material: "#b200ed",
+                isInteractable: true,
+                interactableInfo: {type: "TrueTP", roomDest: "N/A", visible: true, coordDest: "N/A"}
+            }
+        ]
     } else {
+        if(!isWithinBounds(hit, CurrentRoom)) return;
+        if(blockExists(hit, CurrentRoom)) return;
 
-    if(!isWithinBounds(hit, CurrentRoom)) return;
-    if(blockExists(hit, CurrentRoom)) return;
-
-    CurrentRoom.blockList = [...CurrentRoom.blockList, {
-        x: hit.x,
-        y: hit.y,
-        z: hit.z,
-        material: "#b200ed",
-        isInteractable: true,
-        interactableInfo: {type: "TrueTP", roomDest: "N/A", visible: true, coordDest: "N/A"}
-    }]
+        CurrentRoom.blockList = 
+            [...CurrentRoom.blockList, 
+                {
+                    x: hit.x,
+                    y: hit.y,
+                    z: hit.z,
+                    material: "#b200ed",
+                    isInteractable: true,
+                    interactableInfo: {type: "TrueTP", roomDest: "N/A", visible: true, coordDest: "N/A"}
+                }
+            ]
     }
 
     //Now we tell the server to update the current Room
@@ -338,28 +340,26 @@ function handleBlockSelection(hit, CurrentRoom) {
     if (!blockExists(hit, CurrentRoom) || CurrentRoom.blockList.length === 0) return;
 
 
-    if(!selectedBlockObject){
+    if(!selectedBlockObject){   
         
-    container.querySelectorAll(".block-prop-input").forEach(i => 
-        {
-            i.classList.remove("hide-element")
-        })
-    container.querySelector("#NullOptionBlock").classList.add("hide-element")
+        container.querySelectorAll(".block-prop-input").forEach(i => 
+            {
+                i.classList.remove("hide-element")
+            })
+        container.querySelector("#NullOptionBlock").classList.add("hide-element")
     }
 
     selectedBlockObject = CurrentRoom.blockList.filter(
         b => b.x === hit.x && b.y === hit.y && b.z === hit.z)
     [0];
 
-    console.log(selectedBlockObject)
-
     const xCoordLocal = container.querySelector("#showXCoord");
     xCoordLocal.value =selectedBlockObject.x;
 
-        const yCoordLocal = container.querySelector("#showYCoord");
+    const yCoordLocal = container.querySelector("#showYCoord");
     yCoordLocal.value = selectedBlockObject.y;
 
-        const zCoordLocal = container.querySelector("#showZCoord");
+    const zCoordLocal = container.querySelector("#showZCoord");
     zCoordLocal.value = selectedBlockObject.z;
 }
 
