@@ -126,6 +126,12 @@ export async function init(cont, app){
     zcoordInp.id = "zDimensionSize";
     zcoordInp.placeholder = "Z Size";
 
+    const updateRoomButton = container.querySelector("#EditRoomButton");
+    updateRoomButton.addEventListener("click", () => updateSelectedRoom())
+
+    const deleteRoomButton = container.querySelector("#DeleteRoomButton");
+    deleteRoomButton.addEventListener("click", () => deleteSelectedRoom())
+
 
     updateMatList();
 
@@ -553,9 +559,7 @@ async function updateMatList(){
             var oldSelected = mpicker.querySelector(".selected")
             cli.classList.add("selected");
 
-            oldSelected?.classList.remove("selected");
-
-                
+            oldSelected?.classList.remove("selected");  
         });
 
         mpicker.appendChild(cli);
@@ -595,7 +599,6 @@ function setUpSidebarTabs(){
 function newRoomContent() {
     const wrapper = document.createElement("div");
 
-
     //Folder picker
     const fpicker = document.createElement("div");
     fpicker.className = "material-picker";
@@ -613,7 +616,6 @@ function newRoomContent() {
         const tile = document.createElement("div");
         tile.className = "material-tile";
         tile.dataset.id = folder.id;
-
 
         const label = document.createElement("span");
         label.className = "material-label";
@@ -636,12 +638,10 @@ function newRoomContent() {
        
     })
 
-
     const button = document.createElement("button");
     button.id = "roomCreationBtn";
     button.className = "info";
     button.textContent = "Create Room";
-
 
     //On room creation/edit: We need dimensions, nickname, and material list. For he latter: We need some kind of multiselect
     //wrapper.appendChild(mapNinput);
@@ -806,9 +806,6 @@ async function Generate3DSpace(){
         knot.geometry = new THREE.TorusKnotGeometry(radius, tube, tubularSegments, radialSegments, p, q);
     }
 });
-
-
-
     renderer.render(scene, camera);
 }
 
@@ -860,6 +857,7 @@ DeselectBlock();
     selectedRoom = item.id;
     selectedRoomObject = item;
 
+    //Setting the values up
     const xCoordEditor = container.querySelector("#editXCoord")
     xCoordEditor.value = selectedRoomObject.xDimension;
 
@@ -868,8 +866,44 @@ DeselectBlock();
 
     const zCoordEditor = container.querySelector("#editZCoord")
     zCoordEditor.value = selectedRoomObject.zDimension;
-    console.log(selectedRoomObject);
 
+    const RoomNameEditor = container.querySelector("#editRoomName")
+    RoomNameEditor.value = selectedRoomObject.nickname;
+
+    const mapContainerEditor = container.querySelector("#RoomEditorMapSelector");
+
+
+        fileExplorer.forEach((folder) => {
+        if(folder.id !== -1){
+        const tile = document.createElement("div");
+        tile.className = "material-tile";
+        tile.dataset.id = folder.id;
+
+
+        const label = document.createElement("span");
+        label.className = "material-label";
+        label.textContent = folder.mapName;
+
+        tile.appendChild(label);
+
+        if (selectedRoomObject.containerID.includes(folder.id)) {
+                tile.classList.add("selected");
+            }
+
+        tile.addEventListener("click", () => {
+            if (selectedRoomObject.containerID.includes(folder.id)) {
+                selectedRoomObject.containerID = selectedRoomObject.containerID.filter(e => e !== folder.id)
+                tile.classList.remove("selected");
+            } else {
+                selectedRoomObject.containerID = [folder.id, ...selectedRoomObject.containerID];
+                tile.classList.add("selected");
+            }
+        });
+
+        mapContainerEditor.appendChild(tile);
+        }
+       
+    })
     renderRoom(item);
 }
 
@@ -1000,6 +1034,8 @@ async function deleteRoom(room){
 
         if(selectedRoom === room.id){
             selectedRoom = null;
+            selectedBlockObject = null;
+            selectedRoomObject = null;
             clearScene();
         }
 
@@ -1029,6 +1065,15 @@ async function AttemptMatUpload(){
     } catch (error){
         toastUser("Error", "Error Uploading the Material. Please try again later", "error")
     }
+}
+
+
+async function updateSelectedRoom(){
+
+}
+
+async function deleteSelectedRoom(){
+    deleteRoom(selectedRoomObject);
 }
 
 
