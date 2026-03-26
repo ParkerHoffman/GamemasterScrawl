@@ -66,44 +66,10 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
     spaceCont.appendChild(renderer.domElement);
 
-        const geometry = new THREE.BoxGeometry(1,1,1);
-        //const geometry = new THREE.IcosahedronGeometry();
-
-        const texture1 = loader.load("/Components/FileMaterials/Materials/Default_Asphalt.jpg");
-        //Be sure to credit: https://ambientcg.com/
-
-        const material = new THREE.MeshBasicMaterial({map: texture1});
-        //const material = new THREE.MeshBasicMaterial({color: 0x3688F4});
-
-        var i = 0;
-
-const edges = new THREE.EdgesGeometry(geometry);
-const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
-
-for (let i = 0; i < 10; i++) {
-    for (let k = 0; k < 10; k++) {
-
-        const cube = new THREE.Mesh(geometry, material);
-
-        const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
-        cube.add(edgeLines);
-
-        cube.position.set(i, k, 0);
-        scene.add(cube);
-    }
-}
-
         camera.position.z = 15;
 
-    let angle = 0;
 
         function animate() {
-            angle += 0.002;
-
-            camera.position.x = Math.cos(angle) * 10;
-            camera.position.y = Math.sin(angle) * 10;
-            camera.position.z = 15;
-            camera.lookAt(5,5,5)
 
     renderer.render(scene, camera);
 }
