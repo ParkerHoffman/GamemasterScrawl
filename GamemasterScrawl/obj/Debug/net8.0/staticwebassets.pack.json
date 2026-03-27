@@ -153,6 +153,10 @@
       "PackagePath": "staticwebassets/app.js"
     },
     {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/favicon.png",
+      "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
       "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/index.css",
       "PackagePath": "staticwebassets/index.css"
     },

@@ -35,10 +35,8 @@ if(appState.isHost == true){
     const usrlogOutBtn = container.querySelector("#UserRequestsLogOut");
   
     usrlogOutBtn.addEventListener("click", async () => {logUsrOut(appState)});
-
-    
 }
-Generate3DSpace(container, appState)
+//Generate3DSpace(container, appState)
 }
 
 //Logs the user out

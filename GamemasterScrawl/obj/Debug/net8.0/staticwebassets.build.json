@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "LpqfcwJy50j4sA3qxE1MCD0dG1FCKkcC0DwtOHJ4laQ=",
+  "Hash": "4FW6kLHYR83mPP0qozeCx1FUDwvRi+4dO8//njd3wHE=",
   "Source": "GamemasterScrawl",
   "BasePath": "_content/GamemasterScrawl",
   "Mode": "Default",
@@ -737,6 +737,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/Components/js/userManagement.js"
+    },
+    {
+      "Identity": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/favicon.png",
+      "SourceId": "GamemasterScrawl",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/",
+      "BasePath": "_content/GamemasterScrawl",
+      "RelativePath": "favicon.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/favicon.png"
     },
     {
       "Identity": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/index.css",

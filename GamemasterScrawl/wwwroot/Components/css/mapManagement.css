@@ -1,12 +1,10 @@
-/* ─── Return Home Button ────────────────────────────────────────────── */
-#returnHome-wrapper {
+#HomeButtonWrapper {
     position: fixed;
     top: 12px;
     left: 12px;
-    z-index: 100;
+    z-index: 1000;
 }
 
-/* ─── Root Layout ───────────────────────────────────────────────────── */
 #EditorLayout {
     position: fixed;
     inset: 0;
@@ -15,7 +13,6 @@
     overflow: hidden;
 }
 
-/* ─── 3D Viewport ───────────────────────────────────────────────────── */
 #Space3D {
     position: absolute;
     inset: 0;
@@ -30,8 +27,6 @@
     height: 100% !important;
 }
 
-
-/* ─── Sidebar ───────────────────────────────────────────────────────── */
 #sidebar {
     position: absolute;
     top: 0;
@@ -49,7 +44,6 @@
     overflow: hidden;
 }
 
-/* ─── Sidebar Tabs ──────────────────────────────────────────────────── */
 #sidebar-tabs {
     display: flex;
     flex-shrink: 0;
@@ -88,7 +82,6 @@
     background: transparent;
 }
 
-/* ─── Tab Panes ─────────────────────────────────────────────────────── */
 .tab-pane {
     display: none;
     flex: 1;
@@ -105,7 +98,6 @@
     gap: 8px;
 }
 
-/* ─── Sidebar Actions Row ───────────────────────────────────────────── */
 .sidebar-actions {
     display: flex;
     flex-wrap: wrap;
@@ -120,7 +112,6 @@
     min-width: 80px;
 }
 
-/* ─── Room / Block Properties Pane ─────────────────────────────────── */
 #RoomPropertiesPane,
 #BlockPropertiesPane {
     display: flex;
@@ -128,21 +119,18 @@
     gap: 6px;
 }
 
-/* Full-width inputs inside the sidebar panes */
 #RoomPropertiesPane input,
 #BlockPropertiesPane input {
     width: 100%;
     box-sizing: border-box;
 }
 
-/* Full-width buttons inside the sidebar panes */
 #RoomPropertiesPane button,
 #BlockPropertiesPane button {
     width: 100%;
     box-sizing: border-box;
 }
 
-/* ─── No-selection placeholder ──────────────────────────────────────── */
 .no-selection {
     color: #3f3f4a;
     font-size: 12px;
@@ -152,7 +140,6 @@
     padding: 24px 0;
 }
 
-/* ─── Map Selector inside sidebar ───────────────────────────────────── */
 #RoomEditorMapSelector {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
@@ -160,7 +147,6 @@
     padding-top: 4px;
 }
 
-/* ─── Material Picker (bottom overlay) ─────────────────────────────── */
 #MatListSelector {
     position: absolute;
     bottom: 0;
@@ -179,7 +165,6 @@
     scrollbar-color: #3f3f4a transparent;
 }
 
-/* ─── Material Grid ─────────────────────────────────────────────────── */
 .material-picker {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
@@ -217,7 +202,6 @@
     box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.4);
 }
 
-/* Optional label that can sit on tiles (used in folder picker) */
 .material-label {
     width: 100%;
     padding: 2px 4px;
@@ -231,7 +215,6 @@
     text-overflow: ellipsis;
 }
 
-/* ─── Tree polish ───────────────────────────────────────────────────── */
 .tree-folder-header {
     justify-content: flex-start;
     gap: 6px;
