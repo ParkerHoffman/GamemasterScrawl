@@ -64,12 +64,22 @@ async function addImages(){
 }
 
 
-function popupNewToken(){
-    popupModal({title: "Create new Token", content: newTokenContent(), closeable: true, onClose: closeModal})
+function popupNewToken(oldToken){
+    popupModal({title: oldToken? "Edit Token" : "Create new Token", content: newTokenContent(oldToken), closeable: true, onClose: closeModal})
 }
 
 
-function newTokenContent() {
+
+function newTokenContent(oldToken) {
+
+    var refToken = null;
+    if(oldToken){
+        
+        refToken = tokenList.filter((e) => e.id === oldToken)[0];
+    }
+    console.log(oldToken, refToken, tokens)
+
+
     const wrapper = document.createElement("div");
 
     //Folder picker
@@ -86,6 +96,10 @@ function newTokenContent() {
 
         tile.style = `background-image: url('/Components/FileMaterials/TokenImages/${token}')`;
 
+        if(refToken && refToken.imgRef && token === refToken.imgRef){
+            selectedImage = token;
+            tile.classList.add("selected");
+        }
 
         tile.addEventListener("click", () => {
 
@@ -105,14 +119,34 @@ function newTokenContent() {
 
 
     const button = document.createElement("button");
-    button.id = "tokenCreationBtn";
-    button.className = "info";
-    button.textContent = "Create Token";
+    const delButton = document.createElement("button");
 
-    button.addEventListener("click", () => createFreshToken())
+    if(refToken){
+        button.id = "tokenEditBtn";
+        button.className = "info";
+        button.textContent = "Edit Token";
+
+        button.addEventListener("click", () => EditToken(refToken.id))
+
+        delButton.id = "tokenDelBtn";
+        delButton.className = "error";
+        delButton.textContent = "Delete Token";
+        delButton.addEventListener("click", () => deleteToken(refToken.id))
+    } else {
+        button.id = "tokenCreationBtn";
+        button.className = "info";
+        button.textContent = "Create Token";
+
+        button.addEventListener("click", () => createFreshToken())
+        delButton.classList.add("hidden");
+    }
+
+
+
     
     //adding 
     wrapper.appendChild(button);
+    wrapper.appendChild(delButton);
 
     const imageHeaderDiv = document.createElement("div");
     //imageHeaderDiv.TEXT_NODE = "Choose Image"
@@ -125,9 +159,50 @@ function newTokenContent() {
 
 }
 
+
+async function EditToken(tokenID){
+        try{
+var success = await appState.connection.invoke("EditToken", tokenID, selectedImage || "", selectedUsers )
+
+    if(success && success === true){
+        closeModal();
+        toastUser("Success", "Edited the Token", "success");
+        selectedImage = "";
+        selectedUsers = [];
+        //Refresh the token list
+        FetchTableInfo();
+    }else {
+        throw new Error();
+    }
+    } catch {
+        toastUser("Error", "Error editing the Token", "error");
+        return false;
+    }
+}
+
+async function deleteToken(tokenID){
+            try{
+        var success = await appState.connection.invoke("DeleteToken", tokenID)
+
+    if(success && success === true){
+        closeModal();
+        toastUser("Success", "Deleted the Token", "success");
+        selectedImage = "";
+        selectedUsers = [];
+        //Refresh the token list
+        FetchTableInfo();
+    }else {
+        throw new Error();
+    }
+    } catch {
+        toastUser("Error", "Error Deleting the Token", "error");
+        return false;
+    }
+}
+
 async function createFreshToken(){
     try{
-var success = await appState.connection.invoke("CreateFreshToken", selectedImage || "", selectedUsers )
+var success = await appState.connection.invoke("    ", selectedImage || "", selectedUsers )
 
     if(success && success === true){
         closeModal();
@@ -159,10 +234,6 @@ UpdateTable();
     
 }
 
-function editToken(ID){
-
-}
-
 function UpdateTable(){
     const displayTableCont = container.querySelector("#UsermanagementTableContainer");
 
@@ -188,9 +259,7 @@ function UpdateTable(){
     //Setting up the listener set for all the buttons
         tokenList.forEach((e) => {
            const editButton = container.querySelector(`#EditButton${e.id}`)
-           editButton.addEventListener("click", () => editToken(e.id))
-
-
+           editButton.addEventListener("click", () => popupNewToken(e.id))
     })
 }
 

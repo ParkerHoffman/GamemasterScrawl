@@ -762,6 +762,61 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
+        public async Task<bool> DeleteToken(int ID)
+        {
+            try
+            {
+                List<StaticToken> tokens = new List<StaticToken>();
+
+                foreach(StaticToken tok in _mapStore.Data.tokenList)
+                {
+                    if(ID != tok.ID)
+                    {
+                        tokens.Add(tok);
+                    }
+                }
+
+                _mapStore.Data.tokenList = tokens.ToArray();
+                await _mapStore.SaveChanges();
+
+                return true;
+            } catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> EditToken(int ID, string image, int[] users)
+        {
+            try
+            {
+                List<StaticToken> tokens = new List<StaticToken>();
+
+                foreach(StaticToken tok in _mapStore.Data.tokenList)
+                {
+                    if(ID == tok.ID)
+                    {
+                        StaticToken newToken = new StaticToken();
+                        newToken.ID = ID;
+                        newToken.imgRef = image;
+                        newToken.usersToManipulate = users;
+                        tokens.Add(newToken);
+                    } else
+                    {
+                        tokens.Add(tok);
+                    }
+                }
+
+                _mapStore.Data.tokenList = tokens.ToArray();
+                await _mapStore.SaveChanges();
+
+                return true;
+            } catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> CreateFreshToken(string image, int[] users)
         {
             try

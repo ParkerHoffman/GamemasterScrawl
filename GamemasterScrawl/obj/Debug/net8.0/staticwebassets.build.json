@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "0la5nX4pWdFpFJT63wqZiKy0a201TYXR1cKXiDjeGeg=",
+  "Hash": "bge1hacPe4gVBK3EPpSyNTn/UjMsR9s/grzjC2QPAaE=",
   "Source": "GamemasterScrawl",
   "BasePath": "_content/GamemasterScrawl",
   "Mode": "Default",
@@ -148,6 +148,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/Components/FileMaterials/Assets/ClickIcon.png"
+    },
+    {
+      "Identity": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Assets/DefaultToken.png",
+      "SourceId": "GamemasterScrawl",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/",
+      "BasePath": "_content/GamemasterScrawl",
+      "RelativePath": "Components/FileMaterials/Assets/DefaultToken.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/Components/FileMaterials/Assets/DefaultToken.png"
     },
     {
       "Identity": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Assets/DeleteIcon.png",

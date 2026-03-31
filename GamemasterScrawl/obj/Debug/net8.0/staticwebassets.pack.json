@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets/Components/FileMaterials/Assets/ClickIcon.png"
     },
     {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Assets/DefaultToken.png",
+      "PackagePath": "staticwebassets/Components/FileMaterials/Assets/DefaultToken.png"
+    },
+    {
       "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/Assets/DeleteIcon.png",
       "PackagePath": "staticwebassets/Components/FileMaterials/Assets/DeleteIcon.png"
     },
