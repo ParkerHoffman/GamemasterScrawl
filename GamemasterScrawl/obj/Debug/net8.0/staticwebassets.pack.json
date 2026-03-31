@@ -77,6 +77,10 @@
       "PackagePath": "staticwebassets/Components/FileMaterials/Materials/Default_Weathered_Tile.jpg"
     },
     {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/TokenImages/060e5418a8f502564e3d0e82953d05228ddbfac2db96c6c96c3ee6df3fc03ebc.jpeg",
+      "PackagePath": "staticwebassets/Components/FileMaterials/TokenImages/060e5418a8f502564e3d0e82953d05228ddbfac2db96c6c96c3ee6df3fc03ebc.jpeg"
+    },
+    {
       "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/TokenImages/Surp_Cat.webp",
       "PackagePath": "staticwebassets/Components/FileMaterials/TokenImages/Surp_Cat.webp"
     },
@@ -101,6 +105,10 @@
       "PackagePath": "staticwebassets/Components/css/mapManagement.css"
     },
     {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/css/tokenEditor.css",
+      "PackagePath": "staticwebassets/Components/css/tokenEditor.css"
+    },
+    {
       "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/css/userManagement.css",
       "PackagePath": "staticwebassets/Components/css/userManagement.css"
     },
@@ -115,6 +123,10 @@
     {
       "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/html/mapManagement.html",
       "PackagePath": "staticwebassets/Components/html/mapManagement.html"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/html/tokenEditor.html",
+      "PackagePath": "staticwebassets/Components/html/tokenEditor.html"
     },
     {
       "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/html/userManagement.html",
@@ -143,6 +155,10 @@
     {
       "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/js/mapManagement.js",
       "PackagePath": "staticwebassets/Components/js/mapManagement.js"
+    },
+    {
+      "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/js/tokenEditor.js",
+      "PackagePath": "staticwebassets/Components/js/tokenEditor.js"
     },
     {
       "Id": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/js/userManagement.js",

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "4FW6kLHYR83mPP0qozeCx1FUDwvRi+4dO8//njd3wHE=",
+  "Hash": "0la5nX4pWdFpFJT63wqZiKy0a201TYXR1cKXiDjeGeg=",
   "Source": "GamemasterScrawl",
   "BasePath": "_content/GamemasterScrawl",
   "Mode": "Default",
@@ -91,6 +91,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/Components/css/mapManagement.css"
+    },
+    {
+      "Identity": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/css/tokenEditor.css",
+      "SourceId": "GamemasterScrawl",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/",
+      "BasePath": "_content/GamemasterScrawl",
+      "RelativePath": "Components/css/tokenEditor.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/Components/css/tokenEditor.css"
     },
     {
       "Identity": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/css/userManagement.css",
@@ -473,6 +492,25 @@
       "OriginalItemSpec": "wwwroot/Components/FileMaterials/Materials/Default_Weathered_Tile.jpg"
     },
     {
+      "Identity": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/TokenImages/060e5418a8f502564e3d0e82953d05228ddbfac2db96c6c96c3ee6df3fc03ebc.jpeg",
+      "SourceId": "GamemasterScrawl",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/",
+      "BasePath": "_content/GamemasterScrawl",
+      "RelativePath": "Components/FileMaterials/TokenImages/060e5418a8f502564e3d0e82953d05228ddbfac2db96c6c96c3ee6df3fc03ebc.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/Components/FileMaterials/TokenImages/060e5418a8f502564e3d0e82953d05228ddbfac2db96c6c96c3ee6df3fc03ebc.jpeg"
+    },
+    {
       "Identity": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/FileMaterials/TokenImages/creepy-cat.webp",
       "SourceId": "GamemasterScrawl",
       "SourceType": "Discovered",
@@ -585,6 +623,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/Components/html/mapManagement.html"
+    },
+    {
+      "Identity": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/html/tokenEditor.html",
+      "SourceId": "GamemasterScrawl",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/",
+      "BasePath": "_content/GamemasterScrawl",
+      "RelativePath": "Components/html/tokenEditor.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/Components/html/tokenEditor.html"
     },
     {
       "Identity": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/html/userManagement.html",
@@ -718,6 +775,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/Components/js/mapManagement.js"
+    },
+    {
+      "Identity": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/js/tokenEditor.js",
+      "SourceId": "GamemasterScrawl",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/",
+      "BasePath": "_content/GamemasterScrawl",
+      "RelativePath": "Components/js/tokenEditor.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/Components/js/tokenEditor.js"
     },
     {
       "Identity": "/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/wwwroot/Components/js/userManagement.js",

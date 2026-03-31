@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Security.Principal;
 
 
 
@@ -174,6 +175,11 @@ private readonly IHostApplicationLifetime _appLifetime;
             //Return the array of usernames
             return tempList.ToArray();
 
+        }
+
+        public async Task<StaticToken[]> GetFullTokenList()
+        {
+            return _mapStore.Data.tokenList;
         }
 
 
@@ -719,6 +725,18 @@ private readonly IHostApplicationLifetime _appLifetime;
             return Directory.GetFiles(MatDir).Select(Path.GetFileName).ToArray();
         }
 
+
+        public async Task<string?[]> GetMasterTokenList()
+        {
+            var TokenDir = Path.Combine(
+            _env.WebRootPath,
+            "Components",
+            "FileMaterials",
+            "TokenImages"
+            );
+            return Directory.GetFiles(TokenDir).Select(Path.GetFileName).ToArray();
+        }
+
         public async Task<bool> DeleteRoom(int ID)
         {
             try
@@ -739,6 +757,41 @@ private readonly IHostApplicationLifetime _appLifetime;
                 await _mapStore.SaveChanges();
                 return true;
             } catch(Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> CreateFreshToken(string image, int[] users)
+        {
+            try
+            {
+                StaticToken newToken = new StaticToken();
+
+                newToken.imgRef = image;
+                newToken.usersToManipulate = users;
+
+                int newId = 1;
+
+                foreach(StaticToken tok in _mapStore.Data.tokenList)
+                {
+                    if(tok.ID >= newId)
+                    {
+                        newId = tok.ID + 1;
+                    }
+                }
+
+                newToken.ID = newId;
+
+                List<StaticToken> tokens = new List<StaticToken>();
+                tokens.AddRange(_mapStore.Data.tokenList);
+                tokens.Add(newToken);
+
+                _mapStore.Data.tokenList = tokens.ToArray();
+                await _mapStore.SaveChanges();
+
+                return true;
+            } catch (Exception)
             {
                 return false;
             }
