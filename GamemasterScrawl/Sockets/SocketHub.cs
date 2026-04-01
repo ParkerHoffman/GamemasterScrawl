@@ -846,8 +846,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 await _mapStore.SaveChanges();
 
                 return true;
-            } catch (Exception)
-            {
+            } catch (Exception){
                 return false;
             }
         }

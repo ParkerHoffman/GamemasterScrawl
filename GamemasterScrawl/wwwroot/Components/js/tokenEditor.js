@@ -141,15 +141,12 @@ function newTokenContent(oldToken) {
         delButton.classList.add("hidden");
     }
 
-
-
-    
     //adding 
     wrapper.appendChild(button);
     wrapper.appendChild(delButton);
 
     const imageHeaderDiv = document.createElement("div");
-    //imageHeaderDiv.TEXT_NODE = "Choose Image"
+    imageHeaderDiv.textContent = "Choose Image"
 
     wrapper.appendChild(imageHeaderDiv)
     wrapper.appendChild(mpicker)
@@ -202,7 +199,7 @@ async function deleteToken(tokenID){
 
 async function createFreshToken(){
     try{
-var success = await appState.connection.invoke("    ", selectedImage || "", selectedUsers )
+var success = await appState.connection.invoke("CreateFreshToken", selectedImage || "", selectedUsers )
 
     if(success && success === true){
         closeModal();
