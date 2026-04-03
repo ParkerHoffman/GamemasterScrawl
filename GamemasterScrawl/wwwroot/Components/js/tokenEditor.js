@@ -76,8 +76,8 @@ function newTokenContent(oldToken) {
     if(oldToken){
         
         refToken = tokenList.filter((e) => e.id === oldToken)[0];
+        selectedUsers = refToken.usersToManipulate;
     }
-    console.log(oldToken, refToken, tokens)
 
 
     const wrapper = document.createElement("div");
@@ -116,7 +116,33 @@ function newTokenContent(oldToken) {
     })
 
 
+    const userSelector = document.createElement("div");
+    userSelector.className = "material-picker";
 
+    userList.forEach((person) => {
+         const tile = document.createElement("div");
+        tile.className = "material-tile";
+        tile.dataset.id = person.id;
+        tile.textContent = person.username;
+
+        if(refToken && refToken.usersToManipulate && refToken.usersToManipulate.includes(person.id)){
+            //selectedImage = token;
+            tile.classList.add("selected");
+        }
+
+        tile.addEventListener("click", () => {
+            if(selectedUsers.includes(person.id)){
+                tile.classList.remove("selected");
+                selectedUsers = selectedUsers.filter((e) => e !==  person.id);
+
+            } else {
+                tile.classList.add("selected");
+                selectedUsers = [...selectedUsers, person.id]
+            }
+        });
+
+        userSelector.appendChild(tile);
+    })
 
     const button = document.createElement("button");
     const delButton = document.createElement("button");
@@ -150,10 +176,9 @@ function newTokenContent(oldToken) {
 
     wrapper.appendChild(imageHeaderDiv)
     wrapper.appendChild(mpicker)
+    wrapper.appendChild(userSelector)
 
     return wrapper;
-
-
 }
 
 
@@ -247,7 +272,19 @@ function UpdateTable(){
         }
 
 
-       innerString += `<tr><td>${e.id}</td><td><div class="img-card-media" style="background-image: url('${imageLocal}')"></div></td><td><button id="EditButton${e.id}">Edit</button></td><td>`
+       innerString += `<tr><td>${e.id}</td><td><div class="img-card-media" style="background-image: url('${imageLocal}')"></div></td><td>`
+
+       if(e.usersToManipulate.length === 0){
+            innerString +="<div>No users selected</div>"
+       } else {
+            e.usersToManipulate.forEach(person => {
+                var user = userList.filter((x) => x.id === person);
+
+                innerString += `<div>${user[0]?.username}</div>`
+            })
+       }
+       
+       innerString += `</td><td><button id="EditButton${e.id}">Edit</button></td><td>`
     })
 
     innerString += "</table>";
