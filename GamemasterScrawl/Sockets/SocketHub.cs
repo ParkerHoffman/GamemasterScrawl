@@ -41,6 +41,7 @@ private readonly IHostApplicationLifetime _appLifetime;
             _appLifetime = _lifetime;
             _mapStore = tempMap;
             _env = env;
+            Console.WriteLine(tempMap.Data.activeRoom);
         }
 
         /// <summary>
@@ -594,23 +595,7 @@ private readonly IHostApplicationLifetime _appLifetime;
         /// </summary>
         /// <returns>Null if not allowed/Error, map system if allowed</returns>
         public async Task<MapSystem?> GetMapList(){
-             try
-            {
-            bool? perms = await CheckIfHost();
-            //Check the perms of the user. Deny if not allowed
-            if(perms != true)
-            {
-                throw new Exception("");
-            }
-
-
             return _mapStore.Data;
-
-            }catch(Exception)
-            {
-                await toastUser("Error", "There was an error getting the map list", "error", Context.ConnectionId);
-                return null;
-            }
         }
 
         /// <summary>
@@ -849,6 +834,14 @@ private readonly IHostApplicationLifetime _appLifetime;
             } catch (Exception){
                 return false;
             }
+        }
+
+        public async Task ChangeActiveRoom(int id)
+        {
+            _mapStore.Data.activeRoom = id;
+            await Clients.All.SendAsync("SelectFreshGlobalRoom", id);
+
+            await _mapStore.SaveChanges();
         }
 
 

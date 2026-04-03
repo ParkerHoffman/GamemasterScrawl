@@ -855,7 +855,7 @@ DeselectBlock();
         }
        
     })
-    renderRoom(scene, item);
+    
 }
 
 

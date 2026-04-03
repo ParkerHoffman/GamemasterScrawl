@@ -29,6 +29,7 @@ C:/Users/parkh/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/obj/Debug/net8
 C:/Users/parkh/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.genruntimeconfig.cache
 C:/Users/parkh/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/obj/Debug/net8.0/ref/GamemasterScrawl.dll
 /home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/bin/Debug/net8.0/App_Data/login.json
+/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/bin/Debug/net8.0/App_Data/Map.json
 /home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/bin/Debug/net8.0/GamemasterScrawl.staticwebassets.runtime.json
 /home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/bin/Debug/net8.0/GamemasterScrawl
 /home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/bin/Debug/net8.0/GamemasterScrawl.deps.json
@@ -54,4 +55,3 @@ C:/Users/parkh/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/obj/Debug/net8
 /home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.pdb
 /home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/obj/Debug/net8.0/GamemasterScrawl.genruntimeconfig.cache
 /home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/obj/Debug/net8.0/ref/GamemasterScrawl.dll
-/home/xpc/Documents/GitHub/GamemasterScrawl/GamemasterScrawl/bin/Debug/net8.0/App_Data/Map.json

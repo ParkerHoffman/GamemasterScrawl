@@ -26,6 +26,7 @@ namespace GamemasterScrawl
                 Data = JsonSerializer.Deserialize<T>(json) ?? new T();
             } else
             {
+                Console.WriteLine(fileEnd + " doesn't exist");
                 Data = new T();
                 SaveChanges().GetAwaiter().GetResult();
             }
