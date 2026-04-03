@@ -969,7 +969,7 @@ function renderTree( data, onSelect, comp){
         arrow.className = "tree-folder-arrow";
 
         //Handles the specific arrow state
-        arrow.textContent = folder.expanded ? "▼" : "▶";
+        arrow.textContent = folder.expanded ? "\/" : ">";
 
         const label = document.createElement("span")
         label.textContent = folder.mapName;
@@ -1026,7 +1026,7 @@ function renderTree( data, onSelect, comp){
             //Update the bool
             folder.expanded = !folder.expanded;
             //Update the arrow
-            arrow.textContent = folder.expanded ? "▼" : "▶";
+            arrow.textContent = folder.expanded ? "\/" : ">";
             //Update child display
             childrenDiv.style.display = folder.expanded ? "block" : "none";
         });

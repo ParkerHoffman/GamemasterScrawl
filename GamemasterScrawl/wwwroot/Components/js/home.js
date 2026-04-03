@@ -32,6 +32,7 @@ var mapList = [];
 
 var appState = null;
 var container = null;
+var currentActiveRoom = null;
 
 export async function init(cont, app){
         appState = app;
@@ -40,10 +41,11 @@ export async function init(cont, app){
             Generate3DSpace(container, "#Space3D", appState, renderer, camera, scene, controls);
 
         var map = await appState.connection.invoke("GetMapList");
-        var currentActiveRoom = await appState.connection.invoke("GetGlobalActiveRoom");
-        ChangeRoomGlobal(currentActiveRoom, map.maplist)
-        mapList = map.maplist;
+        currentActiveRoom = await appState.connection.invoke("GetGlobalActiveRoom");
 
+        mapList = map.roomList;
+
+        ChangeRoomGlobal(currentActiveRoom)
 //If user is the host
 if(appState.isHost == true){
     //The holder for the UM Navigator Button
@@ -77,7 +79,7 @@ if(appState.isHost == true){
     usrlogOutBtn.addEventListener("click", async () => {logUsrOut(appState)});
 
 
-    appState.connection.on("SelectFreshGlobalRoom", (id) => ChangeRoomGlobal(id, mapList))
+    appState.connection.on("SelectFreshGlobalRoom", (id) => ChangeRoomGlobal(id))
 }
 }
 
@@ -94,8 +96,13 @@ async function logUsrOut(appState){
     
 }
 
-function ChangeRoomGlobal(id, map){
-    console.log(id, map)
+function ChangeRoomGlobal(id){
+    currentActiveRoom = id;
+    var currentRoom = mapList.filter((e) => e.id === id);
+    console.log(currentRoom, id)
+    if(currentRoom && currentRoom[0]){
+        renderRoom(scene, currentRoom[0], true)
+    }
 }
 
 
@@ -122,7 +129,7 @@ function renderFolderTree( data, onSelect, comp){
         arrow.className = "tree-folder-arrow";
 
         //Handles the specific arrow state
-        arrow.textContent = folder.expanded ? "▼" : "▶";
+        arrow.textContent = folder.expanded || folder.id === currentActiveRoom ? "X" : "";
 
         const label = document.createElement("span")
         label.textContent = folder.mapName;
@@ -130,40 +137,31 @@ function renderFolderTree( data, onSelect, comp){
         header.appendChild(arrow);
         header.appendChild(label);
 
-        //Now we deal with the children
-
-        const childrenDiv = document.createElement("div");
-        childrenDiv.className = "tree-children";
-        childrenDiv.style.display = folder.expanded ? "block" : "none";
-
-        folder.children?.forEach(child => {
-            const childItem = document.createElement("div");
-            childItem.className = "tree-item";
-            childItem.textContent = child.nickname;
-
-
-            childItem.addEventListener("click", e => {
-                e.stopPropagation();
-                onSelect(child);
-            });
-
-            childrenDiv.appendChild(childItem);
-        });
-
 
         //Deal with expanding the rows
         header.addEventListener("click", () => {
             //Update the bool
             folder.expanded = !folder.expanded;
-            //Update the arrow
-            arrow.textContent = folder.expanded ? "▼" : "▶";
-            //Update child display
-            childrenDiv.style.display = folder.expanded ? "block" : "none";
+            //Update the notifier
+            arrow.textContent = folder.expanded || folder.id === currentActiveRoom ? "X" : "";
+
+            updateActiveRoomGlobal(folder.id, true);
         });
 
         folderDiv.appendChild(header);
-        folderDiv.appendChild(childrenDiv);
         cont.appendChild(folderDiv)
 
     });
+}
+
+
+async function updateActiveRoomGlobal(roomID, tellClients){
+    ChangeRoomGlobal(roomID);
+    if(tellClients){
+        var success = await appState.connection.invoke("ChangeActiveRoom", roomID);
+
+        if(success !== true){
+            toastUser("Error", "There was an error telling clients to change rooms", "error")
+        }
+    }
 }

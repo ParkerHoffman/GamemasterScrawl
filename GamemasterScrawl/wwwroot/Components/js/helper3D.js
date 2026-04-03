@@ -78,7 +78,7 @@ export function clearScene(scene){
 }
 
 
-export function renderRoom(scene, room, roomList){
+export function renderRoom(scene, room, doTokens){
     clearScene(scene);
 
     const maxDims = getRoomBounds(room);
@@ -114,6 +114,10 @@ export function renderRoom(scene, room, roomList){
 
 
     })
+
+    if(doTokens){
+        console.log("I was supposed to do tokens but I'm too stupid")
+    }
         
 }
 

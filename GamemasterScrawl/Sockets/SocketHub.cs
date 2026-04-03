@@ -41,7 +41,6 @@ private readonly IHostApplicationLifetime _appLifetime;
             _appLifetime = _lifetime;
             _mapStore = tempMap;
             _env = env;
-            Console.WriteLine(tempMap.Data.activeRoom);
         }
 
         /// <summary>
@@ -836,12 +835,27 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
-        public async Task ChangeActiveRoom(int id)
+        public async Task<bool> ChangeActiveRoom(int id)
         {
-            _mapStore.Data.activeRoom = id;
+            if(await CheckIfHost() != true)
+            {
+                return false; 
+            }
+
+            try
+            {
+                           _mapStore.Data.activeRoom = id;
             await Clients.All.SendAsync("SelectFreshGlobalRoom", id);
 
             await _mapStore.SaveChanges();
+
+            return true; 
+            } catch (Exception)
+            {
+                return false;
+            }
+
+
         }
 
 
