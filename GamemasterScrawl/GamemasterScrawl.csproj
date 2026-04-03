@@ -8,5 +8,8 @@
     <Content Update="App_Data\Map.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+        <Content Update="App_Data\login.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
