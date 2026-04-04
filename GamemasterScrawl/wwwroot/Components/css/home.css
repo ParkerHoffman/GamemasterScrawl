@@ -1,0 +1,68 @@
+
+#sidebar-tabs {
+    display: flex;
+    flex-shrink: 0;
+    border-bottom: 1px solid #2f2f3a;
+    background: rgba(255,255,255,0.02);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 10px 4px;
+
+    background: transparent;
+    color: #555;
+
+    border: none;
+    border-bottom: 2px solid transparent;
+
+    font-size: 10px;
+    font-family: inherit;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.tab-btn:hover {
+    color: #aaa;
+    background: rgba(255,255,255,0.03);
+}
+
+.tab-btn.active {
+    color: #3688f4;
+    border-bottom-color: #3688f4;
+    background: transparent;
+}
+
+.tab-pane {
+    display: none;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: #3f3f4a transparent;
+}
+
+.tab-pane.active {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #2f2f3a;
+    margin-bottom: 4px;
+}
+
+.sidebar-actions button {
+    flex: 1;
+    min-width: 80px;
+}

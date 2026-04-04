@@ -1,8 +1,48 @@
 
 <div>
-    <div id="userManagementHolder"></div>
-    <div id="LogoutButtonHolder"></div>
+    <div id="HeaderButtonHolder"></div>
 </div>
+
+<div id="sidebar">
+        <!--The sidebar navigation-->
+        <div id="sidebar-tabs">
+            <button class="tab-btn" data-tab="rooms">Rooms</button>
+            <button class="tab-btn" data-tab="AddTokens">Add Tokens</button>
+            <button class="tab-btn active" data-tab="ChooseTokens">Active Tokens</button>
+            <button class="tab-btn" data-tab="TokenProps">Token Properties</button>
+        </div>
+
+        <!--The initial tab (Room Selection)-->
+        <div id="tab-rooms" class="tab-pane">
+            <div class="sidebar-actions">
+                <button id="openMapManagement" class="info">Map Editor</button>
+            </div>
+            <div id="MapTreeRoot" class="tree-root"></div>
+        </div>
+
+        <!--Token Addition Pane-->
+        <div id="tab-AddTokens" class="tab-pane">
+            <div id="TokenAdditionPane">
+                <button id="openTokenManagement" class="info">Token Editor</button>
+                <div class="hide-element" id="TokenAdditionSelector"></div>
+            </div>
+        </div>
+
+        <!--Active Token Selector Pane-->
+        <div id="tab-ChooseTokens" class="tab-pane">
+            <div id="TokenChooserPane">
+            </div>
+        </div>
+
+        <!--Block Properties Pane-->
+        <div id="tab-TokenProps" class="tab-pane">
+            <div id="TokenPropertiesPane">
+            </div>
+        </div>
+
+
+
+    </div>
 <div id="SpecialInteractables"></div>
 <div id="Space3D" class="cube-background"></div>
 

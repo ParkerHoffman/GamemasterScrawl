@@ -38,7 +38,7 @@ export async function init(cont, app){
         appState = app;
         container = cont;
 
-            Generate3DSpace(container, "#Space3D", appState, renderer, camera, scene, controls);
+        await Generate3DSpace(container, "#Space3D", appState, renderer, camera, scene, controls);
 
         var map = await appState.connection.invoke("GetMapList");
         currentActiveRoom = await appState.connection.invoke("GetGlobalActiveRoom");
@@ -49,9 +49,9 @@ export async function init(cont, app){
 //If user is the host
 if(appState.isHost == true){
     //The holder for the UM Navigator Button
-    const manageBtn = container.querySelector("#userManagementHolder");
+    const manageBtn = container.querySelector("#HeaderButtonHolder");
 
-    manageBtn.innerHTML = "<button id=\"openUserManagement\" class=\"info\">User Management</button><button id=\"openMapManagement\" class=\"info\">Map Editor</button><button id=\"openTokenManagement\" class=\"info\">Token Editor</button>";
+    manageBtn.innerHTML = "<button id=\"openUserManagement\" class=\"info\">User Management</button>";
     //The button itself
     const usrMangBtn = container.querySelector("#openUserManagement");
   
@@ -70,7 +70,7 @@ if(appState.isHost == true){
     renderFolderTree(mapList, onSelect, "#SpecialInteractables");
     
 } else {
-    const logOutBtn = container.querySelector("#LogoutButtonHolder");
+    const logOutBtn = container.querySelector("#HeaderButtonHolder");
 
         logOutBtn.innerHTML = "<button id=\"UserRequestsLogOut\" class=\"info\">Log Out</button>";
     //The button itself
@@ -96,13 +96,21 @@ async function logUsrOut(appState){
     
 }
 
-function ChangeRoomGlobal(id){
+function ChangeRoomGlobal(id, map){
     currentActiveRoom = id;
-    var currentRoom = mapList.filter((e) => e.id === id);
-    console.log(currentRoom, id)
+    var currentRoom;
+    if(map){
+        currentRoom = map.filter((e) => e.id === id);
+    } else {
+        currentRoom = mapList.filter((e) => e.id === id);
+    }
+    
     if(currentRoom && currentRoom[0]){
         renderRoom(scene, currentRoom[0], true)
+    } else {
+
     }
+    
 }
 
 
@@ -130,6 +138,8 @@ function renderFolderTree( data, onSelect, comp){
 
         //Handles the specific arrow state
         arrow.textContent = folder.expanded || folder.id === currentActiveRoom ? "X" : "";
+        arrow.classList.add("ActiveMapOption");
+        arrow.dataset.id = folder.id
 
         const label = document.createElement("span")
         label.textContent = folder.mapName;
@@ -138,15 +148,12 @@ function renderFolderTree( data, onSelect, comp){
         header.appendChild(label);
 
 
-        //Deal with expanding the rows
-        header.addEventListener("click", () => {
-            //Update the bool
-            folder.expanded = !folder.expanded;
-            //Update the notifier
-            arrow.textContent = folder.expanded || folder.id === currentActiveRoom ? "X" : "";
+header.addEventListener("click", () => {
+container.querySelectorAll(".ActiveMapOption").forEach(a => a.textContent = "");
 
-            updateActiveRoomGlobal(folder.id, true);
-        });
+    arrow.textContent = "X";
+    updateActiveRoomGlobal(folder.id, true);
+});
 
         folderDiv.appendChild(header);
         cont.appendChild(folderDiv)
@@ -164,4 +171,18 @@ async function updateActiveRoomGlobal(roomID, tellClients){
             toastUser("Error", "There was an error telling clients to change rooms", "error")
         }
     }
+}
+
+
+function setUpSidebarTabs(){
+    const tabs = container.querySelectorAll(".tab-btn");
+ 
+    tabs.forEach(btn => {
+        btn.addEventListener("click", () => {
+            tabs.forEach(t => t.classList.remove("active"));
+            container.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
+            btn.classList.add("active");
+            container.querySelector(`#tab-${btn.dataset.tab}`).classList.add("active");
+        })
+    })
 }
