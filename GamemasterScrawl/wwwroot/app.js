@@ -14,6 +14,8 @@ var sceneSet = new Set();
 
 var activeRoom = null;
 
+var user = null;
+
 //This function checks if the user is the host
 export function CheckAmIHost(){
     return isHost;
@@ -24,7 +26,8 @@ export const appState = {
     isHost: false,
     connection: connection,
     sceneSet: sceneSet,
-    activeRoom: activeRoom
+    activeRoom: activeRoom,
+    user: user,
 }
 
 //Set the reference to the global state

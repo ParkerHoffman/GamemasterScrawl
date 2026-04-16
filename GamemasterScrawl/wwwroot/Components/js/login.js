@@ -109,9 +109,11 @@ async function ValidateCreds(container, appState){
     //Tell the server the login creds for it to do it's magic
     var success = await appState.connection.invoke("UserLogin", user, newPass);
 
-    if(success === true){
+    if(success !== -1){
         //Tell the user the good news
-        toastUser("Success", `Successfully logged in as ${user}`, 'success')
+        toastUser("Success", `Successfully logged in as ${user}`, 'success');
+
+        appState.user = success;
         //Send the user home, into the app
         loadComponent("home");
     } else {
@@ -222,8 +224,6 @@ function animate() {
     camera.position.z += holdingZMove ;
     cube.rotation.x += 0.01 * randomXChng;
     cube.rotation.y += 0.01 * randomYChng;
-
-
 
     renderer.render(scene, camera);
 }

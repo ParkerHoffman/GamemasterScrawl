@@ -11,7 +11,10 @@ namespace GamemasterScrawl
     {
         public int ID {get; set;} = 0;
         public StaticToken? TokenRef {get; set;}
-        public (int, int, int) Coords {get; set;} = (0,0,0);
+        public int x {get; set;} = 0;
+        public int y {get; set;} = 0;
+        public int z {get; set;} = 0;
+
         public int[] additionalEditors {get; set;} = [];
     }
 }

@@ -66,3 +66,23 @@
     flex: 1;
     min-width: 80px;
 }
+
+.hide-element {
+    display: none;
+}
+
+.img-card-media {
+    display: inline-block; 
+    width: 120px;           
+    height: 80px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 4px;
+}
+
+.ActiveTokenOption {
+    border: 1px solid;
+    border-color: #4CAF50;
+    border-radius: 5px;
+}

@@ -204,8 +204,8 @@ private readonly IHostApplicationLifetime _appLifetime;
     /// </summary>
     /// <param name="user">username selected</param>
     /// <param name="password">Hashed password from client</param>
-    /// <returns>Bool of success</returns>
-    public async Task<bool> UserLogin(string username, string password)
+    /// <returns>UserID</returns>
+    public async Task<int> UserLogin(string username, string password)
         {
             try
             {
@@ -237,7 +237,7 @@ private readonly IHostApplicationLifetime _appLifetime;
                 if(user == null)
                 {
                     //Tell the user those creds don't work (or another user is using them)
-                    return false;
+                    return -1;
                 }
 
                 //log that this user is verified
@@ -256,11 +256,11 @@ private readonly IHostApplicationLifetime _appLifetime;
                 
                 await toastAllUsers("Hello!", username + " just signed in. Hello " + username + '!', "info");
 
-                return true;
+                return user.ID;
             
             } catch(Exception)
             {
-                return false;
+                return -1;
             }
 
         }
@@ -588,6 +588,90 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
+        public async Task<bool> CreateNewTokenInstance(int currentActiveRoom, int selectedToken, int x, int y, int z)
+        {
+            try
+            {
+
+                List<Room3D> newRooms = new List<Room3D>();
+                StaticToken? refTok = null;
+
+                foreach(StaticToken tok in _mapStore.Data.tokenList)
+                {
+                    if(tok.ID == selectedToken)
+                    {
+                        refTok = tok;
+                    }
+                }
+
+                //Ensure a reference token exists
+                if(refTok == null)
+                {
+                    return false;
+                }
+
+                ActiveToken newTok = new ActiveToken();
+                newTok.x = x;
+                newTok.y = y;
+                newTok.z = z;
+                newTok.TokenRef = refTok;
+
+
+                foreach(Room3D room in _mapStore.Data.roomList)
+                {
+                    if(room.ID == currentActiveRoom)
+                    {
+                        List<ActiveToken> tokenList = new List<ActiveToken>();
+                        tokenList.AddRange(room.tokens);
+
+                        int newId = 1;
+
+                        foreach(ActiveToken actTok in tokenList)
+                        {
+                            if(newId <= actTok.ID)
+                            {
+                                newId = actTok.ID + 1;
+                            }
+                        }
+
+                        newTok.ID = newId;
+
+                        tokenList.Add(newTok);
+                        room.tokens = tokenList.ToArray();
+                    }
+
+                    newRooms.Add(room);
+                }
+
+
+                _mapStore.Data.roomList = newRooms.ToArray();
+                await _mapStore.SaveChanges();
+
+
+                await Clients.All.SendAsync("RefreshRoom", currentActiveRoom);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<Room3D?> ReloadRoom(int ID)
+        {
+            Room3D? rroom = null;
+
+            foreach(Room3D room in _mapStore.Data.roomList)
+            {
+                if(ID == room.ID)
+                {
+                    rroom = room;
+                }
+            }
+
+            return rroom;
+        }
+
 
         /// <summary>
         /// This returns a full lsit of the map system
@@ -856,6 +940,40 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
 
 
+        }
+
+        public async Task<bool> MoveTokenInstance(int roomId, int tokenId, int x, int y, int z)
+        {
+            List<Room3D> rooms = new List<Room3D>();
+
+            foreach(Room3D room in _mapStore.Data.roomList)
+            {
+                if(room.ID == roomId)
+                {
+                    List<ActiveToken> tokens = new List<ActiveToken>();
+                    foreach(ActiveToken tok in room.tokens)
+                    {
+                        if(tok.ID == tokenId)
+                        {
+                            tok.x = x;
+                            tok.y = y;
+                            tok.z = z;
+                        }
+
+                        tokens.Add(tok);
+                    }
+
+                    room.tokens = tokens.ToArray();
+                }
+
+                rooms.Add(room);
+            }
+
+            _mapStore.Data.roomList = rooms.ToArray();
+            await _mapStore.SaveChanges();
+
+            await Clients.All.SendAsync("TokenMoved", roomId, tokenId, x, y, z);
+            return true;
         }
 
 

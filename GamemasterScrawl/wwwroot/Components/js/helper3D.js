@@ -19,6 +19,32 @@ export function getTokenImage(ref){
 
 }
 
+function createVisibleToken(token){
+        const imgPath = token.tokenRef?.imgRef
+        ? `/Components/FileMaterials/TokenImages/${token.tokenRef.imgRef}`
+        : "/Components/FileMaterials/Assets/DefaultToken.png";
+
+        const texture = loader.load(imgPath);
+
+        const geometry = new THREE.CircleGeometry(0.5, 32);
+    const material = new THREE.MeshBasicMaterial({ 
+        map: texture,
+        side: THREE.DoubleSide
+    });
+
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(token.x, token.y, token.z);
+
+    mesh.onBeforeRender = (renderer, scene, camera) => {
+        mesh.quaternion.copy(camera.quaternion);
+    };
+
+    mesh.userData.id = token.id;
+    mesh.renderOrder = 999;
+
+    return mesh;
+}
+
 export function createSpecialBlock(block){
             const geometry = new THREE.TorusKnotGeometry( .3, .02, 64, 8 , generateRandomNumber(1, 21), generateRandomNumber(1, 21))
             const material = new THREE.MeshBasicMaterial( { color: block.material } );
@@ -60,10 +86,16 @@ export function make3DBlock(imgRef, moreArgs){
     const cube = new THREE.Mesh(geometry, material);
 
     const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
-    cube.add(edgeLines);
+    if(imgRef !== null)
+    {
+            cube.add(edgeLines);
+    }
+
 
     return cube;
 }
+
+
 
 export function generateRandomNumber(min, max){
     return Math.floor(Math.random() * (max - min) + min);
@@ -116,9 +148,23 @@ export function renderRoom(scene, room, doTokens){
     })
 
     if(doTokens){
-        console.log("I was supposed to do tokens but I'm too stupid")
+            room.tokens.forEach((token) => {
+                const tokenCover = make3DBlock(null);
+
+                tokenCover.position.x = token.x;
+                tokenCover.position.y = token.y;
+                tokenCover.position.z = token.z;
+
+                tokenCover.userData.id = token.id;
+
+                const tokenObject =  createVisibleToken(token);
+                
+                scene.add(tokenObject);
+                scene.add(tokenCover)
+
+
+            })
     }
-        
 }
 
 
