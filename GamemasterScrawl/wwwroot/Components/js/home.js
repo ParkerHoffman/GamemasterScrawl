@@ -104,7 +104,35 @@ setUpSidebarTabs();
 
 createGhostCube();
 
-appState.connection.on("RefreshRoom", (newID) => refreshMap(newID))
+    appState.connection.on("RefreshRoom", (newID) => refreshMap(newID));
+
+
+
+
+appState.connection.on("TokenMoved", (roomId, tokenId, x, y, z) => {
+    // Update local data
+    const room = mapList.find(r => r.id === roomId);
+    if (room) {
+        const token = room.tokens.find(t => t.id === tokenId);
+        if (token) {
+            token.x = x;
+            token.y = y;
+            token.z = z;
+        }
+    }
+
+    // If this is the active room, re-render
+    if (roomId === currentActiveRoom) {
+        const currentRoom = mapList.find(r => r.id === roomId);
+        renderRoom(scene, currentRoom, true);
+        // Reapply selection ring if this was the active token
+        if (tokenId === activeToken) {
+            setTokenSelected(tokenId, true);
+        }
+    }
+});
+
+
 }
 
 //Logs the user out
