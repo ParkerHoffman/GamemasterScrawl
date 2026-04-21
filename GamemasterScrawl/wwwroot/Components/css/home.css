@@ -1,3 +1,47 @@
+body {
+    color: #c8c8d4;
+    overflow: hidden;
+}
+
+#Space3D {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+}
+
+#Space3D canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#HeaderButtonHolder {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 100;
+    display: flex;
+    gap: 8px;
+}
+
+#sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100%;
+    z-index: 20;
+
+    background: rgba(22, 22, 28, 0.92);
+    backdrop-filter: blur(8px);
+    border-left: 1px solid #2f2f3a;
+
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
 
 #sidebar-tabs {
     display: flex;
@@ -9,19 +53,14 @@
 .tab-btn {
     flex: 1;
     padding: 10px 4px;
-
     background: transparent;
     color: #555;
-
     border: none;
     border-bottom: 2px solid transparent;
-
     font-size: 10px;
-    font-family: inherit;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-
     cursor: pointer;
     transition: color 0.2s, border-color 0.2s, background 0.2s;
 }
@@ -57,7 +96,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    padding-bottom: 4px;
+    padding-bottom: 8px;
     border-bottom: 1px solid #2f2f3a;
     margin-bottom: 4px;
 }
@@ -67,13 +106,9 @@
     min-width: 80px;
 }
 
-.hide-element {
-    display: none;
-}
-
 .img-card-media {
-    display: inline-block; 
-    width: 120px;           
+    display: inline-block;
+    width: 120px;
     height: 80px;
     background-size: contain;
     background-repeat: no-repeat;
@@ -81,8 +116,59 @@
     border-radius: 4px;
 }
 
+#TokenAdditionSelector,
+#TokenChooserPane {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+    padding-top: 4px;
+}
+
+.tree-folder {
+    border: 2px solid transparent;
+    border-radius: 6px;
+    transition: border-color 0.15s;
+    cursor: pointer;
+}
+
+.tree-folder:hover {
+    border-color: #3f3f4a;
+}
+
+.tree-folder-header {
+    display: flex;
+    align-items: center;
+    padding: 6px;
+    border-radius: 4px;
+}
+
 .ActiveTokenOption {
-    border: 1px solid;
     border-color: #4CAF50;
-    border-radius: 5px;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.25);
+}
+
+#SpecialInteractables {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+#SpecialInteractables .tree-folder-header {
+    font-size: 0.8rem;
+    color: #aaa;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+#SpecialInteractables .tree-folder-header:hover{
+    color: #f0f0f5;
+    background: rgba(255,255,255,0.04);
+}
+
+.hide-element {
+    display: none !important;
+}
+
+.selected {
+    border: 1px solid #4CAF50;
 }

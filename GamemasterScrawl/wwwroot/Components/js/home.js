@@ -206,25 +206,22 @@ function renderFolderTree( data, comp){
         header.textContent = folder.nickname;
 
 
-        const arrow = document.createElement("span")
-        arrow.className = "tree-folder-arrow";
-
         //Handles the specific arrow state
-        arrow.textContent = folder.expanded || folder.id === currentActiveRoom ? "X" : "";
-        arrow.classList.add("ActiveMapOption");
-        arrow.dataset.id = folder.id
+        if(folder.expanded || folder.id === currentActiveRoom){
+            folderDiv.classList.add("selected")
+        }
+        folderDiv.classList.add("ActiveMapOption");
 
         const label = document.createElement("span")
         label.textContent = folder.mapName;
 
-        header.appendChild(arrow);
         header.appendChild(label);
 
 
 header.addEventListener("click", () => {
-container.querySelectorAll(".ActiveMapOption").forEach(a => a.textContent = "");
+container.querySelectorAll(".ActiveMapOption").forEach(a => a.classList.remove("selected"));
 
-    arrow.textContent = "X";
+    folderDiv.classList.add("selected")
     updateActiveRoomGlobal(folder.id, true);
 });
 
