@@ -160,11 +160,15 @@ body {
     letter-spacing: 0.04em;
 }
 
-#SpecialInteractables .tree-folder-header:hover {
+#SpecialInteractables .tree-folder-header:hover{
     color: #f0f0f5;
     background: rgba(255,255,255,0.04);
 }
 
 .hide-element {
     display: none !important;
+}
+
+.selected {
+    border: 1px solid #4CAF50;
 }
