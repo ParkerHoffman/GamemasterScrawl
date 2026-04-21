@@ -485,32 +485,6 @@ async function updateMatList(){
         mpicker.appendChild(tile);
     })
 
-        //Adding the delete button:
-     const por = document.createElement("div");
-        por.className = "material-tile";
-        por.dataset.id = "interactBlock";
-
-        por.style = `background-image: url('/Components/FileMaterials/Assets/PortalIcon.png')`;
-
-
-        por.addEventListener("click", () => {
-
-            ghostCube.material.color.set("#b200ed");
-            ghostCube.material.map = null;
-            ghostCube.material.needsUpdate = true; 
-
-            deleteMode = false;
-            clickMode = false;
-            interactableMode = true;
-            var oldSelected = mpicker.querySelector(".selected")
-            por.classList.add("selected");
-
-            oldSelected?.classList.remove("selected");
-
-                
-        });
-
-        mpicker.appendChild(por);
 
     //Adding the delete button:
      const del = document.createElement("div");
