@@ -8,26 +8,26 @@ import { Generate3DSpace, loader, rootPathMat,renderRoom, clearScene } from "./h
 import { UploadMaterial } from "./FileService.js";
 import { getImageFile } from "./FileGrabber.js";
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+var mapscene = new THREE.Scene();
+var mapcamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
- const renderer = new THREE.WebGLRenderer();
-const controls = new OrbitControls(camera, renderer.domElement);
+ var maprenderer = new THREE.WebGLRenderer();
+var mapcontrols = new OrbitControls(mapcamera, maprenderer.domElement);
 
-controls.mouseButtons = {
+mapcontrols.mouseButtons = {
     LEFT: null,
     MIDDLE: THREE.MOUSE.ROTATE,
     RIGHT: THREE.MOUSE.PAN
 };
 
 //Deals with block manipulation
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
+const mapraycaster = new THREE.Raycaster();
+const mapmouse = new THREE.Vector2();
 
 // Tinkercad-style settings:
-controls.enableDamping = true; // Adds that smooth "weight" to the movement
-controls.dampingFactor = 0.05;
-controls.screenSpacePanning = true; // Allows moving up/down/left/right relative to the camera view
+mapcontrols.enableDamping = true; // Adds that smooth "weight" to the movement
+mapcontrols.dampingFactor = 0.05;
+mapcontrols.screenSpacePanning = true; // Allows moving up/down/left/right relative to the camera view
 
 var map;
 var fileExplorer = [];
@@ -62,11 +62,12 @@ export async function init(cont, app){
     container = cont;
     appState = app;
 
+
     const returnHomeBtn = container.querySelector("#returnHome");
   
     returnHomeBtn.addEventListener("click", async () => {loadComponent("home")});
 
-    await Generate3DSpace(container, "#Space3D", appState, renderer, camera, scene, controls);
+    await Generate3DSpace(container, "#Space3D", appState, maprenderer, mapcamera, mapscene, mapcontrols);
     map = await appState.connection.invoke("GetMapList");
     selectedRoom = map.activeRoom;
 
@@ -134,8 +135,8 @@ export async function init(cont, app){
 
     updateMatList();
 
-    renderer.domElement.addEventListener("click", (e) => onSceneClick(e));
-    renderer.domElement.addEventListener("mousemove", (e) => onSceneMouseMove(e));
+    maprenderer.domElement.addEventListener("click", (e) => onSceneClick(e));
+    maprenderer.domElement.addEventListener("mousemove", (e) => onSceneMouseMove(e));
 
     createGhostCube();
     
@@ -144,15 +145,15 @@ export async function init(cont, app){
 function onSceneMouseMove(event){
     if(!event || !selectedRoom) return; //If nothing happened, do nothing (duh)
 
-    const rect = renderer.domElement.getBoundingClientRect();
-    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    const rect = maprenderer.domElement.getBoundingClientRect();
+    mapmouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mapmouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-    raycaster.setFromCamera(mouse, camera);
+    mapraycaster.setFromCamera(mapmouse, mapcamera);
 
     //Ghost cube is now exempt from casting
-    const hittable = scene.children.filter((e) => e !== ghostCube && e instanceof THREE.Mesh);
-    const hitCast = raycaster.intersectObjects(hittable, true).filter(h => h.object instanceof THREE.Mesh);
+    const hittable = mapscene.children.filter((e) => e !== ghostCube && e instanceof THREE.Mesh);
+    const hitCast = mapraycaster.intersectObjects(hittable, true).filter(h => h.object instanceof THREE.Mesh);
 
     if(!hitCast.length){
         ghostCube.visible = false;
@@ -244,7 +245,7 @@ function createGhostCube(){
 
     ghostCube.userData.persistent = true; // survives clearScene(), and thus remains after room changes
     ghostCube.visible = false; //Starts invisible
-    scene.add(ghostCube); //Add the cube
+    mapscene.add(ghostCube); //Add the cube
 }
 
 function handleInteractablePlacement(hit, CurrentRoom, event){
@@ -291,7 +292,7 @@ function handleInteractablePlacement(hit, CurrentRoom, event){
 
         return folder
     })
-    renderRoom(scene, CurrentRoom);
+    renderRoom(mapscene, CurrentRoom);
     
 requestAnimationFrame(() => onSceneMouseMove(event))
 }
@@ -334,7 +335,7 @@ function handleBlockPlacement(hit, CurrentRoom, event){
 
         return folder
     })
-    renderRoom(scene, CurrentRoom);
+    renderRoom(mapscene, CurrentRoom);
     
 requestAnimationFrame(() => onSceneMouseMove(event))
 }
@@ -387,7 +388,7 @@ function handleBlockDeletion(hit, CurrentRoom, event) {
         return folder
     })
 
-    renderRoom(scene, CurrentRoom);
+    renderRoom(mapscene, CurrentRoom);
 
 requestAnimationFrame(() => onSceneMouseMove(event))
     
@@ -761,7 +762,6 @@ function DeselectBlock(){
         {
             i.classList.add("hide-element")
         })
-    container.querySelector("#NullOptionBlock").classList.remove("hide-element")
 }
 
 function selectItem(item){
@@ -828,6 +828,8 @@ DeselectBlock();
         }
        
     })
+
+    renderRoom(mapscene, selectedRoomObject);
     
 }
 
@@ -883,7 +885,7 @@ async function deleteRoom(room){
             selectedRoom = null;
             selectedBlockObject = null;
             selectedRoomObject = null;
-            clearScene(scene);
+            clearScene(mapscene);
         }
 
     } catch{toastUser("error", "Error", "There was an error deleting the room. Please try again later")}
@@ -912,11 +914,6 @@ async function AttemptMatUpload(){
     } catch (error){
         toastUser("Error", "Error Uploading the Material. Please try again later", "error")
     }
-}
-
-
-async function updateSelectedRoom(){
-
 }
 
 async function deleteSelectedRoom(){

@@ -202,12 +202,19 @@ function renderRoomBounds(scene, bounds){
 
 export async function Generate3DSpace(container, contName, appState, renderer, camera, scene, controls){
 
+    const spaceCont = container.querySelector(contName);
     appState.sceneSet.add({renderer: renderer, scene: scene})
 
         renderer.setClearColor(0x000000, 0); // transparent background
-        renderer.setSize(window.innerWidth, window.innerHeight);
 
-    var spaceCont = container.querySelector(contName);
+
+        const rect = spaceCont.getBoundingClientRect();
+
+renderer.setSize(rect.width, rect.height);
+
+camera.aspect = rect.width / rect.height;
+camera.updateProjectionMatrix();
+
 
     spaceCont.appendChild(renderer.domElement);
 
