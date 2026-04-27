@@ -211,38 +211,14 @@ export async function Generate3DSpace(container, contName, appState, renderer, c
 
     spaceCont.appendChild(renderer.domElement);
 
-
         camera.position.z = 15;
 
         let lastTime = performance.now();
 
         function animate() {
-
             //Require damping is true, and thus I must update the controls
             controls.update(); 
 
-            const now = performance.now();
-            const delta = (now - lastTime) / 1000;
-            lastTime = now;
-
-             const knots = scene.children.filter(obj => obj.geometry?.type === "TorusKnotGeometry");
-
-             knots.forEach(knot => {
-    // Smooth rotation using knot's own speed
-    knot.rotation.x += delta * knot.userData.rotation.x;
-    knot.rotation.y += delta * knot.userData.rotation.y;
-
-    // Stutter using knot's own timer and interval
-    knot.userData.stutterTimer += delta;
-    if (knot.userData.stutterTimer >= knot.userData.stutterInterval) {
-        knot.userData.stutterTimer = 0;
-        const p = generateRandomNumber(1,21);
-        const q = generateRandomNumber(1,21);
-        const { radius, tube, tubularSegments, radialSegments } = knot.geometry.parameters;
-        knot.geometry.dispose();
-        knot.geometry = new THREE.TorusKnotGeometry(radius, tube, tubularSegments, radialSegments, p, q);
-    }
-});
     renderer.render(scene, camera);
 }
 

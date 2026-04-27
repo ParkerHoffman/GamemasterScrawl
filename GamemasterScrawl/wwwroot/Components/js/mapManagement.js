@@ -56,8 +56,6 @@ let ghostCube = null;
 
     //Controls the maximum size of each dimension
     const maxDimensionSize = 100
-    
-
 
 export async function init(cont, app){
 
@@ -68,9 +66,10 @@ export async function init(cont, app){
   
     returnHomeBtn.addEventListener("click", async () => {loadComponent("home")});
 
-    Generate3DSpace(container, "#Space3D", appState, renderer, camera, scene, controls);
+    await Generate3DSpace(container, "#Space3D", appState, renderer, camera, scene, controls);
     map = await appState.connection.invoke("GetMapList");
     selectedRoom = map.activeRoom;
+
     setUpSidebarTabs();
     HandleFileExplorerSetup();
 
