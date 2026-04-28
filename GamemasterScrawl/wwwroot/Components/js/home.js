@@ -535,20 +535,21 @@ function createGhostCube(){
     scene.add(ghostCube); //Add the cube
 }
 
-
+//This function enforces that the given position is still within bounds and not outside of the room's dimensions
 function isWithinBounds(pos, room){
     return (
         pos.x >= 0 && pos.x < room.xDimension && pos.y >= 0 && pos.y < room.yDimension && pos.z >= 0 && pos.z < room.zDimension
     )
 }
 
+//This verifies if a block (or token) already exists at the given position
 function blockExists(pos, room){
     var validTokens = room.tokens.filter(b => b.x === pos.x && b.y === pos.y && b.z === pos.z);
-
     
     return (validTokens[0] ) || room.blockList.some(b => b.x === pos.x && b.y === pos.y && b.z === pos.z)
 }
 
+//This function forces the cords to be whole numbers
 function snapToGrid(vec){
     return{ 
         x: Math.floor(vec.x + .5),
