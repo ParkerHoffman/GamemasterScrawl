@@ -1,3 +1,4 @@
+//holding variables
 let appState;
 let currentStyle = null;
 
@@ -77,6 +78,4 @@ item.renderer.domElement.remove();
   //Initialize the JS
   module.init(app, appState);
   }
-
-
 }

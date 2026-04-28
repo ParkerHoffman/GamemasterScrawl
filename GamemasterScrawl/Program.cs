@@ -44,11 +44,6 @@ builder.Services.AddSingleton(sp =>
 //Configuring the ports to use
 builder.WebHost.ConfigureKestrel(options =>
 {
-    //options.ListenAnyIP(80);
-    //options.ListenAnyIP(443, listenOptions =>
-    //{
-    //    listenOptions.UseHttps();
-    //});
     options.ListenAnyIP(5000);
 
     options.ListenAnyIP(8787); // Rest API Only
@@ -69,9 +64,6 @@ builder.Services.AddCors(options =>
 
 //Building the actual app
 var app = builder.Build();
-
-//Used in routing for the app, if not otherwise specified the app knows where the correct files are when http requesting
-//app.UseStaticFiles();
 
 //See above
 //In addition, this disables cacheing

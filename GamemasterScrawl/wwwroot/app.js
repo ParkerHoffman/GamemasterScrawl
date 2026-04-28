@@ -10,16 +10,12 @@ var isHost = false;
 //Deals with the modalPopup
 let activeModal = "";
 
+//Used in scene ceanup
 var sceneSet = new Set();
 
+//Global variables
 var activeRoom = null;
-
 var user = null;
-
-//This function checks if the user is the host
-export function CheckAmIHost(){
-    return isHost;
-}
 
 //A global state variable with references to the variables stored in this global layer
 export const appState = {
@@ -28,6 +24,11 @@ export const appState = {
     sceneSet: sceneSet,
     activeRoom: activeRoom,
     user: user,
+}
+
+//This function checks if the user is the host
+export function CheckAmIHost(){
+    return isHost;
 }
 
 //Set the reference to the global state
@@ -50,7 +51,6 @@ export function hashPassword(pass){
         //Modify the 'hash' in
         hash = char + (hash << 6) + (hash << 16) - hash;
     }
-
 
     //Return the pass as a hex
     return (hash >>> 0).toString(16).padStart(8, '0');
@@ -77,7 +77,7 @@ export async function checkHostStatus(){
 
 
 
-//THis is the function tht calls the cleanup function. 
+//This is the function that calls the socket cleanup function. 
  connection.on("CloseWindow", function () {
         handleDisconnect();
  });
@@ -105,21 +105,20 @@ export async function checkHostStatus(){
     //The toast container
     const container = document.getElementById('toast-container');
 
+    //Setting up the inner container
     const toast = document.createElement('div');
     const toastID = `ToastID${Date().now}`
 
     //Setting it up as a ${type} toast
     toast.className = `toast ${type}`;
 
+    //Setting up toast header
     const toastHeader = document.createElement('div');
-
     toastHeader.innerText = header;
-
     toastHeader.className = 'toastHeader';
 
-
+    //Setting up the toast message
     const toastMessage = document.createElement('div');
-
     toastMessage.innerText = message;
 
     //Set up other properties of the toast
@@ -199,9 +198,9 @@ export function popupModal({title = "",
     }
 
 
+    //Adding the elements to the page
     panel.appendChild(header);
     panel.appendChild(body);
-
     overlay.appendChild(panel);
     root.appendChild(overlay);
 
@@ -213,14 +212,16 @@ export function popupModal({title = "",
 
 //Closes the modal
 export function closeModal(){
-    //If there is nto active modal, cease
+    //If there is not an active modal, cease
     if(!activeModal) return;
 
+    //Cleanup
     document.removeEventListener("keydown", escHandler);
     activeModal.overlay.remove();
     activeModal = null;
 }
 
+//Handles closing the modal if escape is pressed
 function escHandler(e){
     if (e.key === "Escape"){
         closeModal();
