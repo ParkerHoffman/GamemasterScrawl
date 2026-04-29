@@ -46,18 +46,24 @@ var choosingToken = false;
 var isDragging = false;
 var dragStartPos = null;
 
+
+//Initialize the page
 export async function init(cont, app){
+    //Setting up settings
         appState = app;
         container = cont;
 
+        //Generate the 3D space
         await Generate3DSpace(container, "#Space3D", appState, renderer, camera, scene, controls);
 
+        //Set more settings
         var map = await appState.connection.invoke("GetMapList");
         currentActiveRoom = await appState.connection.invoke("GetGlobalActiveRoom");
 
         mapList = map.roomList;
         tokenAddList = map.tokenList;
 
+        //Update the room and load it
         ChangeRoomGlobal(currentActiveRoom)
 //If user is the host
 if(appState.isHost == true){
@@ -80,10 +86,12 @@ if(appState.isHost == true){
     tokenMangBtn.addEventListener("click", async () => {loadComponent("tokenEditor")});
 
 
+    //Render functions only the host uses
     renderFolderTree(mapList, "#SpecialInteractables");
     renderTokenAdditions(tokenAddList, "#TokenAdditionSelector")
     
 } else {
+    //Render logout button
     const logOutBtn = container.querySelector("#HeaderButtonHolder");
 
         logOutBtn.innerHTML = "<button id=\"UserRequestsLogOut\" class=\"info\">Log Out</button>";
@@ -96,19 +104,21 @@ if(appState.isHost == true){
     appState.connection.on("SelectFreshGlobalRoom", (id) => ChangeRoomGlobal(id))
 }
 
-setUpSidebarTabs();
+    //Set up the sidebar for all users
+    setUpSidebarTabs();
 
+    //Load the mouse events
     renderer.domElement.addEventListener("mousedown", (e) => onSceneMouseDown(e));
     renderer.domElement.addEventListener("mouseup", (e) => onSceneMouseUp(e));
     renderer.domElement.addEventListener("mousemove", (e) => onSceneMouseMove(e));
 
-createGhostCube();
+    //Render teh ghost cube
+    createGhostCube();
 
+    //Set up listener for reloading room
     appState.connection.on("RefreshRoom", (newID) => refreshMap(newID));
 
-
-
-
+    //Deal with token updates
 appState.connection.on("TokenMoved", (roomId, tokenId, x, y, z) => {
     // Update local data
     const room = mapList.find(r => r.id === roomId);
@@ -148,6 +158,7 @@ async function logUsrOut(appState){
     
 }
 
+//Superuser changes room seleected
 function ChangeRoomGlobal(id, map){
     currentActiveRoom = id;
     var currentRoom;
@@ -173,6 +184,7 @@ function ChangeRoomGlobal(id, map){
     
 }
 
+//Rerenders the map
 async function refreshMap(id){
      const updated = await appState.connection.invoke("ReloadRoom", room.id)
     const newMap = mapList.forEach((room) => {
@@ -191,7 +203,7 @@ async function refreshMap(id){
 }
 
 
-//This function creates (and updates) the file Tree
+//This function creates (and updates) the room Tree
 function renderFolderTree( data, comp){
     const cont = container.querySelector(comp);
 
@@ -231,7 +243,7 @@ container.querySelectorAll(".ActiveMapOption").forEach(a => a.classList.remove("
     });
 }
 
-
+//Updates the room selected for all clients
 async function updateActiveRoomGlobal(roomID, tellClients){
     ChangeRoomGlobal(roomID);
     if(tellClients){
@@ -243,7 +255,7 @@ async function updateActiveRoomGlobal(roomID, tellClients){
     }
 }
 
-
+//Sets up the functionality of the isdebar tabs
 function setUpSidebarTabs(){
     const tabs = container.querySelectorAll(".tab-btn");
  
@@ -262,6 +274,7 @@ function setUpSidebarTabs(){
     });
 }
 
+//Renders a tree for selecting tokens to add to the scene
 function renderTokenAdditions(data, comp){
     const cont = container.querySelector(comp);
 
@@ -310,6 +323,7 @@ folderDiv.classList.add("ActiveTokenOption")
     });
 }
 
+//Renders a tree for selecting tokens
 function renderTokenSelector(data, comp){
     const cont = container.querySelector(comp);
 
@@ -321,7 +335,6 @@ function renderTokenSelector(data, comp){
 
         const header = document.createElement("div");
         header.className = "tree-folder-header"
-        //header.textContent = folder.nickname;
 
         var imageLocal = "";
         if(folder.tokenRef && folder.tokenRef.imgRef){
@@ -359,8 +372,12 @@ setTokenSelected(folder.id, true)
     });
 }
 
+//Selects a token
 function setTokenSelected(tokenId, isSelected) {
+    //Get all tokens
     const tokenMesh = scene.children.find(e => e.userData.id === tokenId && e.geometry?.type === "CircleGeometry");
+
+    //if no tokens
     if (!tokenMesh) return;
 
     const circleGeoChildren = scene.children.filter((e) => e.geometry?.type === "CircleGeometry")
@@ -374,6 +391,7 @@ function setTokenSelected(tokenId, isSelected) {
     }
     })
     
+    //Place a selected halo ring behind the relevant token
     if (isSelected) {
         const ringGeo = new THREE.RingGeometry(0.52, 0.62, 32); // just outside the circle
         const ringMat = new THREE.MeshBasicMaterial({ color: 0x4CAF50, side: THREE.DoubleSide });
@@ -384,18 +402,24 @@ function setTokenSelected(tokenId, isSelected) {
     }
 }
 
+//Handle repositioning hte ghost cube to always hover around the mouse location
 function onSceneMouseMove(event) {
+    //Verify rendering the cube is valid
     if (!event || !selectedRoom) return;
 
+    //Get the mouse positon
     const rect = renderer.domElement.getBoundingClientRect();
     mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
     mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
+    //Draw a line from the camera to the mouse 
     raycaster.setFromCamera(mouse, camera);
 
+    //Intersect the blocks there to determine what the user is looking at
     const hittable = scene.children.filter((e) => e !== ghostCube && e instanceof THREE.Mesh);
     const hitCast = raycaster.intersectObjects(hittable, true).filter(h => h.object instanceof THREE.Mesh);
 
+    //If there is nothing
     if (!hitCast.length) {
         if (!isDragging) ghostCube.visible = false;
         return;
@@ -417,9 +441,12 @@ function onSceneMouseMove(event) {
     updateGhostCubePosition(hitCast[0]);
 }
 
+//This handles the inital click on the scene
 function onSceneMouseDown(event) {
+    //if no selected room: Move on
     if (!selectedRoom || !event) return;
 
+    //IF there is no token, mark it
     if (activeToken !== null) {
         isDragging = true;
         dragStartPos = { ...ghostCube.position };
@@ -446,7 +473,9 @@ function onSceneMouseDown(event) {
     }
 }
 
+//Deal with the mouse being released
 async function onSceneMouseUp(event) {
+    //Verify we should be continuing
     if (!isDragging || activeToken === null) {
         isDragging = false;
         return;
@@ -464,6 +493,7 @@ async function onSceneMouseUp(event) {
         return;
     }
 
+    //Move the token
     var success = await appState.connection.invoke("MoveTokenInstance", currentActiveRoom, activeToken, newPos.x, newPos.y, newPos.z);
 
     if (!success) {
@@ -471,11 +501,13 @@ async function onSceneMouseUp(event) {
     }
 }
 
-
+//Changes the position of the Ghost Cube on the map
 function updateGhostCubePosition(hit){
+    //If no coords, stop here
     if(!hit) return;
     const CurrentRoom = selectedRoom;
 
+    //This will be the new coords of the cube
         let snapped;
 
         //Check if the cube is rendered 
@@ -483,6 +515,7 @@ function updateGhostCubePosition(hit){
 
             snapped = snapToGrid(hit.object.position);
 
+            //Check if the cube should be visible
             const exists = blockExists(snapped, CurrentRoom);
 
             ghostCube.visible = exists;
@@ -493,10 +526,13 @@ function updateGhostCubePosition(hit){
             const faceN = hit.face.normal.clone();
             faceN.transformDirection(hit.object.matrixWorld);
 
+            //Move off the wall from above
             const placementPosition = hit.point.clone().add(faceN.multiplyScalar(0.5))
 
+            //Get clean useable coords
             snapped = snapToGrid(placementPosition);
 
+            //Verify we can use the cube
             if(!isWithinBounds(snapped, CurrentRoom) || blockExists(snapped, CurrentRoom)){
                 ghostCube.visible = false;
                 return;
@@ -504,9 +540,11 @@ function updateGhostCubePosition(hit){
             ghostCube.visible = true;
         }
 
+        //Move the cube
         ghostCube.position.set(snapped.x, snapped.y, snapped.z);
 }
 
+//Adds a fresh token to the map
 async function addFreshToken(){
     var success = await appState.connection.invoke("CreateNewTokenInstance", currentActiveRoom, selectedToken, ghostCube.position.x, ghostCube.position.y, ghostCube.position.z )
 
@@ -516,16 +554,21 @@ async function addFreshToken(){
 
 }
 
-
+//This function creates the ghost cube
+//AKA the selector icon
 function createGhostCube(){
+    //Setting up the shape
     const geometry = new THREE.BoxGeometry(1,1,1);
     const edges = new THREE.EdgesGeometry(geometry);
     const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
 
+    //Setting up the texture
     var material = new THREE.MeshBasicMaterial({color: "#aaaaaa", transparent: true, opacity: .6, depthWrite: false,});
 
+    //Creating the cube
     ghostCube = new THREE.Mesh(geometry, material); 
     
+    //Adding outline to the cube
     const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
     ghostCube.add(edgeLines);
     

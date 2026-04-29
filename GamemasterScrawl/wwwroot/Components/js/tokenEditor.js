@@ -18,7 +18,7 @@ var selectedUsers = [];
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-
+//Setup function
 export async function init(cont, app){
     appState = app;
     container = cont;
@@ -40,7 +40,7 @@ export async function init(cont, app){
     updateTokenImageList();
 }
 
-
+//Adds new images for use as tokens
 async function addImages(){
     try{
         const file = await getImageFile();
@@ -63,15 +63,14 @@ async function addImages(){
     }
 }
 
-
+//Opens the popup window for a new token
 function popupNewToken(oldToken){
     popupModal({title: oldToken? "Edit Token" : "Create new Token", content: newTokenContent(oldToken), closeable: true, onClose: closeModal})
 }
 
 
-
+//Renders the token popup window
 function newTokenContent(oldToken) {
-
     var refToken = null;
     if(oldToken){
         
@@ -79,11 +78,7 @@ function newTokenContent(oldToken) {
         selectedUsers = refToken.usersToManipulate;
     }
 
-
     const wrapper = document.createElement("div");
-
-    //Folder picker
-
 
         //Folder picker
     const mpicker = document.createElement("div");
@@ -114,7 +109,6 @@ function newTokenContent(oldToken) {
 
         mpicker.appendChild(tile);
     })
-
 
     const userSelector = document.createElement("div");
     userSelector.className = "material-picker";
@@ -181,10 +175,11 @@ function newTokenContent(oldToken) {
     return wrapper;
 }
 
-
+//Edit token properties
 async function EditToken(tokenID){
         try{
-var success = await appState.connection.invoke("EditToken", tokenID, selectedImage || "", selectedUsers )
+            //Tell server
+            var success = await appState.connection.invoke("EditToken", tokenID, selectedImage || "", selectedUsers )
 
     if(success && success === true){
         closeModal();
@@ -202,8 +197,10 @@ var success = await appState.connection.invoke("EditToken", tokenID, selectedIma
     }
 }
 
+//Deletes a selected token
 async function deleteToken(tokenID){
-            try{
+    try{
+                //Tell server
         var success = await appState.connection.invoke("DeleteToken", tokenID)
 
     if(success && success === true){
@@ -222,9 +219,11 @@ async function deleteToken(tokenID){
     }
 }
 
+//Creates a new token
 async function createFreshToken(){
     try{
-var success = await appState.connection.invoke("CreateFreshToken", selectedImage || "", selectedUsers )
+        //Talk to server
+    var success = await appState.connection.invoke("CreateFreshToken", selectedImage || "", selectedUsers )
 
     if(success && success === true){
         closeModal();
@@ -243,19 +242,19 @@ var success = await appState.connection.invoke("CreateFreshToken", selectedImage
     
 }
 
-
+//Gets the list of tken images
 async function updateTokenImageList(){
     tokens = await appState.connection.invoke("GetMasterTokenList");
 }
 
-
+//Loads in the initial information
 async function FetchTableInfo(){
 userList = await appState.connection.invoke("GetFullUserList");
 tokenList = await appState.connection.invoke("GetFullTokenList");
 UpdateTable();
-    
 }
 
+//Selection table generation
 function UpdateTable(){
     const displayTableCont = container.querySelector("#UsermanagementTableContainer");
 
@@ -297,12 +296,12 @@ function UpdateTable(){
     })
 }
 
-
-
+//Gets a random number
 function RandomIntGen() {
     return Math.floor(Math.random() * 21) - 10;
 }
 
+//Gets a random postion
 function RandomIntGenPos() {
     var num = RandomIntGen();
     if(num >= 0){
@@ -311,11 +310,12 @@ function RandomIntGenPos() {
     return num * -1;
 }
 
+//Randomized movement variables
 var xgoPositive = RandomIntGen() >= 0;
 var ygoPositive = RandomIntGen() >= 0;
 var zgoPositive = RandomIntGen() >= 0;
 
-
+//Adds the bouncing shape
 function AddOminousCube(){
         const renderer = new THREE.WebGLRenderer();
 
@@ -323,23 +323,22 @@ function AddOminousCube(){
         renderer.setClearColor(0x000000, 0); // transparent background
 renderer.setSize(window.innerWidth, window.innerHeight);
 
+    //Set up the space
     var ominousCubeCont = container.querySelector("#OminousCube");
-
     ominousCubeCont.appendChild(renderer.domElement);
 
+    //Creat the shape
     const geometry = new THREE.OctahedronGeometry();
     const material = new THREE.MeshBasicMaterial({color: 0xf4e736});
-
     const cube = new THREE.Mesh(geometry, material);
 
+    //Set up the outline
     const edges = new THREE.EdgesGeometry(geometry);
-
     const edgeMaterial = new THREE.LineBasicMaterial({color: 0x000000, linewidth: 10});
     const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
-
     cube.add(edgeLines);
 
-
+    //Add the cube
     scene.add(cube);
 
     camera.position.z = 5;
@@ -349,7 +348,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
     const randomYMove = RandomIntGenPos();
     const randomXMove = RandomIntGenPos();
 
-
+//Handles the animation of the shape
 function animate() {
     var holdingXMove = 0;
     var holdingYMove = 0;
@@ -399,11 +398,9 @@ function animate() {
     cube.rotation.x += 0.005 * randomXChng;
     cube.rotation.y += 0.005 * randomYChng;
 
-
-
     renderer.render(scene, camera);
 }
 
+//Run the animation
 renderer.setAnimationLoop( animate );
-
 }

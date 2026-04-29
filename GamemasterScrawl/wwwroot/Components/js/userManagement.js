@@ -10,10 +10,8 @@ var userList = [];
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-
+//Setup function
 export async function init(container, appState){
-
-
 const returnHomeBtn = container.querySelector("#returnHome");
   
 returnHomeBtn.addEventListener("click", async () => {loadComponent("home")});
@@ -45,12 +43,11 @@ FetchTableInfo(container, appState);
     AddOminousCube(container, appState);
 }
 
-
+//Handles creating a new user
 async function createNewUser(container, appState){
      // Get the username and the password
         var userI = container.querySelector("#NewusernameInput")
         var passI = container.querySelector("#NewpasswordInput")
-
         var user = userI.value;
         var pass = passI.value;
     
@@ -82,16 +79,15 @@ async function createNewUser(container, appState){
         }
 }
 
-
+//Gets the user list
 async function FetchTableInfo(container, appState){
-userList = await appState.connection.invoke("GetFullUserList");
-
+    userList = await appState.connection.invoke("GetFullUserList");
     UpdateTable(container, appState);
 }
 
+//Table display function
 function UpdateTable(container, appState){
     const displayTableCont = container.querySelector("#UsermanagementTableContainer");
-
 
     var innerString = "<table><thead><tr><td>ID</td><td>Username</td><td>Edit Password</td><td>User Status</td><td>Kick User</td><td>Delete User</td></tr></thead><tr>";
 
@@ -103,7 +99,6 @@ function UpdateTable(container, appState){
         } else {
             innerString += `<div class="status-tag error">Logged Out</div></td><td><button id=\"kickUser${e.id}\" class=\"InactiveButton info\">Kick</button></td><td><button class="error" id=\"deleteUser${e.id}\">Delete</button></td></tr>`
         }
-        
     })
     innerString += "</table>";
     displayTableCont.innerHTML = innerString;
@@ -135,7 +130,6 @@ function UpdateTable(container, appState){
   
             //Setting up the delete function
             usrKickBtn.addEventListener("click", async () => {kickUser(container, appState, e.id)});
-
     })
 }
 
@@ -156,10 +150,10 @@ async function changeUserPassword(container, appState, id){
     } 
 }
 
+//Handles deleting a given user
 async function DeleteUser(container, appState, id){
-
+    //Tell server
     var success = await appState.connection.invoke("DeleteUser", id);
-
     if(success == true){
         FetchTableInfo(container, appState);
         toastUser("Deleted", `User successfully deleted`, 'success')
@@ -168,7 +162,7 @@ async function DeleteUser(container, appState, id){
     }
 }
 
-
+//logs teh given user out
 async function kickUser(container, appState, id){
     var success = await appState.connection.invoke("forceDisconnectAUser", id);
 
@@ -180,12 +174,12 @@ async function kickUser(container, appState, id){
     }
 }
 
-
-
+//Randomly generates a number
 function RandomIntGen() {
     return Math.floor(Math.random() * 21) - 10;
 }
 
+//Randomly generates a positon modifier
 function RandomIntGenPos() {
     var num = RandomIntGen();
     if(num >= 0){
@@ -198,13 +192,13 @@ var xgoPositive = RandomIntGen() >= 0;
 var ygoPositive = RandomIntGen() >= 0;
 var zgoPositive = RandomIntGen() >= 0;
 
-
+//Adds the rotating shape to the background
 function AddOminousCube(container, appState){
-        const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer();
 
-            appState.sceneSet.add({renderer: renderer, scene: scene})
-        renderer.setClearColor(0x000000, 0); // transparent background
-renderer.setSize(window.innerWidth, window.innerHeight);
+    appState.sceneSet.add({renderer: renderer, scene: scene})
+    renderer.setClearColor(0x000000, 0); // transparent background
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
     var ominousCubeCont = container.querySelector("#OminousCube");
 
@@ -221,7 +215,6 @@ renderer.setSize(window.innerWidth, window.innerHeight);
     const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
 
     cube.add(edgeLines);
-
 
     scene.add(cube);
 
@@ -282,11 +275,7 @@ function animate() {
     cube.rotation.x += 0.005 * randomXChng;
     cube.rotation.y += 0.005 * randomYChng;
 
-
-
     renderer.render(scene, camera);
 }
-
 renderer.setAnimationLoop( animate );
-
 }

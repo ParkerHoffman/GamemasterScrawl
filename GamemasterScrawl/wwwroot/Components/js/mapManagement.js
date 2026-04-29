@@ -8,12 +8,13 @@ import { Generate3DSpace, loader, rootPathMat,renderRoom, clearScene } from "./h
 import { UploadMaterial } from "./FileService.js";
 import { getImageFile } from "./FileGrabber.js";
 
+//Map variables
 var mapscene = new THREE.Scene();
 var mapcamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
  var maprenderer = new THREE.WebGLRenderer();
 var mapcontrols = new OrbitControls(mapcamera, maprenderer.domElement);
 
+//Setting up map controls
 mapcontrols.mouseButtons = {
     LEFT: null,
     MIDDLE: THREE.MOUSE.ROTATE,
@@ -142,6 +143,7 @@ export async function init(cont, app){
     
 }
 
+//Moves teh ghost cube to follow the mouse
 function onSceneMouseMove(event){
     if(!event || !selectedRoom) return; //If nothing happened, do nothing (duh)
 
@@ -163,6 +165,7 @@ function onSceneMouseMove(event){
     updateGhostCubePosition(hitCast[0])
 }
 
+//Handles interaction with the space
 function onSceneClick(event){
     //No room is active, wait
     if(!selectedRoom || !event){
@@ -193,6 +196,7 @@ function onSceneClick(event){
     handleBlockPlacement(ghostCube.position, CurrentRoom, event)
 }
 
+//Moves the ghost cube position
 function updateGhostCubePosition(hit){
     if(!hit) return;
     const CurrentRoom = fileExplorer[(fileExplorer.length - 1)].children
@@ -229,7 +233,7 @@ function updateGhostCubePosition(hit){
         ghostCube.position.set(snapped.x, snapped.y, snapped.z);
 }
 
-
+//Handles intitial creation of the ghost cube
 function createGhostCube(){
     const geometry = new THREE.BoxGeometry(1,1,1);
     const edges = new THREE.EdgesGeometry(geometry);
@@ -249,7 +253,6 @@ function createGhostCube(){
 }
 
 function handleInteractablePlacement(hit, CurrentRoom, event){
-
     if(CurrentRoom.blockList.length === 0 ){
     CurrentRoom.blockList = 
         [...CurrentRoom.blockList, 
@@ -280,7 +283,6 @@ function handleInteractablePlacement(hit, CurrentRoom, event){
     }
 
     //Now we tell the server to update the current Room
-
     appState.connection.invoke("EditRoom", CurrentRoom)
 
         fileExplorer = fileExplorer.map((folder) => {
@@ -294,12 +296,12 @@ function handleInteractablePlacement(hit, CurrentRoom, event){
     })
     renderRoom(mapscene, CurrentRoom);
     
+    //Rerender the ghost cube
 requestAnimationFrame(() => onSceneMouseMove(event))
 }
 
 //Handles placing a block on the grid
 function handleBlockPlacement(hit, CurrentRoom, event){
-
     if(CurrentRoom.blockList.length === 0 ){
     CurrentRoom.blockList = [...CurrentRoom.blockList, {
         x: 0,
@@ -337,17 +339,17 @@ function handleBlockPlacement(hit, CurrentRoom, event){
     })
     renderRoom(mapscene, CurrentRoom);
     
+    //Rerender the ghost cube
 requestAnimationFrame(() => onSceneMouseMove(event))
 }
 
-
+//Handles a block being selected
 function handleBlockSelection(hit, CurrentRoom) {
-
+    //Verify block exists
     if (!blockExists(hit, CurrentRoom) || CurrentRoom.blockList.length === 0) return;
 
 
     if(!selectedBlockObject){   
-        
         container.querySelectorAll(".block-prop-input").forEach(i => 
             {
                 i.classList.remove("hide-element")
@@ -369,16 +371,19 @@ function handleBlockSelection(hit, CurrentRoom) {
     zCoordLocal.value = selectedBlockObject.z;
 }
 
+//Handles block deletion
 function handleBlockDeletion(hit, CurrentRoom, event) {
-
+    //Make sure a block exists
     if (!blockExists(hit, CurrentRoom) || CurrentRoom.blockList.length === 0) return;
 
     CurrentRoom.blockList = CurrentRoom.blockList.filter(
         b => !(b.x === hit.x && b.y === hit.y && b.z === hit.z)
     );
 
+    //Tell server
     appState.connection.invoke("EditRoom", CurrentRoom);
 
+    //Update the file system
     fileExplorer = fileExplorer.map((folder) => {
         folder.children = folder.children.map((room) => {if(room.id === CurrentRoom.id){
             return CurrentRoom;
@@ -388,12 +393,14 @@ function handleBlockDeletion(hit, CurrentRoom, event) {
         return folder
     })
 
+    //Rerender the room to reflect it
     renderRoom(mapscene, CurrentRoom);
 
-requestAnimationFrame(() => onSceneMouseMove(event))
-    
+    //Update the cube
+    requestAnimationFrame(() => onSceneMouseMove(event))
 }
 
+//Forces the coords to be in the normal coord set
 function snapToGrid(vec){
     return{ 
         x: Math.floor(vec.x + .5),
@@ -403,16 +410,19 @@ function snapToGrid(vec){
     }
 }
 
+//Verifies the coords are valid and in bounds
 function isWithinBounds(pos, room){
     return (
         pos.x >= 0 && pos.x < room.xDimension && pos.y >= 0 && pos.y < room.yDimension && pos.z >= 0 && pos.z < room.zDimension
     )
 }
 
+//Checks if a block already exists at hte given coords
 function blockExists(pos, room){
     return room.blockList.some(b => b.x === pos.x && b.y === pos.y && b.z === pos.z)
 }
 
+//Generates the map creation modal
 function newMapContent() {
     const wrapper = document.createElement("div");
 
@@ -429,8 +439,8 @@ function newMapContent() {
     return wrapper;
 }
 
+//Renders the material picker
 async function updateMatList(){
-
     const mats = await appState.connection.invoke("GetMasterMaterialList");
     selectedMaterial = matList[0];
 
@@ -485,14 +495,11 @@ async function updateMatList(){
         mpicker.appendChild(tile);
     })
 
-
     //Adding the delete button:
      const del = document.createElement("div");
         del.className = "material-tile";
         del.dataset.id = "deleteBlock";
-
         del.style = `background-image: url('/Components/FileMaterials/Assets/DeleteIcon.png')`;
-
 
         del.addEventListener("click", () => {
 
@@ -542,21 +549,18 @@ async function updateMatList(){
      const add = document.createElement("div");
         add.className = "material-tile";
         add.dataset.id = "addBlock";
-
         add.style = `background-image: url('/Components/FileMaterials/Assets/Plus.jpg')`;
-
-
         add.addEventListener("click", () => {
                 AttemptMatUpload();
         });
 
         mpicker.appendChild(add);
 
-
     wrapper.appendChild(mpicker);
     
 }
 
+//Sets up the sidebar tabs for interaction
 function setUpSidebarTabs(){
     const tabs = container.querySelectorAll(".tab-btn");
  
@@ -570,6 +574,7 @@ function setUpSidebarTabs(){
     })
 }
 
+//Populates the new room modal
 function newRoomContent() {
     const wrapper = document.createElement("div");
 
@@ -638,29 +643,34 @@ function newRoomContent() {
 
 }
 
+//Opens the map creation modal
 function popupNewMap(){
 popupModal({title: "Create New Map", content: newMapContent(), closeable: true, onClose: closeModal})
 
 }
 
+//Opens the room creation modal
 function popupNewRoom(){
     popupModal({title: "Create new Room", content: newRoomContent(), closeable: true, onClose: closeModal})
 }
 
+//Creates a new map
 async function CreateNewMap(){
     //Get the value
     const inpVal = mapNinput.value;
 
+    //Validate info
     if(inpVal && inpVal.length > 0){
         try{
+            //Tell server to create
             const success = await appState.connection.invoke("CreateNewMap", inpVal);
 
             if(!success){
                 throw new Error();
             }
 
+            //Update and rerender the tree
             fileExplorer = [success, ...fileExplorer];
-
             renderTree(fileExplorer, selectItem, "#MapTreeRoot")
 
             //Tell user success
@@ -671,8 +681,6 @@ async function CreateNewMap(){
         } catch{
             toastUser("Error", 'There was an error creating the map', 'error')
         }
-
-
     } else {
         toastUser("More Info", "Please give the map a name", "info")
     }
@@ -680,10 +688,11 @@ async function CreateNewMap(){
 
 }
 
-
+//This function creates a new room
 async function CreateNewRoom(){
     const roomNick = roomNinput.value;
 
+    //Validate info
     if(!roomNick || roomNick.length < 1){
         toastUser("More Info Needed", "Please enter a name for the room", "info");
         return;
@@ -693,6 +702,7 @@ async function CreateNewRoom(){
     const yCoordVal = ycoordInp.value;
     const zCoordVal = zcoordInp.value;
 
+    //More info validation
     if(!xCoordVal || !yCoordVal || !zCoordVal){
         toastUser("More Info Needed", "Please enter room dismensions", "info");
         return;
@@ -709,8 +719,6 @@ async function CreateNewRoom(){
     if(selectedFolderList.size > 0){
         foldList = [...selectedFolderList];
     } 
-
-
     
     //Get the sevrer to create the new room
     var newRoom = await appState.connection.invoke("CreateNew3DRoom", roomNick, xCoordVal, yCoordVal, zCoordVal, foldList);
@@ -724,23 +732,28 @@ async function CreateNewRoom(){
         return folder;
     })
 
-
+    //Update the sidebar
     renderTree( fileExplorer, selectItem, "#MapTreeRoot")
+    //Select the item
     selectItem(newRoom)
 
-    
+    //Reset the input values
     xcoordInp.value = null;
     ycoordInp.value = null;
     zcoordInp.value = null;
     roomNinput.value = null;
     selectedFolderList = [];
+
+    //Close the popup
     closeModal();
 }
 
+//This is run on intiial load. It set up the given data structure into teh useful for the tree one
 function HandleFileExplorerSetup(){
-
+//Adds an all rooms option
 fileExplorer = [...map.maplist.map(e => ({...e, children: []})), {id: -1, mapName: "All Rooms", children: []}];
 
+//Populate rooms into maps
 map.roomList.forEach(room => {
     fileExplorer = fileExplorer.map(folder => {
 
@@ -754,9 +767,8 @@ map.roomList.forEach(room => {
 renderTree( fileExplorer, selectItem, "#MapTreeRoot")
 }
 
-
+//Handles when a block must be unselected
 function DeselectBlock(){
-    //Deselect Block
     selectedBlockObject = null;
     container.querySelectorAll(".block-prop-input").forEach(i => 
         {
@@ -764,9 +776,10 @@ function DeselectBlock(){
         })
 }
 
+//handles selecting a room
 function selectItem(item){
-
-DeselectBlock();
+    //Deselect the last block
+    DeselectBlock();
 
     if(!item){ 
             container.querySelectorAll(".room-prop-input").forEach(i => 
@@ -833,17 +846,18 @@ DeselectBlock();
     
 }
 
-
-
+//Deletes the given map
 async function deleteFolder(id) {
     try{
-
+        //Tell sevrer
         var success = await appState.connection.invoke("DeleteFolder", id);
 
+        //If failed
         if(!success){
             throw new Error();
         }
 
+        //Remvoe the folder
         fileExplorer = fileExplorer.map(folder => {
             if(folder.id !== id){
                 folder.children = folder.children.map((room) => {
@@ -856,6 +870,7 @@ async function deleteFolder(id) {
             }
         }).filter(e => e)
 
+        //Rerender the tree to show changes
         renderTree( fileExplorer, selectItem, "#MapTreeRoot");
 
     } catch {
@@ -864,23 +879,28 @@ async function deleteFolder(id) {
     
 }
 
+//Deletes a room from the list
 async function deleteRoom(room){
     try{
-        
+        //Tell the server
         var success = await appState.connection.invoke("DeleteRoom", room.id);
 
+        //If not worked
         if(!success){
             throw new Error();
         }
 
+        //Remove it from the list
         fileExplorer = fileExplorer.map(folder => {
             folder.children = folder.children.filter((e) => e.id !== room.id)
         return folder;
             
         })
 
+        //Rerender the tree
         renderTree( fileExplorer, selectItem, "#MapTreeRoot");
 
+        //Deal with if it's the selected room
         if(selectedRoom === room.id){
             selectedRoom = null;
             selectedBlockObject = null;
@@ -916,6 +936,7 @@ async function AttemptMatUpload(){
     }
 }
 
+//Deletes the room
 async function deleteSelectedRoom(){
     deleteRoom(selectedRoomObject);
 }

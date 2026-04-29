@@ -49,7 +49,7 @@ export function init(container, appState){
 
 }
 
-
+//Gets a list of users to be selected
 async function getUserList(state, container){
     ddList = await state.connection.invoke("GetUserNameList");
 
@@ -121,11 +121,12 @@ async function ValidateCreds(container, appState){
     }
 }
 
-
+//Randomly generates a number for use in cube display
 function RandomIntGen() {
     return Math.floor(Math.random() * 21) - 10;
 }
 
+//Get a random position
 function RandomIntGenPos() {
     var num = RandomIntGen();
     if(num >= 0){
@@ -134,25 +135,28 @@ function RandomIntGenPos() {
     return num * -1;
 }
 
+//Bools to determine directions
 var xgoPositive = RandomIntGen() >= 0;
 var ygoPositive = RandomIntGen() >= 0;
 var zgoPositive = RandomIntGen() >= 0;
 
-
+//Adds teh backround cube
 function AddOminousCube(container, appState){
         
-        const renderer = new THREE.WebGLRenderer();
+    //3D variables
+    const renderer = new THREE.WebGLRenderer();
 
-        appState.sceneSet.add({renderer: renderer, scene: scene})
+    appState.sceneSet.add({renderer: renderer, scene: scene})
 
         
-        renderer.setClearColor(0x000000, 0); // transparent background
-renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0); // transparent background
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
     var ominousCubeCont = container.querySelector("#OminousCube");
 
     ominousCubeCont.appendChild(renderer.domElement);
 
+    //Cube setup
     const geometry = new THREE.BoxGeometry(1,1,1);
     const material = new THREE.MeshBasicMaterial({color: 0x4CAF50});
 
@@ -165,9 +169,9 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
     cube.add(edgeLines);
 
-
     scene.add(cube);
 
+    //Set up the cube motion
     camera.position.z = 5;
     const randomYChng = RandomIntGen()
     const randomXChng = RandomIntGen()
@@ -175,7 +179,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
     const randomYMove = RandomIntGenPos();
     const randomXMove = RandomIntGenPos();
 
-
+//Run every frame to visually change the cube position
 function animate() {
     var holdingXMove = 0;
     var holdingYMove = 0;
