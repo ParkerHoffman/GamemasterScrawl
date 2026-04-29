@@ -7,6 +7,10 @@ namespace GamemasterScrawl
         public User[] users {get; set;} = [];
         public int lastID {private get; set;} = 0;
 
+/// <summary>
+/// Increments the minimum ID
+/// </summary>
+/// <returns><The Incremented ID/returns>
         public int IncrementID()
         {
             //Declre the min ID

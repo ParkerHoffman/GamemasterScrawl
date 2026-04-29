@@ -16,6 +16,11 @@ namespace GamemasterScrawl
 
         public T Data {get; private set;}
 
+        /// <summary>
+        /// This handles reasing and writing of files
+        /// </summary>
+        /// <param name="basePath"></param>
+        /// <param name="fileEnd"></param>
         public FileHandler(string basePath, string fileEnd)
         {
             filepath = Path.Combine(basePath, fileEnd);
@@ -32,7 +37,10 @@ namespace GamemasterScrawl
             }
         }
 
-
+        /// <summary>
+        /// This saves changes from the RAM instance to the file
+        /// </summary>
+        /// <returns></returns>
         public async Task SaveChanges()
         {
             lock (_lock)

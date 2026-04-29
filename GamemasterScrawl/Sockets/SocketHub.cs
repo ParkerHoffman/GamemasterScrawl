@@ -177,6 +177,10 @@ private readonly IHostApplicationLifetime _appLifetime;
 
         }
 
+        /// <summary>
+        /// This returns the full static token list
+        /// </summary>
+        /// <returns>StaticToken[]</returns>
         public async Task<StaticToken[]> GetFullTokenList()
         {
             return _mapStore.Data.tokenList;
@@ -219,7 +223,6 @@ private readonly IHostApplicationLifetime _appLifetime;
                 for(holdingI = 0; holdingI < _loginStore.Data.users.Length; holdingI++)
                 {
                     GamemasterScrawl.User u = _loginStore.Data.users[holdingI];
-
 
                     //Check every account
                     //If a user is not connected to this account AND the credentials are correct
@@ -281,7 +284,6 @@ private readonly IHostApplicationLifetime _appLifetime;
             {
                 return false;
             }
-
                 //Verify that there is no double usernames
                 foreach(User person in _loginStore.Data.users)
                 {
@@ -447,6 +449,10 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
+        /// <summary>
+        /// This will force a user to log out
+        /// </summary>
+        /// <returns>Bool of success</returns>
         public async Task<bool> LogUserOut(){
             try{
             bool? perms = await CheckIfHost();
@@ -460,7 +466,6 @@ private readonly IHostApplicationLifetime _appLifetime;
             List<User> tempList = new List<User>();
 
             string user = "";
-
 
             foreach(User person in _loginStore.Data.users)
             {
@@ -527,9 +532,6 @@ private readonly IHostApplicationLifetime _appLifetime;
             {
                 Console.WriteLine(ex.Message);
             }
-            
-
-
         }
 
         /// <summary>
@@ -588,6 +590,15 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
+        /// <summary>
+        /// This creates a new instance of a token
+        /// </summary>
+        /// <param name="currentActiveRoom">ID of the given room</param>
+        /// <param name="selectedToken">The static token ID</param>
+        /// <param name="x">X Coord</param>
+        /// <param name="y">Y Coord</param>
+        /// <param name="z">Z Coord</param>
+        /// <returns>Bool of success</returns>
         public async Task<bool> CreateNewTokenInstance(int currentActiveRoom, int selectedToken, int x, int y, int z)
         {
             try
@@ -643,10 +654,8 @@ private readonly IHostApplicationLifetime _appLifetime;
                     newRooms.Add(room);
                 }
 
-
                 _mapStore.Data.roomList = newRooms.ToArray();
                 await _mapStore.SaveChanges();
-
 
                 await Clients.All.SendAsync("RefreshRoom", currentActiveRoom);
                 return true;
@@ -657,6 +666,11 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
+        /// <summary>
+        /// This will get the oom to be reloaded
+        /// </summary>
+        /// <param name="ID">I of the room to reload</param>
+        /// <returns>New state of the given room (Room3D)</returns>
         public async Task<Room3D?> ReloadRoom(int ID)
         {
             Room3D? rroom = null;
@@ -772,7 +786,10 @@ private readonly IHostApplicationLifetime _appLifetime;
             
         }
 
-
+        /// <summary>
+        /// This gets the current active room
+        /// </summary>
+        /// <returns>ID of the current room</returns>
         public async Task<int?> GetGlobalActiveRoom()
         {
             return _mapStore.Data.activeRoom;
@@ -793,7 +810,10 @@ private readonly IHostApplicationLifetime _appLifetime;
             return Directory.GetFiles(MatDir).Select(Path.GetFileName).ToArray();
         }
 
-
+        /// <summary>
+        /// This gets the entire list of token images
+        /// </summary>
+        /// <returns>string[] of image names</returns>
         public async Task<string?[]> GetMasterTokenList()
         {
             var TokenDir = Path.Combine(
@@ -805,6 +825,11 @@ private readonly IHostApplicationLifetime _appLifetime;
             return Directory.GetFiles(TokenDir).Select(Path.GetFileName).ToArray();
         }
 
+        /// <summary>
+        /// This deltees a room
+        /// </summary>
+        /// <param name="ID">ID of the room to be deleted</param>
+        /// <returns>Bool of success</returns>
         public async Task<bool> DeleteRoom(int ID)
         {
             try
@@ -830,6 +855,11 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
+        /// <summary>
+        /// Deletes the given static Token
+        /// </summary>
+        /// <param name="ID">ID of the deleted token</param>
+        /// <returns>bool of success</returns>
         public async Task<bool> DeleteToken(int ID)
         {
             try
@@ -854,6 +884,13 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
+        /// <summary>
+        /// Edits a given token
+        /// </summary>
+        /// <param name="ID">ID of the token to be edited</param>
+        /// <param name="image">Image ref of the token</param>
+        /// <param name="users">int[] of user IDs that can manipulate the token</param>
+        /// <returns>Bool of success</returns>
         public async Task<bool> EditToken(int ID, string image, int[] users)
         {
             try
@@ -885,6 +922,12 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
+        /// <summary>
+        /// Creates a new static token
+        /// </summary>
+        /// <param name="image">Image of the new token</param>
+        /// <param name="users">int[] of user IDs who can manipulate the tokens</param>
+        /// <returns></returns>
         public async Task<bool> CreateFreshToken(string image, int[] users)
         {
             try
@@ -919,6 +962,11 @@ private readonly IHostApplicationLifetime _appLifetime;
             }
         }
 
+        /// <summary>
+        /// THis changes the active room
+        /// </summary>
+        /// <param name="id">ID of the new globally active room</param>
+        /// <returns>bool of success</returns>
         public async Task<bool> ChangeActiveRoom(int id)
         {
             if(await CheckIfHost() != true)
@@ -942,6 +990,15 @@ private readonly IHostApplicationLifetime _appLifetime;
 
         }
 
+        /// <summary>
+        /// This moves an instance of the token on the map to the given coordinates
+        /// </summary>
+        /// <param name="roomId">Room of the given activity</param>
+        /// <param name="tokenId">ID of the token</param>
+        /// <param name="x">X Coord</param>
+        /// <param name="y"><Y Coord/param>
+        /// <param name="z">Z Coord</param>
+        /// <returns>bool of success</returns>
         public async Task<bool> MoveTokenInstance(int roomId, int tokenId, int x, int y, int z)
         {
             List<Room3D> rooms = new List<Room3D>();
@@ -976,12 +1033,15 @@ private readonly IHostApplicationLifetime _appLifetime;
             return true;
         }
 
-
+        /// <summary>
+        /// Deletes a given 'map', or folder
+        /// </summary>
+        /// <param name="id">ID of the given folder</param>
+        /// <returns>bool of success</returns>
         public async Task<bool> DeleteFolder(int id)
         {
             try
             {
-
                 List<Room3D> rooms = new List<Room3D>();
                 List<SingleMap> maps = new List<SingleMap>();
 
@@ -1008,8 +1068,6 @@ private readonly IHostApplicationLifetime _appLifetime;
 
                     rooms.Add(room);
                 }
-
-
 
                 _mapStore.Data.maplist = maps.ToArray();
                 _mapStore.Data.roomList = rooms.ToArray();
